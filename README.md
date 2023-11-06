@@ -84,7 +84,7 @@ C. Order Service + Frontend:
 D. Order Service:
 1. GET top X products by category (weekly and monthly)
 2. POST Order
-3. Get order by seller_id
+3. PUT order (ubah status order)
 4. [Seller] Graph di Catalog Page
 
 Iterasi 3 : Frontend (14 fitur)
