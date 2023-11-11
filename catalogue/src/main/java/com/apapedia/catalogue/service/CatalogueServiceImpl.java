@@ -47,7 +47,7 @@ public class CatalogueServiceImpl implements CatalogueService{
     }
 
     public List<Catalogue> getAllCatalogue() {
-        return catalogueDb.findAllOrderProductNameByAsc();
+
         return catalogueDb.findAllByOrderByProductNameByAsc();
     }
     
