@@ -9,5 +9,8 @@ public interface CatalogueService {
     List<Catalogue> getAllCatalogue();
     Catalogue getCatalogueById(UUID id);
     Catalogue updateCatalogue(Catalogue catalogue, UUID id);
+    List<Catalogue> getCataloguesBySellerId(UUID idSeller);
+    Catalogue addCatalogue(Catalogue catalogue);
+
     void deleteCatalogue(Catalogue catalogue);
 }
