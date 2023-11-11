@@ -18,7 +18,7 @@ public class Catalogue {
     @Id
     private UUID id = UUID.randomUUID();
 
-    @Column(name="id_seller", nullable=false)
+    @Column(name="id_seller")
     private UUID idSeller;
 
     @NotNull
@@ -26,7 +26,6 @@ public class Catalogue {
     private int price;
 
     @NotNull
-
     @Column(name="product_name", nullable=false)
     private String productName;  
 
