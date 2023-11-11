@@ -26,6 +26,7 @@ public class Catalogue {
     private int price;
 
     @NotNull
+
     @Column(name="product_name", nullable=false)
     private String productName;  
 
@@ -44,6 +45,11 @@ public class Catalogue {
     @Column(name="image", nullable=false)
     private String image;
 
+    @ManyToOne
+    @JoinColumn(name="category_id")
+    private Category category;
+
+}
     @NotNull
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = Boolean.FALSE;
