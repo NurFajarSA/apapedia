@@ -23,7 +23,7 @@ import lombok.Setter;
 @Entity
 @SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id=?")
 @Where(clause = "is_deleted = false")
-@Table(name = "user")
+@Table(name = "user_table")
 public abstract class User {
     @Id
     private UUID id = UUID.randomUUID();
@@ -44,6 +44,10 @@ public abstract class User {
     @Column(name="email", nullable = false)
     private String email;
     
+    @NotNull
+    @Column(name="balance", nullable = false)
+    private long balance;
+
     @NotNull
     @Column(name="address", nullable = false)
     private String address;

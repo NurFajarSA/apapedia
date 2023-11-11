@@ -2,8 +2,11 @@ package com.apapedia.user.service;
 
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
 import com.apapedia.user.model.User;
 
+@Service
 public class UserServiceImpl implements UserService{
 
     @Override
