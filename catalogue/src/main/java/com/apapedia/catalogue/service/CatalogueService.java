@@ -9,4 +9,5 @@ public interface CatalogueService {
     List<Catalogue> getAllCatalogue();
     Catalogue getCatalogueById(UUID id);
     Catalogue updateCatalogue(Catalogue catalogue, UUID id);
+    void deleteCatalogue(Catalogue catalogue);
 }
