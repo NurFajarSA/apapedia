@@ -49,8 +49,8 @@ public class Catalogue {
     @JoinColumn(name="category_id")
     private Category category;
 
-}
     @NotNull
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = Boolean.FALSE;
+
 }
