@@ -1,14 +1,16 @@
 package com.apapedia.user.service;
 
+import com.apapedia.user.dto.request.SignUpUserRequestDTO;
+import com.apapedia.user.dto.request.UpdateUserRequestDTO;
 import com.apapedia.user.model.User;
 
 import java.util.UUID;
 
 public interface UserService {
     User getUserbyId(UUID id);
-    User signUp(User newUser);
+    User signUp(SignUpUserRequestDTO newUser);
     // jwt
-    User updateUser(User updatedUser);
+    User updateUser(UpdateUserRequestDTO updatedUser);
     User deletedUser(User deletedUser);
     // balace
 }

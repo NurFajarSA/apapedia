@@ -46,7 +46,7 @@ public abstract class User {
     
     @NotNull
     @Column(name="balance", nullable = false)
-    private long balance;
+    private long balance = 0;
 
     @NotNull
     @Column(name="address", nullable = false)
@@ -54,13 +54,13 @@ public abstract class User {
     
     @NotNull
     @Column(name="created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
     
     @NotNull
     @Column(name="updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt = LocalDateTime.now();
     
     @NotNull
     @Column(name="is_deleted", nullable = false)
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 }

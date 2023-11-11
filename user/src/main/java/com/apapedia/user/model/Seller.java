@@ -1,7 +1,6 @@
 package com.apapedia.user.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ import lombok.Setter;
 @DiscriminatorValue("SELLER")
 @Entity
 public class Seller extends User {
-    @NotNull
-    @Column(name="category", nullable=false)
+    
+    @Column(name="category", nullable=true)
     private String category;
 }
