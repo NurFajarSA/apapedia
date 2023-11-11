@@ -26,8 +26,9 @@ public class Catalogue {
     private int price;
 
     @NotNull
-    @Column(name="productName", nullable=false)
-    private String productName;
+
+    @Column(name="product_name", nullable=false)
+    private String productName;  
 
     @NotNull
     @Column(name="product_description", nullable=false)
@@ -48,4 +49,8 @@ public class Catalogue {
     @JoinColumn(name="category_id")
     private Category category;
 
+}
+    @NotNull
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = Boolean.FALSE;
 }
