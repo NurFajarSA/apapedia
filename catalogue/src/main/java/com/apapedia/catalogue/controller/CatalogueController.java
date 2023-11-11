@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apapedia.catalogue.model.Catalogue;
@@ -55,4 +60,11 @@ public class CatalogueController {
     }
 
 
+    @DeleteMapping(value = "/catalogue/{id}")
+    public String deleteCatalogue(@PathVariable ("id") UUID id){
+        var catalogue = catalogueService.getCatalogueById(id);
+        catalogueService.deleteCatalogue(catalogue);
+
+        return "Catalogue with id: " + id + " has been deleted";
+    }
 }

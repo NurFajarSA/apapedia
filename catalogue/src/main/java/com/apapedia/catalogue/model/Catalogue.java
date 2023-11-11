@@ -43,4 +43,8 @@ public class Catalogue {
 
     @Column(name="image", nullable=false)
     private String image;
+
+    @NotNull
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = Boolean.FALSE;
 }

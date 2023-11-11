@@ -12,4 +12,5 @@ public interface CatalogueService {
     List<Catalogue> getCataloguesBySellerId(UUID idSeller);
     Catalogue addCatalogue(Catalogue catalogue);
 
+    void deleteCatalogue(Catalogue catalogue);
 }
