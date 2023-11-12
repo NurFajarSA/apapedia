@@ -15,4 +15,7 @@ public interface UserService {
     User updateUser(UpdateUserRequestDTO updatedUser);
     User deletedUser(User deletedUser);
     // balace
+    User updateBalance(UUID id, long amount);
+
+    void softDeleteUser(UUID id);
 }

@@ -1,5 +1,6 @@
 package com.apapedia.user.service;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +65,27 @@ public class UserServiceImpl implements UserService{
     public User getUserbyUsername(String username) {
         return userDb.findByUsername(username);
     }
+
+    @Override
+    public void softDeleteUser(UUID id) {
+    User user = userDb.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+    user.setIsDeleted(true);
+    userDb.save(user);
+    }
+
+    @Override
+    public User updateBalance(UUID id, long amount) {
+        User user = userDb.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+    
+        // Add validation for non-negative balance
+        if (amount < 0 && user.getBalance() < Math.abs(amount)) {
+            throw new IllegalArgumentException("Insufficient balance");
+        }
+    
+        // Update balance
+        user.setBalance(user.getBalance() + amount);
+        return userDb.save(user);
+    }
+    
     
 }
