@@ -24,7 +24,7 @@ import lombok.Setter;
 @SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id=?")
 @Where(clause = "is_deleted = false")
 @Table(name = "user_table")
-public abstract class User {
+public class User {
     @Id
     private UUID id = UUID.randomUUID();
 

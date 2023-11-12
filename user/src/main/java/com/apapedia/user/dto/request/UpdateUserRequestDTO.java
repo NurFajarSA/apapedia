@@ -1,5 +1,6 @@
 package com.apapedia.user.dto.request;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
@@ -14,4 +15,9 @@ import lombok.Setter;
 public class UpdateUserRequestDTO extends SignUpUserRequestDTO{
     private UUID id;
     private long balance;
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    public void setId(String id) {
+        this.id = UUID.fromString(id);
+    }
 }

@@ -27,7 +27,7 @@ public abstract class SignUpUserRequestDTO {
     @NotEmpty
     private String address;
 
-    private String category;
+    private String category = null;
 
-    private UUID cartId;
+    private UUID cartId = null;
 }
