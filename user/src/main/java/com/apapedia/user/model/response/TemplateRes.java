@@ -1,13 +1,14 @@
 package com.apapedia.user.model.response;
 
-import org.springframework.http.HttpStatus;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class ErrorRes {
-    HttpStatus httpStatus;
+@NoArgsConstructor
+public class TemplateRes<T> {
+    boolean isSuccess = true;
     String message;
+    T content;
 }

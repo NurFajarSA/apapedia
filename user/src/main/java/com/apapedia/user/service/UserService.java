@@ -6,11 +6,10 @@ import com.apapedia.user.model.User;
 
 import java.util.UUID;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-public interface UserService extends UserDetailsService{
+public interface UserService {
     User getUserbyId(UUID id);
     User getUserbyEmail(String email);
+    User getUserbyUsername(String username);
     User signUp(SignUpUserRequestDTO newUser);
     // jwt
     User updateUser(UpdateUserRequestDTO updatedUser);
