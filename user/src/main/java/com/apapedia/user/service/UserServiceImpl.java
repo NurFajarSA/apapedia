@@ -1,8 +1,12 @@
 package com.apapedia.user.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,6 +57,28 @@ public class UserServiceImpl implements UserService{
     public User deletedUser(User deletedUser) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deletedUser'");
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userDb.findByEmail(email);
+        if(user == null){
+            throw new UsernameNotFoundException("User not found");
+        }
+        List<String> roles = new ArrayList<>();
+        roles.add("USER");
+        UserDetails userDetails =
+                org.springframework.security.core.userdetails.User.builder()
+                        .username(user.getEmail())
+                        .password(user.getPassword())
+                        .roles(roles.toArray(new String[0]))
+                        .build();
+        return userDetails;
+    }
+
+    @Override
+    public User getUserbyEmail(String email) {
+        return userDb.findByEmail(email);
     }
     
 }

@@ -36,15 +36,6 @@ public class UserController {
         }
     }
 
-    @PostMapping("/signup")
-    private User signUp(@Valid @RequestBody SignUpUserRequestDTO newUser) {
-        try{
-            return userService.signUp(newUser);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
-        }
-    }
-
     @PutMapping(value="/update")
     private User updateUser(@Valid @RequestBody UpdateUserRequestDTO updatedUser) {
         try {
