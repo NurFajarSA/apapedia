@@ -20,7 +20,7 @@ public interface CatalogueDb extends JpaRepository<Catalogue, UUID> {
     List<Catalogue> findAllByOrderByPriceDesc();
     List<Catalogue> findAllByOrderByProductNameAsc();
     List<Catalogue> findAllByOrderByProductNameDesc();
-    List<Catalogue> findAllOrderProductNameByAsc();
+
     List<Catalogue> findByIdSellerOrderByProductNameAsc(UUID idSeller);
 
     @Query("SELECT c FROM Catalogue c ORDER BY LOWER (c.productName)")

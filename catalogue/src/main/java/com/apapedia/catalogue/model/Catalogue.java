@@ -18,7 +18,7 @@ public class Catalogue {
     @Id
     private UUID id = UUID.randomUUID();
 
-    @Column(name="id_seller", nullable=false)
+    @Column(name="id_seller")
     private UUID idSeller;
 
     @NotNull
@@ -26,7 +26,6 @@ public class Catalogue {
     private int price;
 
     @NotNull
-
     @Column(name="product_name", nullable=false)
     private String productName;  
 
@@ -34,9 +33,9 @@ public class Catalogue {
     @Column(name="product_description", nullable=false)
     private String productDescription;
 
-    @NotNull
-    @Column(name="id_category", nullable=false)
-    private UUID idCategory;
+    // @NotNull
+    // @Column(name="id_category", nullable=false)
+    // private UUID idCategory;
 
     @NotNull
     @Column(name="stock", nullable=false)
@@ -49,8 +48,8 @@ public class Catalogue {
     @JoinColumn(name="category_id")
     private Category category;
 
+    @NotNull
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = Boolean.FALSE;
+
 }
-//    @NotNull
-//    @Column(name = "is_deleted", nullable = false)
-//    private boolean isDeleted = Boolean.FALSE;
-//}
