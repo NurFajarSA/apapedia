@@ -1,7 +1,7 @@
-version: '3.8'
+version: '3.3'
 services:
   order:
-    platform: linux/amd64
+    image: apap-registry.cs.ui.ac.id/son.sulung/apap-104
     build:
       context: ./order
     restart: always
@@ -32,7 +32,7 @@ services:
       - backend-network
 
   catalogue:
-    platform: linux/amd64
+    image: apap-registry.cs.ui.ac.id/son.sulung/apap-103
     build:
       context: ./catalogue
     restart: always
@@ -63,7 +63,7 @@ services:
       - backend-network
 
   user:
-    platform: linux/amd64
+    image: apap-registry.cs.ui.ac.id/son.sulung/apap-102
     build:
       context: ./user
     restart: always
@@ -94,7 +94,7 @@ services:
       - backend-network
 
   frontend:
-    platform: linux/amd64
+    image: apap-registry.cs.ui.ac.id/son.sulung/apap-105
     build:
       context: ./webapp
     restart: always
@@ -109,7 +109,7 @@ services:
 
 volumes:
   db:
-    driver: local
+
 
 networks:
   frontend-network:

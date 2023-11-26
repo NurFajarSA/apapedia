@@ -66,7 +66,7 @@ public class CartServiceImpl implements CartService{
 
     @Override
     public List<CartItem> getCartItemsByUserId(UUID userId) {
-        return cartDb.findByCart_UserId(userId);
+        return cartDb.findByCartUserId(userId);
     }
 
     @Override
