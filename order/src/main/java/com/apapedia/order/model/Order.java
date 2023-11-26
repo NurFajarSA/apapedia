@@ -1,3 +1,4 @@
+
 package com.apapedia.order.model;
 
 
@@ -50,4 +51,3 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> listOrderItem;
 }
-

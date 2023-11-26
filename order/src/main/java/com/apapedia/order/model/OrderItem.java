@@ -1,3 +1,4 @@
+
 package com.apapedia.order.model;
 
 import jakarta.persistence.*;
@@ -25,7 +26,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "orderId")
-    private Order order;
+    private Order order; 
 
     @NotNull
     @Column(name = "product_id", nullable = false)

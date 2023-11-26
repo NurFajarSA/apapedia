@@ -22,12 +22,21 @@ repositories {
 }
 
 dependencies {
+<<<<<<< HEAD
 //	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 //	implementation 'org.springframework.boot:spring-boot-starter-web'
 //	compileOnly 'org.projectlombok:lombok'
 //	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 //	annotationProcessor 'org.projectlombok:lombok'
 //	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+=======
+	// implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	// implementation 'org.springframework.boot:spring-boot-starter-web'
+	// compileOnly 'org.projectlombok:lombok'
+	// developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	// annotationProcessor 'org.projectlombok:lombok'
+	// testImplementation 'org.springframework.boot:spring-boot-starter-test'
+>>>>>>> 77b9ee9b481bcf64547bf72da1e4120d4029c3e2
 
 	implementation 'com.github.javafaker:javafaker:1.0.2'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -46,8 +55,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 77b9ee9b481bcf64547bf72da1e4120d4029c3e2
 }
 
 tasks.named('test') {
