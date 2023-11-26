@@ -31,7 +31,7 @@ public class CartItem {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "cart_id", referencedColumnName = "cartId")
-    private Cart cart; 
+    private Cart cart;
 }
