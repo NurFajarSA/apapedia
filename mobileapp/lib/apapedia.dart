@@ -12,7 +12,7 @@ class Apapedia extends StatelessWidget {
     return GetMaterialApp(
       title: 'Apapedia',
       theme: AppTheme.apapediaTheme,
-      initialRoute: Routes.HOME,
+      initialRoute: Routes.SPLASH,
       getPages: Pages.routes,
     );
   }
