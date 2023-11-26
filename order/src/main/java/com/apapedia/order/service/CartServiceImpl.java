@@ -1,5 +1,6 @@
 package com.apapedia.order.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,4 +64,13 @@ public class CartServiceImpl implements CartService{
         // cart.setTotalPrice(cart.getListCartItem().stream().mapToInt(cartItem -> cartItem.getQuantity() * {{get price product}}).sum());
     }
 
+    @Override
+    public List<CartItem> getCartItemsByUserId(UUID userId) {
+        return cartDb.findByCart_UserId(userId);
+    }
+
+    @Override
+    public void deleteCartItem(UUID cartItemId) {
+        cartDb.deleteById(cartItemId);
+    }
 }
