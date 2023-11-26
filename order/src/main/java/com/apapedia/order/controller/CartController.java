@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apapedia.order.dto.request.AddCartItemRequestDTO;
@@ -29,7 +30,7 @@ public class CartController {
      * @return new Cart
      */
     @PostMapping("/add")
-    public Cart addCart(@RequestBody UUID userId) {
+    public Cart addCart(@RequestParam(name = "userId") UUID userId) {
         Cart cart = new Cart();
         cart.setUserId(userId);
         cart.setListCartItem(new ArrayList<CartItem>());

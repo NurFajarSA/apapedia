@@ -31,31 +31,36 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public Cart addCartItem(UUID cartId, CartItem cartItem) {
-        Cart cart = cartDb.findById(cartId).get();
-        cart.getListCartItem().add(cartItem);
-
-        cartItemDb.save(cartItem);
-        return cartDb.save(cart);
-    }
-
-    @Override
     public Cart addCartItem(AddCartItemRequestDTO cartItemDTO) {
-        Cart cart = cartDb.findById(cartItemDTO.getCartId()).get();
+        Cart cart = getCartById(cartItemDTO.getCartId());
         CartItem cartItem = cartMapper.addCartItemRequestDTOtoCartItem(cartItemDTO);
-        cart.getListCartItem().add(cartItem);
-
+        cartItem.setCart(cart);
+        cartItem.setProductId(UUID.randomUUID()); // TODO: change to real product id
         cartItemDb.save(cartItem);
+
+        updateTotalPrice(cart);
         return cartDb.save(cart);
     }
 
     @Override
     public Cart updateCartItem(UpdateCartItemRequestDTO cartItemDTO) {
-        Cart cart = cartDb.findById(cartItemDTO.getCartId()).get();
-        CartItem cartItem = cartMapper.updateCartItemRequestDTOtoCartItem(cartItemDTO);
-
+        CartItem cartItem = cartItemDb.findById(cartItemDTO.getCartItemId()).get();
+        cartItem.setQuantity(cartItemDTO.getQuantity());
         cartItemDb.save(cartItem);
-        return cartDb.save(cart);
-    }  
+
+        Cart cart = cartDb.findById(cartItem.getCart().getCartId()).get();
+        updateTotalPrice(cart);
+        return cart;
+    }
+
+    @Override
+    public Cart getCartById(UUID cartId) {
+        return cartDb.findById(cartId).get();
+    }
+    
+    private void updateTotalPrice(Cart cart) {
+        // TODO: get price product
+        // cart.setTotalPrice(cart.getListCartItem().stream().mapToInt(cartItem -> cartItem.getQuantity() * {{get price product}}).sum());
+    }
 
 }
