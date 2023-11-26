@@ -50,7 +50,7 @@ public class Catalogue {
     private Category category;
 
 }
-    @NotNull
-    @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = Boolean.FALSE;
-}
+//    @NotNull
+//    @Column(name = "is_deleted", nullable = false)
+//    private boolean isDeleted = Boolean.FALSE;
+//}
