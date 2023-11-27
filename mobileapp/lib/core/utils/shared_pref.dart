@@ -4,6 +4,15 @@ import 'package:flutter/foundation.dart';
 
 class TbSharedPref {
   static User? _userLogin;
+  static bool? _guestLogin;
+
+  static void setGuestLogin() {
+    _guestLogin = true;
+  }
+
+  static bool? getGuestLogin() {
+    return _guestLogin;
+  }
 
   static void setUserLogin(User user) {
     _userLogin = user;

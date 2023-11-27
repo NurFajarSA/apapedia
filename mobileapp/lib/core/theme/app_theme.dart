@@ -8,14 +8,14 @@ class AppTheme {
     useMaterial3: true,
     colorScheme: ColorScheme.fromSwatch(
       brightness: Brightness.light,
-      primarySwatch: MaterialColorGenerator.from(ColorsTheme.primary),
-      accentColor: MaterialColorGenerator.from(ColorsTheme.accent),
-      errorColor: MaterialColorGenerator.from(ColorsTheme.error),
-      backgroundColor: MaterialColorGenerator.from(ColorsTheme.background),
-      cardColor: MaterialColorGenerator.from(ColorsTheme.surface),
+      primarySwatch: MaterialColorGenerator.from(MyColors.primary),
+      accentColor: MaterialColorGenerator.from(MyColors.accent),
+      errorColor: MaterialColorGenerator.from(MyColors.error),
+      backgroundColor: MaterialColorGenerator.from(MyColors.background),
+      cardColor: MaterialColorGenerator.from(MyColors.surface),
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: ColorsTheme.background,
+      backgroundColor: MyColors.background,
       elevation: 0,
       centerTitle: true,
       titleTextStyle: TextStyle(
@@ -23,17 +23,17 @@ class AppTheme {
         fontWeight: FontWeight.w500,
         letterSpacing: 0.15,
         fontFamily: 'Poppins',
-        color: ColorsTheme.secondary,
+        color: MyColors.secondary,
       ),
       iconTheme: IconThemeData(
-        color: ColorsTheme.primary,
+        color: MyColors.primary,
       ),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: ColorsTheme.background,
+      backgroundColor: MyColors.background,
       elevation: 0,
-      selectedItemColor: ColorsTheme.primary,
-      unselectedItemColor: ColorsTheme.greyLight,
+      selectedItemColor: MyColors.primary,
+      unselectedItemColor: MyColors.greyLight,
       selectedLabelStyle: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w500,
@@ -49,8 +49,8 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: ColorsTheme.primary,
-        foregroundColor: ColorsTheme.surface,
+        backgroundColor: MyColors.primary,
+        foregroundColor: MyColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -64,7 +64,7 @@ class AppTheme {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        backgroundColor: ColorsTheme.primary,
+        backgroundColor: MyColors.primary,
         textStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -75,7 +75,7 @@ class AppTheme {
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        backgroundColor: ColorsTheme.primary,
+        backgroundColor: MyColors.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -88,6 +88,6 @@ class AppTheme {
       ),
     ),
     textTheme: TextThemeApapedia.textThemeApapedia,
-    shadowColor: ColorsTheme.greyLighter,
+    shadowColor: MyColors.greyLighter,
   );
 }
