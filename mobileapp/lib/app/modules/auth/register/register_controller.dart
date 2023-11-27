@@ -80,5 +80,11 @@ class RegisterController extends GetxController {
     return null;
   }
 
-  isValidPassword(String? val) {}
+  isValidPassword(String? val) {
+    isEmpty(val);
+    if (val!.length < 8) {
+      return "Password must be at least 8 characters";
+    }
+    return null;
+  }
 }
