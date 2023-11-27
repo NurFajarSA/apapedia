@@ -56,8 +56,9 @@ class SigninController extends GetxController {
 
   void _signIn({required email, required password}) async {
     try {
-      await authService.signIn(email: email, password: password);
-      if (TbSharedPref.getUserLogin() != null) {
+      var response = await authService.signIn(email: email, password: password);
+      if (response.statusCode == 200) {
+        TbSharedPref.setUserLogin(response.body);
         Get.offAllNamed(Routes.HOME);
         Get.snackbar(
           "Success",
@@ -67,7 +68,7 @@ class SigninController extends GetxController {
       } else {
         Get.snackbar(
           "Error",
-          "Sign in failed",
+          response.body.toString(),
           snackPosition: SnackPosition.BOTTOM,
         );
       }
@@ -81,7 +82,7 @@ class SigninController extends GetxController {
   }
 
   void toSignUp() {
-    // Get.toNamed(Routes.SIGNUP);
+    Get.toNamed(Routes.REGISTER);
   }
 
   void signInGuest() {
