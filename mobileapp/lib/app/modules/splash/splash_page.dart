@@ -8,7 +8,7 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        attr: ScaffoldAttribute(backgroundColor: ColorsTheme.primary),
+        attr: ScaffoldAttribute(backgroundColor: MyColors.primary),
         body: Center(
           child: Image.asset(
             'assets/images/logo.png',

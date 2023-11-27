@@ -7,9 +7,9 @@ import 'package:mobileapp/routes/routes.dart';
 class SigninController extends GetxController {
   @override
   void dispose() {
-    _emailFocusNode.dispose();
+    // _emailFocusNode.dispose();
     _emailController.dispose();
-    _passwordFocusNode.dispose();
+    // _passwordFocusNode.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -17,15 +17,15 @@ class SigninController extends GetxController {
   final authService = Get.find<AuthService>();
 
   final _formKey = GlobalKey<FormState>();
-  final _emailFocusNode = FocusNode();
+  // final _emailFocusNode = FocusNode();
   final _emailController = TextEditingController();
-  final _passwordFocusNode = FocusNode();
+  // final _passwordFocusNode = FocusNode();
   final _passwordController = TextEditingController();
 
   get formKey => _formKey;
-  get emailFocusNode => _emailFocusNode;
+  // get emailFocusNode => _emailFocusNode;
   get emailController => _emailController;
-  get passwordFocusNode => _passwordFocusNode;
+  // get passwordFocusNode => _passwordFocusNode;
   get passwordController => _passwordController;
 
   isValidEmailorUsername(String? val) {
@@ -82,5 +82,10 @@ class SigninController extends GetxController {
 
   void toSignUp() {
     // Get.toNamed(Routes.SIGNUP);
+  }
+
+  void signInGuest() {
+    TbSharedPref.setGuestLogin();
+    Get.offAllNamed(Routes.HOME);
   }
 }
