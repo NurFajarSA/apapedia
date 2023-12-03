@@ -66,6 +66,8 @@ class SigninPage extends StatelessWidget {
                               isMandatory: true,
                               background: MyColors.background,
                               controller: signinController.passwordController,
+                              validator: (val) =>
+                                  signinController.isValidPassword(val),
                             ),
                           ],
                         ),

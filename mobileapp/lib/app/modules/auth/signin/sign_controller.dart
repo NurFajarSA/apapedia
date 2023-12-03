@@ -89,4 +89,13 @@ class SigninController extends GetxController {
     TbSharedPref.setGuestLogin();
     Get.offAllNamed(Routes.HOME);
   }
+
+  isValidPassword(String? val) {
+    if (val == null || val.isEmpty) {
+      return "Password is required";
+    } else if (val.length < 8) {
+      return "Password must be at least 8 characters";
+    }
+    return null;
+  }
 }

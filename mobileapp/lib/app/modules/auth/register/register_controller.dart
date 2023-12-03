@@ -8,6 +8,12 @@ import 'package:mobileapp/routes/routes.dart';
 class RegisterController extends GetxController {
   @override
   void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _addressController.dispose();
+    _usernameController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
