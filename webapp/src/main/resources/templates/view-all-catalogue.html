@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.8/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <title>Catalogue List</title>
+</head>
+
+<body>
+    <section class="bg-gray-50 dark:bg-gray-900">
+        <div th:each="catalogue: ${listCatalogue}"></div>
+        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <h1 class="text-3xl font-bold text-center">Catalogue List</h1> <br>
+            <p class="text-center">- Username -</p>
+            <div class="w-80 carousel rounded-box">
+                <div class="carousel-item w-full">
+                    <div class="card w-96 bg-base-100 shadow-xl flex-grow">
+                        <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
+                                alt="Shoes" /></figure>
+                        <div class="card-body">
+                            <h2 class="card-title" th:text="${catalogue.productName}"></h2>
+                            <p th:text="${catalogue.price}"></p>
+                            <p th:text="${catalogue.stock}"></p>
+                            <div class="card-actions justify-between">
+                                <button class="btn btn-primary">Edit Product</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-circle btn-primary absolute right-3/4 transform -translate-x-1/2 top-1/2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button class="btn btn-circle btn-primary absolute left-3/4 transform translate-x-1/2 top-1/2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div><br>
+            <button class="btn btn-primary">Add Product</button>
+        </div>
+    </section>
+    <script>
+        // Carousel Navigation
+        $(document).ready(function() {
+    $(".carousel-item:first").addClass("visible");
+    $(".carousel-item:first").prev().addClass("prev");
+    $(".carousel-item:last").next().addClass("next");
+
+    $(".carousel").on("click", ".btn-circle", function() {
+        let current = $(".carousel-item.visible");
+        let next = null;
+        let prev = null;
+
+        if ($(this).hasClass("btn-primary")) {
+            next = current.next();
+            prev = current.prev();
+        } else {
+            next = current.prev();
+            prev = current.next();
+        }
+
+        current.removeClass("visible").addClass("prev");
+        next.removeClass("next").addClass("visible");
+        prev.removeClass("prev").addClass("next");
+    });
+});
+    </script>
+</body>
+
+</html>
