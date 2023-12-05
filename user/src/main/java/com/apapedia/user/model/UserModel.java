@@ -2,9 +2,14 @@ package com.apapedia.user.model;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
@@ -18,13 +23,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id=?")
 @Where(clause = "is_deleted = false")
 @Table(name = "user_table")
-public class User {
+public class UserModel implements Serializable{
     @Id
     private UUID id = UUID.randomUUID();
 
@@ -63,4 +67,10 @@ public class User {
     @NotNull
     @Column(name="is_deleted", nullable = false)
     private Boolean isDeleted = false;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role", referencedColumnName = "id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Role role;
 }

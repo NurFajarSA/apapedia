@@ -1,16 +1,16 @@
 package com.apapedia.user.controller;
 
-import com.apapedia.user.auth.JwtUtil;
+import com.apapedia.user.constant.Constant;
 import com.apapedia.user.dto.request.SignUpUserRequestDTO;
-import com.apapedia.user.model.User;
+import com.apapedia.user.model.UserModel;
 import com.apapedia.user.model.request.LoginReq;
 import com.apapedia.user.model.response.LoginRes;
 import com.apapedia.user.model.response.TemplateRes;
 import com.apapedia.user.service.UserService;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,12 +20,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/auth")
-@AllArgsConstructor
 public class AuthController {
 
+    @Autowired
     private UserService userService;
-
-    private JwtUtil jwtUtil;
 
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -33,17 +31,16 @@ public class AuthController {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         // Username/email kosong
-        if ((loginReq.getEmail() == null || loginReq.getEmail().isEmpty())
-                && (loginReq.getUsername() == null || loginReq.getUsername().isEmpty())) {
+        if (loginReq.getUsernameEmail() == null || loginReq.getUsernameEmail().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new TemplateRes<>(false, "Invalid Request!", null));
         }
 
-        User user;
-        if (!loginReq.getEmail().isEmpty()) {
-            user = userService.getUserbyEmail(loginReq.getEmail());
+        UserModel user;
+        if (loginReq.getUsernameEmail().contains("@")) {
+            user = userService.getUserByEmail(loginReq.getUsernameEmail());
         } else {
-            user = userService.getUserbyUsername(loginReq.getUsername());
+            user = userService.getUserByUsername(loginReq.getUsernameEmail());
         }
 
         // Salah password
@@ -52,14 +49,20 @@ public class AuthController {
                     .body(new TemplateRes<>(false, "Invalid Credentials!", null));
         }
 
-        // Berhasil login
-        String token = jwtUtil.createToken(user);
-        return ResponseEntity.ok().body(new TemplateRes<>(true, "Login Success!", new LoginRes(token)));
+        if (user.getRole().getRole().equals(Constant.ROLE_SELLER)) {
+            // TODO: SSO
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new TemplateRes<>(false, "Seller cannot login!", null));
+        } else{
+            String tokenCustomer = userService.login(user);
+            return ResponseEntity.ok().body(new TemplateRes<>(true, "Login Success!", new LoginRes(tokenCustomer)));
+        }
+
 
     }
 
     @PostMapping("/signup")
-    private User signUp(@Valid @RequestBody SignUpUserRequestDTO newUser) {
+    private UserModel signUp(@Valid @RequestBody SignUpUserRequestDTO newUser) {
         try {
             return userService.signUp(newUser);
         } catch (Exception e) {

@@ -3,6 +3,7 @@ package com.apapedia.user.controller;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,72 +16,47 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.apapedia.user.auth.JwtUtil;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
-import com.apapedia.user.model.User;
+import com.apapedia.user.model.UserModel;
+import com.apapedia.user.security.jwt.JwtUtils;
 import com.apapedia.user.service.UserService;
 
-import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/user")
-@AllArgsConstructor
 public class UserController {
 
+    @Autowired
     private UserService userService;
 
-    private JwtUtil jwtUtil;
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @GetMapping("/{id}")
-    private User getUserById(@PathVariable UUID id) {
+    private UserModel getUserById(@PathVariable UUID id) {
         try {
-            return userService.getUserbyId(id);
+            return userService.getUserById(id);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
     }
 
     @PutMapping("/update")
-    private User updateUser(@Valid @RequestBody UpdateUserRequestDTO updatedUser,
+    private UserModel updateUser(@Valid @RequestBody UpdateUserRequestDTO updatedUser,
             @RequestHeader HashMap<String, String> headers) {
-
-        String token = jwtUtil.resolveToken(headers);
-
-        // Jika token tidak ada
-        if (token == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
-        }
-
-        Claims claims = jwtUtil.parseJwtClaims(token);
-        UUID userId = UUID.fromString(claims.getSubject());
-
-        // Jika user yang mengakses bukan user yang ingin diupdate
-        if (!userId.equals(updatedUser.getId())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
-        }
-
-        User user = userService.updateUser(updatedUser);
-        return user;
+        return userService.updateUser(updatedUser, jwtUtils.getTokenFromHeader(headers));
+        
     }
 
     @DeleteMapping("/delete/{id}")
-    private void deleteUser(@PathVariable UUID id) {
-        try {
-            userService.softDeleteUser(id);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-        }
+    private void deleteUser(@PathVariable UUID id, @RequestHeader HashMap<String, String> headers) {
+        userService.deleteUser(id, jwtUtils.getTokenFromHeader(headers));
     }
 
     @PutMapping("/update-balance/{id}")
-    private User updateBalance(@PathVariable UUID id, @RequestParam("amount") long amount) {
-        try {
-            return userService.updateBalance(id, amount);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-        }
+    private UserModel updateBalance(@PathVariable UUID id, @RequestParam("amount") long amount, @RequestHeader HashMap<String, String> headers) {
+        return userService.updateBalance(id, amount, jwtUtils.getTokenFromHeader(headers));
     }
 
 
