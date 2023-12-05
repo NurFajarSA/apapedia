@@ -56,11 +56,20 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserModel signUp(SignUpUserRequestDTO newUser) {
+    public UserModel signUpCustomer(SignUpUserRequestDTO newUser) {
         UserModel user = userMapper.signUpUserRequestDTOToUser(newUser);
         String hashedPassword = encrypt(newUser.getPassword());
         user.setPassword(hashedPassword);
         Role newRole = roleService.getRoleByRoleName(Constant.ROLE_CUSTOMER);
+        user.setRole(newRole);
+        return userDb.save(user);
+    }
+
+    @Override
+    public UserModel signUpSeller(SignUpUserRequestDTO newUser) {
+        UserModel user = userMapper.signUpUserRequestDTOToUser(newUser);
+        user.setPassword("PasswordnyaPakeSSO");
+        Role newRole = roleService.getRoleByRoleName(Constant.ROLE_SELLER);
         user.setRole(newRole);
         return userDb.save(user);
     }

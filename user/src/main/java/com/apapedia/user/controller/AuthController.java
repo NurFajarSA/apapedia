@@ -61,10 +61,19 @@ public class AuthController {
 
     }
 
-    @PostMapping("/signup")
-    private UserModel signUp(@Valid @RequestBody SignUpUserRequestDTO newUser) {
+    @PostMapping("/signup/customer")
+    private UserModel signUpCustomer(@Valid @RequestBody SignUpUserRequestDTO newUser) {
         try {
-            return userService.signUp(newUser);
+            return userService.signUpCustomer(newUser);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
+        }
+    }
+
+    @PostMapping("/signup/seller")
+    private UserModel signUpSeller(@Valid @RequestBody SignUpUserRequestDTO newUser) {
+        try {
+            return userService.signUpSeller(newUser);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
         }
