@@ -13,6 +13,7 @@ import com.apapedia.user.constant.Constant;
 import com.apapedia.user.dto.UserMapper;
 import com.apapedia.user.dto.request.SignUpUserRequestDTO;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
+import com.apapedia.user.model.Role;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
 import com.apapedia.user.security.jwt.JwtUtils;
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public UserModel getUserById(UUID id) {
@@ -56,6 +60,8 @@ public class UserServiceImpl implements UserService{
         UserModel user = userMapper.signUpUserRequestDTOToUser(newUser);
         String hashedPassword = encrypt(newUser.getPassword());
         user.setPassword(hashedPassword);
+        Role newRole = roleService.getRoleByRoleName(Constant.ROLE_CUSTOMER);
+        user.setRole(newRole);
         return userDb.save(user);
     }
 
