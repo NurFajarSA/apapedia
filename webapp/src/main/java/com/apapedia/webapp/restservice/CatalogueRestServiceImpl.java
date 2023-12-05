@@ -9,17 +9,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
 import com.apapedia.webapp.model.Catalogue;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Service
 public class CatalogueRestServiceImpl implements CatalogueRestService{
 
     @Override
     public List<Map<String, Object>> viewAllCatalogue() throws IOException, InterruptedException{
         //Send Request To Get JSON Data Catalogue
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://api.apapedia.com/catalogue/view-all"))
+            .uri(URI.create("http://localhost:8081/api/catalogue/view-all"))
             .method("GET", HttpRequest.BodyPublishers.noBody())
             .build();
         
@@ -37,7 +40,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public Catalogue getCatalogueById(String id) throws IOException, InterruptedException{
         //Send Request To Get JSON Data Catalogue
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://api.apapedia.com/catalogue/get-by-id/" + id))
+            .uri(URI.create("http://api.apapedia.com/catalogue/get-by-id/" + id))
             .method("GET", HttpRequest.BodyPublishers.noBody())
             .build();
         
