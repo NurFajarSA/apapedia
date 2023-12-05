@@ -10,9 +10,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@DiscriminatorValue("SELLER")
+@PrimaryKeyJoinColumn(name="id_user")
 @Entity
-public class Seller extends User {
+public class Seller extends UserModel {
     
     @Column(name="category", nullable=true)
     private String category;
