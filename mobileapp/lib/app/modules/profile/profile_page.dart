@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobileapp/app/modules/profile/profile_controller.dart';
 import 'package:mobileapp/core/theme/colors.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 
@@ -7,6 +9,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final profileController = Get.find<ProfileController>();
     return Scaffold(
         appBar: AppBar(
           title: Text('Profile'),
@@ -89,7 +92,9 @@ class ProfilePage extends StatelessWidget {
                   width: double.infinity,
                   height: 48,
                   text: 'Edit Profile',
-                  onPressed: () {},
+                  onPressed: () {
+                    profileController.goToEditProfile();
+                  },
                 ),
               ],
             ),

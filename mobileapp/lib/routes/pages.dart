@@ -5,6 +5,8 @@ import 'package:mobileapp/app/modules/auth/signin/signin_binding.dart';
 import 'package:mobileapp/app/modules/auth/signin/signin_page.dart';
 import 'package:mobileapp/app/modules/cart/cart_binding.dart';
 import 'package:mobileapp/app/modules/cart/cart_page.dart';
+import 'package:mobileapp/app/modules/edit_profile/edit_profile_binding.dart';
+import 'package:mobileapp/app/modules/edit_profile/edit_profile_page.dart';
 import 'package:mobileapp/app/modules/home/home_binding.dart';
 import 'package:mobileapp/app/modules/home/home_page.dart';
 import 'package:mobileapp/app/modules/product_detail/product_detail_binding.dart';
@@ -46,5 +48,9 @@ class Pages {
         name: Routes.PRODUCT_DETAIL,
         page: () => const ProductDetailPage(),
         binding: ProductDetailBinding()),
+    GetPage(
+        name: Routes.EDIT_PROFILE,
+        page: () => const EditProfilePage(),
+        binding: EditProfileBinding()),
   ];
 }
