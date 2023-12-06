@@ -7,10 +7,56 @@ class ProductDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      attr: ScaffoldAttribute(),
+    return Scaffold(
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        height: 60,
+        decoration: BoxDecoration(
+          color: MyColors.white,
+          boxShadow: BoxShadowDecorator().defaultShadow(context),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // button buy
+            Expanded(
+              child: SecondaryButton(
+                onPressed: () {},
+                child: Center(
+                  child: Text(
+                    'Buy',
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: MyColors.primary,
+                        ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: PrimaryButton(
+                onPressed: () {},
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.add_shopping_cart, color: Colors.white),
+                    SizedBox(width: 4),
+                    Text(
+                      'Cart',
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                            color: MyColors.white,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text('Product Detail'),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -92,51 +138,6 @@ class ProductDetailPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // button buy
-                      Expanded(
-                        child: SecondaryButton(
-                          onPressed: () {},
-                          child: Center(
-                            child: Text(
-                              'Buy',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
-                                  ?.copyWith(
-                                    color: MyColors.primary,
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: PrimaryButton(
-                          onPressed: () {},
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.add_shopping_cart,
-                                  color: Colors.white),
-                              SizedBox(width: 4),
-                              Text(
-                                'Cart',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge
-                                    ?.copyWith(
-                                      color: MyColors.white,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  )
                 ],
               ),
             ),
