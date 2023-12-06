@@ -9,9 +9,9 @@ class CardProduct extends StatelessWidget {
       required this.productPrice,
       required this.productImage});
   // parameternya nama produk, harga, dan gambar
-  final productName;
-  final productPrice;
-  final productImage;
+  final String productName;
+  final String productPrice;
+  final String productImage;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class CardProduct extends StatelessWidget {
                     SecondaryButton(
                       width: MediaQuery.of(context).size.width * 0.17,
                       onPressed: () {},
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Buy',
                           style: TextStyle(color: MyColors.primary),
@@ -66,12 +66,11 @@ class CardProduct extends StatelessWidget {
                     PrimaryButton(
                       width: MediaQuery.of(context).size.width * 0.17,
                       onPressed: () {},
-                      child: Row(
+                      child: const Row(
                         children: [
-                          const Icon(Icons.add_shopping_cart,
-                              color: Colors.white),
-                          const SizedBox(width: 4),
-                          const Text(
+                          Icon(Icons.add_shopping_cart, color: Colors.white),
+                          SizedBox(width: 4),
+                          Text(
                             'Cart',
                             style: TextStyle(color: Colors.white),
                           ),

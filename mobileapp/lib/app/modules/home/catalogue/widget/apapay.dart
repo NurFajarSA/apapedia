@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobileapp/app/modules/home/controller/home_controller.dart';
 import 'package:mobileapp/core/theme/colors.dart';
 import 'package:mobileapp/core/theme/text_theme.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
@@ -9,6 +10,7 @@ class Apapay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var homeController = Get.find<HomeController>();
     return Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -22,22 +24,20 @@ class Apapay extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Apapay', style: TextThemeApapedia.labelMedium),
-                Text('Rp 100.000', style: TextThemeApapedia.headlineMedium),
+                const Text('Apapay', style: TextThemeApapedia.labelMedium),
+                Text('Rp ${homeController.getBalance()}',
+                    style: TextThemeApapedia.headlineMedium),
               ],
             ),
             // top up button
             GestureDetector(
               onTap: () {
-                Get.showSnackbar(
-                  const GetSnackBar(
-                    title: 'Top Up',
-                    message: 'Under Development',
-                    duration: Duration(seconds: 2),
-                  ),
+                showDialog(
+                  context: context,
+                  builder: (context) => dialogTopUp(context),
                 );
               },
               child: const Column(
@@ -60,4 +60,58 @@ class Apapay extends StatelessWidget {
           ],
         ));
   }
+}
+
+Widget dialogTopUp(BuildContext context) {
+  var homeController = Get.find<HomeController>();
+  return Dialog(
+    // backgroundColor: MyColors.white,
+    child: Container(
+      decoration: BoxDecoration(
+        color: MyColors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Top Up',
+            style: TextThemeApapedia.headlineMedium,
+          ),
+          const SizedBox(height: 16),
+          InputField(
+            controller: homeController.topUpController,
+            focusNode: homeController.topUpFocusNode,
+            hintText: 'Input amount',
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: SecondaryButton(
+                  text: 'Cancel',
+                  onPressed: () {
+                    homeController.topUpController.clear();
+                    homeController.topUpFocusNode.unfocus();
+                    Get.back();
+                  },
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: PrimaryButton(
+                  text: 'Top Up',
+                  onPressed: () {
+                    homeController.confirmTopUp();
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
 }

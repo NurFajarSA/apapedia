@@ -22,11 +22,6 @@ class FilterSearchProduct extends StatelessWidget {
             // filter
             GestureDetector(
                 onTap: () {
-                  // Get.showSnackbar(const GetSnackBar(
-                  //   title: 'Filter',
-                  //   message: 'Under Development',
-                  //   duration: Duration(seconds: 2),
-                  // ));
                   showDialog(
                     context: context,
                     builder: (context) => dialogFilter(context),
