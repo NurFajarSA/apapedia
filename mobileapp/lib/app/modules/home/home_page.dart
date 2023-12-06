@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobileapp/app/modules/home/home_controller.dart';
+import 'package:mobileapp/app/modules/home/catalogue/catalogue_page.dart';
+import 'package:mobileapp/app/modules/home/controller/home_controller.dart';
+import 'package:mobileapp/app/modules/home/order/order_page.dart';
+import 'package:mobileapp/core/theme/colors.dart';
 import 'package:mobileapp/core/values/strings.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 
@@ -12,28 +15,23 @@ class HomePage extends StatelessWidget {
     final homeController = Get.find<HomeController>();
     return CustomScaffold(
         attr: ScaffoldAttribute(
-          bottomNavigation: RistekBotNavBar(
-            onTap: (index) {
-              homeController.currentIndex.value = index;
-            },
-            items: const [
-              RistekBotNavItem(
-                icon: Icons.home,
-                text: 'Home',
-              ),
-              RistekBotNavItem(
-                icon: Icons.shopping_cart,
-                text: 'Cart',
-              ),
-              RistekBotNavItem(
-                icon: Icons.history,
-                text: 'Order History',
-              ),
-              RistekBotNavItem(
-                icon: Icons.person,
-                text: 'Profile',
-              ),
-            ],
+          bottomNavigation: Obx(
+            () => RistekBotNavBar(
+              initialActiveIndex: homeController.currentIndex.value,
+              onTap: (index) {
+                homeController.changeIndex(index);
+              },
+              items: const [
+                RistekBotNavItem(
+                  icon: Icons.home,
+                  text: 'Home',
+                ),
+                RistekBotNavItem(
+                  icon: Icons.history,
+                  text: 'Order History',
+                ),
+              ],
+            ),
           ),
         ),
         appBar: AppBar(
@@ -52,11 +50,33 @@ class HomePage extends StatelessWidget {
               ),
             ],
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.shopping_cart, color: MyColors.secondary),
+              onPressed: () {
+                homeController.toCart();
+              },
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.person_rounded,
+                color: MyColors.secondary,
+              ),
+              onPressed: () {
+                homeController.toProfile();
+              },
+            ),
+          ],
         ),
-        body: Center(
-            child: PrimaryButton(
-          text: 'Go to Detail',
-          onPressed: () {},
-        )));
+        body: Obx(() {
+          switch (homeController.currentIndex.value) {
+            case 0:
+              return const CataloguePage();
+            case 1:
+              return const OrderPage();
+            default:
+              return const CataloguePage();
+          }
+        }));
   }
 }
