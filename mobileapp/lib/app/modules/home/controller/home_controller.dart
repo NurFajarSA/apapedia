@@ -19,7 +19,7 @@ class HomeController extends GetxController {
   }
 
   String getBalance() {
-    return 'Rp 100.000';
+    return '100.000';
   }
 
   final topUpController = TextEditingController();
