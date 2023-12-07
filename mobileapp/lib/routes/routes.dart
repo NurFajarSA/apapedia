@@ -9,4 +9,5 @@ abstract class Routes {
   static const EDIT_PROFILE = '/profile/edit';
   static const CART = '/cart';
   static const PRODUCT_DETAIL = '/home/product-detail';
+  static const CHECKOUT_CART = '/home/cart/checkout';
 }

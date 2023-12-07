@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobileapp/app/modules/cart/cart_controller.dart';
 import 'package:mobileapp/app/modules/cart/widgets/cart_item.dart';
 import 'package:mobileapp/core/theme/colors.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
@@ -8,6 +10,7 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartController = Get.find<CartController>();
     return Scaffold(
       appBar: AppBar(
         title: Text('Cart'),
@@ -17,27 +20,6 @@ class CartPage extends StatelessWidget {
           Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: CartItem())
-          // CartItem(
-          //   title: 'Kaos Ristek',
-          //   price: 100000,
-          //   quantity: 2,
-          //   image: Image.asset('assets/images/kaos.png'),
-          //   onRemove: () {},
-          // ),
-          // CartItem(
-          //   title: 'Kaos Ristek',
-          //   price: 100000,
-          //   quantity: 2,
-          //   image: Image.asset('assets/images/kaos.png'),
-          //   onRemove: () {},
-          // ),
-          // CartItem(
-          //   title: 'Kaos Ristek',
-          //   price: 100000,
-          //   quantity: 2,
-          //   image: Image.asset('assets/images/kaos.png'),
-          //   onRemove: () {},
-          // ),
         ],
       ),
       bottomNavigationBar: Container(
@@ -73,7 +55,9 @@ class CartPage extends StatelessWidget {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.4,
               child: PrimaryButton(
-                onPressed: () {},
+                onPressed: () {
+                  cartController.checkout();
+                },
                 child: Center(
                   child: Text(
                     'Checkout',
