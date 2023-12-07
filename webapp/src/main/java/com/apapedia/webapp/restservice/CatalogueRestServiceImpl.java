@@ -22,7 +22,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public List<Map<String, Object>> viewAllCatalogue() throws IOException, InterruptedException{
         //Send Request To Get JSON Data Catalogue
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("http://localhost:8081/api/catalogue/view-all"))
+            .uri(URI.create("https://apap-103.cs.ui.ac.id/api/catalogue/view-all"))
             .method("GET", HttpRequest.BodyPublishers.noBody())
             .build();
         

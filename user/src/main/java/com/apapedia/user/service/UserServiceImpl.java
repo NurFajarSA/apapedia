@@ -68,7 +68,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserModel signUpSeller(SignUpUserRequestDTO newUser) {
         UserModel user = userMapper.signUpUserRequestDTOToUser(newUser);
-        user.setPassword("PasswordnyaPakeSSO");
+        String hashedPassword = encrypt(newUser.getPassword());
+        user.setPassword(hashedPassword);
         Role newRole = roleService.getRoleByRoleName(Constant.ROLE_SELLER);
         user.setRole(newRole);
         return userDb.save(user);
