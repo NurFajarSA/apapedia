@@ -18,7 +18,14 @@ class Apapay extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: MyColors.white,
-          boxShadow: BoxShadowDecorator().defaultShadow(context),
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(255, 130, 115, 156).withOpacity(0.2),
+              spreadRadius: 18 / 4,
+              blurRadius: 18 / 3,
+              offset: const Offset(0, 18 / 5),
+            )
+          ],
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(

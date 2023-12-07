@@ -10,8 +10,12 @@ class OrderPage extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.all(20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('OrderPage'),
+            Text(
+              'Order History',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
           ],
         ),
       ),

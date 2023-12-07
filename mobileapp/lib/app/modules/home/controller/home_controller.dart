@@ -4,6 +4,7 @@ import 'package:mobileapp/routes/routes.dart';
 
 class HomeController extends GetxController {
   get currentIndex => _currentIndex;
+  get cartIsEmpty => true;
   set currentIndex(value) => _currentIndex.value = value;
   final _currentIndex = 0.obs;
   void changeIndex(int index) {
