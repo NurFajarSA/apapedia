@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import java.util.UUID;
 
 import com.apapedia.webapp.restservice.CatalogueRestService;
 
@@ -24,7 +25,7 @@ public class CatalogueController {
     }
 
     @GetMapping("/catalogue/get-catalogue-by-id")
-    public String viewDetailCatalogue(@ModelAttribute("id") String id, Model model) throws IOException, InterruptedException{
+    public String viewDetailCatalogue(@ModelAttribute("id") UUID id, Model model) throws IOException, InterruptedException{
         var catalogue = catalogueRestService.getCatalogueById(id);
         model.addAttribute("catalogue", catalogue);
         return "view-detail-catalogue";

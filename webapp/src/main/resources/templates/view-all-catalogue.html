@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.8/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Catalogue List</title>
 </head>
 
@@ -17,9 +17,9 @@
             <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                 <h1 class="text-3xl font-bold text-center">Catalogue List</h1> <br>
                 <p class="text-center">- Username -</p>
-                <div class="w-80 carousel rounded-box">
+                <div class="w-100 carousel rounded-box">
                     <div class="carousel-item w-full">
-                        <div class="card w-96 bg-base-100 shadow-xl flex-grow">
+                        <div class="card w-80 bg-base-100 shadow-xl flex-grow">
                             <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
                                     alt="Shoes" /></figure>
                             <div class="card-body">
@@ -28,6 +28,7 @@
                                 <p th:text="'Stock: ' + ${catalogue['stock']}"></p>
                                 <div class="card-actions justify-between">
                                     <button class="btn btn-primary">Edit Product</button>
+                                    <button class="btn btn-primary" href="@{/catalogue/get-catalogue-by-id/{id}(id=${catalogue.id})}">Detail Product</button>
                                 </div>
                             </div>
                         </div>

@@ -8,6 +8,7 @@ import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public List<Map<String, Object>> viewAllCatalogue() throws IOException, InterruptedException{
         //Send Request To Get JSON Data Catalogue
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("http://localhost:8081/api/catalogue/view-all"))
+            .uri(URI.create("https://apap-103.cs.ui.ac.id/api/catalogue/view-all"))
             .method("GET", HttpRequest.BodyPublishers.noBody())
             .build();
         
@@ -37,10 +38,10 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     }
 
     @Override
-    public Catalogue getCatalogueById(String id) throws IOException, InterruptedException{
+    public Catalogue getCatalogueById(UUID id) throws IOException, InterruptedException{
         //Send Request To Get JSON Data Catalogue
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("http://api.apapedia.com/catalogue/get-by-id/" + id))
+            .uri(URI.create("https://apap-103.cs.ui.ac.id/api/catalogue/view-catalogue-by-id" + id))
             .method("GET", HttpRequest.BodyPublishers.noBody())
             .build();
         
