@@ -11,7 +11,8 @@ public interface UserService {
     UserModel getUserByEmail(String email);
     UserModel getUserByUsername(String username);
     
-    UserModel signUp(SignUpUserRequestDTO newUser);
+    UserModel signUpCustomer(SignUpUserRequestDTO newUser);
+    UserModel signUpSeller(SignUpUserRequestDTO newUser);
     String login(UserModel user);
 
     UserModel updateUser(UpdateUserRequestDTO updatedUser, String token);

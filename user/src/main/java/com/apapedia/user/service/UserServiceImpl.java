@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserModel signUp(SignUpUserRequestDTO newUser) {
+    public UserModel signUpCustomer(SignUpUserRequestDTO newUser) {
         UserModel user = userMapper.signUpUserRequestDTOToUser(newUser);
         String hashedPassword = encrypt(newUser.getPassword());
         user.setPassword(hashedPassword);
@@ -66,11 +66,21 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public UserModel signUpSeller(SignUpUserRequestDTO newUser) {
+        UserModel user = userMapper.signUpUserRequestDTOToUser(newUser);
+        user.setPassword("PasswordnyaPakeSSO");
+        Role newRole = roleService.getRoleByRoleName(Constant.ROLE_SELLER);
+        user.setRole(newRole);
+        return userDb.save(user);
+    }
+
+    @Override
     public String login(UserModel user) {
         if (user.getRole().getRole() == Constant.ROLE_SELLER) {
             if (!isUserExist(user.getId())) {
                 throw new NoSuchElementException("Seller not registered");
-            } 
+            }
+            return Constant.ROLE_SELLER; 
         }
         return jwtUtils.generateJwtToken(user);
     }
