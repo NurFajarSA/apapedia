@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String login(UserModel user) {
-        if (user.getRole().getRole() == Constant.ROLE_SELLER) {
+        if (user.getRole().getRole().equals(Constant.ROLE_SELLER)) {
             if (!isUserExist(user.getId())) {
                 throw new NoSuchElementException("Seller not registered");
             }
