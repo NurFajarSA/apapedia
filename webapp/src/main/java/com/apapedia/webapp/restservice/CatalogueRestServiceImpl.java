@@ -1,5 +1,7 @@
 package com.apapedia.webapp.restservice;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,7 +35,16 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
             .uri("https://apap-103.cs.ui.ac.id/api/catalogue/view-all")
             .retrieve()
             .bodyToFlux(Catalogue.class);
-        return catalogueFlux.collectList().block();
+        var listCatalogue = catalogueFlux.collectList().block();
+
+        listCatalogue.forEach(catalog -> {
+            // Explicitly convert the image field to a byte array
+            byte[] imageBytes;
+            imageBytes = ((String) catalog.getImageBase64()).getBytes(StandardCharsets.UTF_8);
+            catalog.setImageBase64(Base64.getEncoder().encodeToString(imageBytes));
+        });
+
+        return listCatalogue;
     }
 
     @Override

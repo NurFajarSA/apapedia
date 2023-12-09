@@ -18,7 +18,7 @@ public class Catalogue {
     private String productName;
     private String productDescription;
     private long stock;
-    private String image;
+    private String imageBase64;
     private Category category;
     private boolean deleted;
 

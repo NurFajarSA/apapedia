@@ -48,7 +48,7 @@ public class CatalogueController {
         catalogueFromDTO.setPrice(catalogueDTO.getPrice());
         catalogueFromDTO.setProductDescription(catalogueDTO.getProductDescription());
         catalogueFromDTO.setStock(catalogueDTO.getStock());
-        catalogueFromDTO.setImage(catalogueDTO.getImage());
+        catalogueFromDTO.setImageBase64(catalogueDTO.getImage());
 
         List<Category> listCategory = categoryRestService.viewAllCategory();
         for(Category category : listCategory){
