@@ -6,8 +6,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.apapedia.webapp.model.Catalogue;
+import com.apapedia.webapp.model.Category;
 
 public interface CatalogueRestService {
-    List<Map<String, Object>> viewAllCatalogue() throws IOException, InterruptedException;
-    Catalogue getCatalogueById(UUID id) throws IOException, InterruptedException;
+    Catalogue createCatalogue(Catalogue catalogue);
+    List<Catalogue> viewAllCatalogue();
+    Catalogue getCatalogueById(UUID id);
+    Catalogue updateCatalogue(Catalogue catalogue, UUID id);
+    Category getCategoryById(UUID id);
 }

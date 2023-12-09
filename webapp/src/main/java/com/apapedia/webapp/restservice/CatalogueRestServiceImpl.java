@@ -1,57 +1,69 @@
 package com.apapedia.webapp.restservice;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.apapedia.webapp.model.Catalogue;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.apapedia.webapp.model.Category;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class CatalogueRestServiceImpl implements CatalogueRestService{
 
     @Override
-    public List<Map<String, Object>> viewAllCatalogue() throws IOException, InterruptedException{
-        //Send Request To Get JSON Data Catalogue
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://apap-103.cs.ui.ac.id/api/catalogue/view-all"))
-            .method("GET", HttpRequest.BodyPublishers.noBody())
-            .build();
-        
-        HttpClient httpClient = HttpClient.newHttpClient();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        //Convert JSON Data Catalogue To Map
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Map<String, Object>> catalogueList = objectMapper.readValue(response.body(), new TypeReference<List<Map<String, Object>>>(){});
-
-        return catalogueList;
+    public Catalogue createCatalogue(Catalogue catalogue){
+        Mono<Catalogue> catalogueMono = WebClient.create()
+            .post()
+            .uri("https://apap-103.cs.ui.ac.id/api/catalogue/add-catalogue")
+            .body(Mono.just(catalogue), Catalogue.class)
+            .retrieve()
+            .bodyToMono(Catalogue.class);
+        return catalogueMono.block();
     }
 
     @Override
-    public Catalogue getCatalogueById(UUID id) throws IOException, InterruptedException{
-        //Send Request To Get JSON Data Catalogue
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://apap-103.cs.ui.ac.id/api/catalogue/view-catalogue-by-id" + id))
-            .method("GET", HttpRequest.BodyPublishers.noBody())
-            .build();
-        
-        HttpClient httpClient = HttpClient.newHttpClient();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    public List<Catalogue> viewAllCatalogue() {
+        Flux<Catalogue> catalogueFlux = WebClient.create()
+            .get()
+            .uri("https://apap-103.cs.ui.ac.id/api/catalogue/view-all")
+            .retrieve()
+            .bodyToFlux(Catalogue.class);
+        return catalogueFlux.collectList().block();
+    }
 
-        //Convert JSON Data Catalogue To Map
-        ObjectMapper objectMapper = new ObjectMapper();
-        Catalogue catalogue = objectMapper.readValue(response.body(), Catalogue.class);
+    @Override
+    public Catalogue getCatalogueById(UUID id){
+        Mono<Catalogue> catalogueMono = WebClient.create()
+            .get()
+            .uri("https://apap-103.cs.ui.ac.id/api/catalogue/view-catalogue-by-id/" + id)
+            .retrieve()
+            .bodyToMono(Catalogue.class);
+        return catalogueMono.block();
+    }
 
-        return catalogue;
+    @Override
+    public Category getCategoryById(UUID id) {
+        Flux<Category> categoryFlux = WebClient.create()
+            .get()
+            .uri("https://apap-103.cs.ui.ac.id/api/category/view-all")
+            .retrieve()
+            .bodyToFlux(Category.class);
+        for(Category category : categoryFlux.collectList().block()){
+            if(category.getId().equals(id)){
+                return category;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Catalogue updateCatalogue(Catalogue catalogueDTO, UUID id){
+        var category = getCategoryById(catalogueDTO.getCategory().getId());
+        catalogueDTO.setCategory(category);
+        return catalogueDTO;
     }
 }
