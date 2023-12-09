@@ -12,6 +12,6 @@ public class NewCatalogueDTO {
     private int price;
     private String productDescription;
     private int stock;
-    private String image;
+    private byte[] image;
     private UUID idCategory;
 }
