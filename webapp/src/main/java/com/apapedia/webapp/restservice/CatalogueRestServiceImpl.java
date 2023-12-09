@@ -22,7 +22,8 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
             .body(Mono.just(catalogue), Catalogue.class)
             .retrieve()
             .bodyToMono(Catalogue.class);
-        return catalogueMono.block();
+        var response = catalogueMono.block();
+        return response;
     }
 
     @Override

@@ -8,15 +8,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.apapedia.webapp.DTO.CatalogueMapper;
 import com.apapedia.webapp.DTO.CreateCatalogueDTO;
 import com.apapedia.webapp.DTO.UpdateCatalogueDTO;
+import com.apapedia.webapp.model.Catalogue;
+import com.apapedia.webapp.model.Category;
 import com.apapedia.webapp.restservice.CatalogueRestService;
 import com.apapedia.webapp.restservice.CategoryRestService;
 
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class CatalogueController {
@@ -38,11 +42,25 @@ public class CatalogueController {
     }
 
     @PostMapping("/catalogue/add-catalogue")
-    public String addCatalogue(@ModelAttribute CreateCatalogueDTO catalogueDTO, Model model){
-        var catalogueFromDTO = catalogueMapper.createCatalogueDTOToCatalogue(catalogueDTO);
+    public String addCatalogue(@ModelAttribute CreateCatalogueDTO catalogueDTO, Model model, RedirectAttributes redirectAttrs){
+        var catalogueFromDTO = new Catalogue();
+        catalogueFromDTO.setProductName(catalogueDTO.getProductName());
+        catalogueFromDTO.setPrice(catalogueDTO.getPrice());
+        catalogueFromDTO.setProductDescription(catalogueDTO.getProductDescription());
+        catalogueFromDTO.setStock(catalogueDTO.getStock());
+        catalogueFromDTO.setImage(catalogueDTO.getImage());
+
+        List<Category> listCategory = categoryRestService.viewAllCategory();
+        for(Category category : listCategory){
+            if(category.getId().equals(UUID.fromString(catalogueDTO.getCategory()))){
+                catalogueFromDTO.setCategory(category);
+            }
+        }
         var catalogue = catalogueRestService.createCatalogue(catalogueFromDTO);
         model.addAttribute("catalogueName", catalogue.getProductName());
-        return "add-catalogue-success";
+        redirectAttrs.addFlashAttribute("success",
+                String.format("Produk baru %s berhasil disimpan", catalogue.getProductName()));
+        return "redirect:/catalogue/view-all";
     }
     
     @GetMapping("/catalogue/view-all")

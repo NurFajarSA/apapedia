@@ -19,6 +19,6 @@ public class CreateCatalogueDTO {
     private String productDescription;
     private long stock;
     private String image;
-    private Category category;
+    private String category;
     private boolean deleted;
 }
