@@ -2,9 +2,13 @@ package com.apapedia.catalogue.service;
 
 import com.apapedia.catalogue.model.Catalogue;
 import com.apapedia.catalogue.repository.CatalogueDb;
+import com.apapedia.catalogue.service.DTO.NewCatalogueDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,11 +84,46 @@ public class CatalogueServiceImpl implements CatalogueService{
     }
 
     @Override
-    public Catalogue addCatalogue(Catalogue catalogue) {
+    public Catalogue saveCatalogue(Catalogue catalogue) {
         return catalogueDb.save(catalogue);
+    }
+
+    @Override
+    public Catalogue createCatalogue(NewCatalogueDTO catalogueDTO) {
+        Catalogue catalogue = new Catalogue();
+        catalogue.setProductName(catalogueDTO.getProductName());
+        catalogue.setPrice(catalogueDTO.getPrice());
+        catalogue.setProductDescription(catalogueDTO.getProductDescription());
+        catalogue.setCategory(catalogueDTO.getCategory());
+        catalogue.setStock(catalogueDTO.getStock());
+        catalogue.setImage(catalogueDTO.getImage());
+        catalogueDb.save(catalogue);
+        return catalogue;
     }
     
     public void deleteCatalogue(Catalogue catalogue) {
         catalogueDb.delete(catalogue);
+    }
+
+    @Override
+    public byte[] cekFile(MultipartFile file) throws IOException {
+
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty");
+        }
+
+        
+        if (!isImage(file)) {
+            throw new IllegalArgumentException("File is not an image");
+        }
+
+
+        return file.getBytes();
+    }
+
+
+    private boolean isImage(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        return fileName != null && (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"));
     }
 }
