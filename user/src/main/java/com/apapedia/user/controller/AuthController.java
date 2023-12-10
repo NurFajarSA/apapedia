@@ -72,7 +72,7 @@ public class AuthController {
             UserModel user = userService.signUpSeller(newUser); 
             return ResponseEntity.ok().body(new TemplateRes<>(true, "Success!", user));
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 }

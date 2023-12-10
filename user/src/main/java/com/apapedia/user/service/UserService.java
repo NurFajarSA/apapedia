@@ -2,6 +2,8 @@ package com.apapedia.user.service;
 
 import com.apapedia.user.dto.request.SignUpUserRequestDTO;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
+import com.apapedia.user.model.Customer;
+import com.apapedia.user.model.Seller;
 import com.apapedia.user.model.UserModel;
 
 import java.util.UUID;
@@ -23,4 +25,6 @@ public interface UserService {
     boolean isSameUser(UUID userId, String token);
     boolean isUserExist(UUID userId);
     String getToken(String token);
+    Customer getCustomerById(UUID id);
+    Seller getSellerById(UUID id);
 }
