@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:mobileapp/app/data/models/user.dart';
 import 'package:mobileapp/app/data/services/auth_service.dart';
+import 'package:mobileapp/app/data/services/user_service.dart';
 import 'package:mobileapp/core/utils/shared_pref.dart';
 import 'package:mobileapp/routes/routes.dart';
 
@@ -22,5 +23,9 @@ class ProfileController extends GetxController {
   void logout() async {
     await Get.find<AuthService>().logout();
     Get.offAllNamed(Routes.LOGIN);
+  }
+
+  Future<bool> deleteAccount() async {
+    return await Get.find<UserService>().deleteAccount();
   }
 }

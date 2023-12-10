@@ -35,7 +35,13 @@ class EditProfileController extends GetxController {
     }
   }
 
-  updateProfile() {
-    if (_formKey.currentState!.validate()) {}
+  updateProfile() async {
+    if (_formKey.currentState!.validate()) {
+      var response = await userService.updateProfile(
+        _nameController.text,
+        _addressController.text,
+      );
+      return response;
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobileapp/app/modules/profile/profile_controller.dart';
+import 'package:mobileapp/app/widgets/show_loading.dart';
 import 'package:mobileapp/core/theme/colors.dart';
 import 'package:mobileapp/routes/routes.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
@@ -42,7 +43,9 @@ class ProfilePage extends StatelessWidget {
                   height: 48,
                   backgroundColor: Theme.of(context).colorScheme.error,
                   text: 'Delete Account',
-                  onPressed: () {},
+                  onPressed: () async {
+                    await showConfirmDialog(context);
+                  },
                 ),
               if (profileController.user == null)
                 PrimaryButton(
@@ -123,5 +126,39 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  showConfirmDialog(BuildContext context) async {
+    return await Get.defaultDialog(
+      title: 'Delete Account',
+      content: const Text('Are you sure want to delete your account?'),
+      textConfirm: 'Yes',
+      textCancel: 'No',
+      buttonColor: MyColors.error,
+      confirmTextColor: MyColors.errorBackground,
+      cancelTextColor: MyColors.white,
+      radius: 8,
+      onConfirm: () async {
+        showLoading(context);
+        await Get.find<ProfileController>().deleteAccount().then((value) {
+          Get.back();
+          if (value) {
+            Get.offAllNamed(Routes.LOGIN);
+            Get.snackbar(
+              'Success',
+              'Delete account successful',
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          } else {
+            Get.back();
+            Get.snackbar(
+              'Error',
+              'Delete account failed',
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          }
+        });
+      },
+    );
   }
 }

@@ -1,9 +1,9 @@
 class User {
   final String id;
-  final String name;
+  String name;
   final String username;
   final String email;
-  final String address;
+  String address;
   int balance;
 
   User({

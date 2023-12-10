@@ -48,7 +48,25 @@ class EditProfilePage extends StatelessWidget {
               child: PrimaryButton(
                 onPressed: () async {
                   showLoading(context);
-                  await editProfileController.updateProfile();
+                  await editProfileController.updateProfile().then((value) {
+                    Get.back();
+                    if (value) {
+                      Get.back();
+                      Get.snackbar(
+                        'Success',
+                        'Profile updated successfully',
+                        backgroundColor: MyColors.success,
+                        colorText: MyColors.white,
+                      );
+                    } else {
+                      Get.snackbar(
+                        'Error',
+                        'Failed to update profile',
+                        backgroundColor: MyColors.error,
+                        colorText: MyColors.white,
+                      );
+                    }
+                  });
                 },
                 child: Center(
                   child: Text(

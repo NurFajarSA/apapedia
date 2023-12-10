@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobileapp/app/modules/home/controller/home_controller.dart';
+import 'package:mobileapp/app/widgets/custom_textfield.dart';
+import 'package:mobileapp/app/widgets/show_loading.dart';
 import 'package:mobileapp/core/theme/colors.dart';
 import 'package:mobileapp/core/theme/text_theme.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
@@ -82,15 +84,13 @@ Widget dialogTopUp(BuildContext context) {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            'Top Up',
-            style: TextThemeApapedia.headlineMedium,
-          ),
-          const SizedBox(height: 16),
-          InputField(
+          CustomTextfield(
             controller: homeController.topUpController,
-            focusNode: homeController.topUpFocusNode,
-            hintText: 'Input amount',
+            label: "Top Up",
+            hint: "Amount",
+            background: MyColors.white,
+            validator: (value) => homeController.topUpValidator(value),
+            keyboardType: TextInputType.number,
           ),
           const SizedBox(height: 16),
           Row(
@@ -110,8 +110,29 @@ Widget dialogTopUp(BuildContext context) {
               Expanded(
                 child: PrimaryButton(
                   text: 'Top Up',
-                  onPressed: () {
-                    homeController.confirmTopUp();
+                  onPressed: () async {
+                    showLoading(context);
+                    await homeController.confirmTopUp().then((value) {
+                      Get.back();
+                      if (value) {
+                        homeController.topUpController.clear();
+                        homeController.topUpFocusNode.unfocus();
+                        Get.back();
+                        Get.snackbar(
+                          'Success',
+                          'Top up success',
+                          backgroundColor: MyColors.success,
+                          colorText: MyColors.white,
+                        );
+                      } else {
+                        Get.snackbar(
+                          'Failed',
+                          'Top up failed',
+                          backgroundColor: MyColors.error,
+                          colorText: MyColors.white,
+                        );
+                      }
+                    });
                   },
                 ),
               ),

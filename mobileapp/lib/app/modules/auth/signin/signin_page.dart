@@ -102,6 +102,7 @@ class SigninPage extends StatelessWidget {
                               }
                             });
                           } catch (e) {
+                            Get.back();
                             Get.snackbar("Error", e.toString());
                           }
                         },
