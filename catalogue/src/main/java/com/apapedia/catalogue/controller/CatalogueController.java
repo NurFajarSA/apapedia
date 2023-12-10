@@ -4,21 +4,29 @@ package com.apapedia.catalogue.controller;
 import com.apapedia.catalogue.model.Catalogue;
 import com.apapedia.catalogue.service.CatalogueService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.apapedia.catalogue.service.DTO.CatalogueMapper;
 import com.apapedia.catalogue.service.DTO.NewCatalogueDTO;
 import com.apapedia.catalogue.service.DTO.UpdateCatalogueDTO;
 
+import jakarta.validation.Valid;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,9 +61,26 @@ public class CatalogueController {
     }
 
     @PostMapping(value = "/catalogue/add-catalogue")
-    public Catalogue addCatalogue(@RequestBody NewCatalogueDTO newCatalogueDTO) {
-        var catalogue = catalogueMapper.newCatalogueDTOToCatalogue(newCatalogueDTO);
-        return catalogueService.addCatalogue(catalogue);
+    public Catalogue addCatalogue(@Valid @RequestBody NewCatalogueDTO newCatalogueDTO, BindingResult bindingResult, @RequestPart("file") MultipartFile file) {
+        if(bindingResult.hasFieldErrors()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
+        }else{
+            var catalogue = catalogueService.createCatalogue(newCatalogueDTO);
+
+            byte[] content;
+
+            try {
+                content = catalogueService.cekFile(file);
+            } catch (IOException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.INTERNAL_SERVER_ERROR, "Error processing the file"
+                );
+            }
+
+            catalogue.setImage(content);
+            return catalogueService.saveCatalogue(catalogue);
+        }
+        
     }
 
 
