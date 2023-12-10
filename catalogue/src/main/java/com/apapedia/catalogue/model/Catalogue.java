@@ -33,9 +33,9 @@ public class Catalogue {
     @Column(name="product_description", nullable=false)
     private String productDescription;
 
-    @NotNull
-    @Column(name="id_category", nullable=false)
-    private UUID idCategory;
+    // @NotNull
+    // @Column(name="id_category", nullable=false)
+    // private UUID idCategory;
 
     @NotNull
     @Column(name="stock", nullable=false)
