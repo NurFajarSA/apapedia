@@ -7,9 +7,7 @@ import 'package:mobileapp/routes/routes.dart';
 class SigninController extends GetxController {
   @override
   void dispose() {
-    // _emailFocusNode.dispose();
-    _emailController.dispose();
-    // _passwordFocusNode.dispose();
+    _usernameEmailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -17,15 +15,11 @@ class SigninController extends GetxController {
   final authService = Get.find<AuthService>();
 
   final _formKey = GlobalKey<FormState>();
-  // final _emailFocusNode = FocusNode();
-  final _emailController = TextEditingController();
-  // final _passwordFocusNode = FocusNode();
+  final _usernameEmailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   get formKey => _formKey;
-  // get emailFocusNode => _emailFocusNode;
-  get emailController => _emailController;
-  // get passwordFocusNode => _passwordFocusNode;
+  get usernameEmailController => _usernameEmailController;
   get passwordController => _passwordController;
 
   isValidEmailorUsername(String? val) {
@@ -50,15 +44,17 @@ class SigninController extends GetxController {
 
   void signIn() {
     if (_isValid()) {
-      _signIn(email: emailController.text, password: passwordController.text);
+      _signIn(
+          usernameEmail: usernameEmailController.text,
+          password: passwordController.text);
     }
   }
 
-  void _signIn({required email, required password}) async {
+  void _signIn({required usernameEmail, required password}) async {
     try {
-      var response = await authService.signIn(email: email, password: password);
-      if (response.statusCode == 200) {
-        TbSharedPref.setUserLogin(response.body);
+      var response = await authService.signIn(
+          usernameEmail: usernameEmail, password: password);
+      if (response) {
         Get.offAllNamed(Routes.HOME);
         Get.snackbar(
           "Success",
@@ -68,7 +64,7 @@ class SigninController extends GetxController {
       } else {
         Get.snackbar(
           "Error",
-          response.body.toString(),
+          "Sign in failed",
           snackPosition: SnackPosition.BOTTOM,
         );
       }

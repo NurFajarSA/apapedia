@@ -14,7 +14,7 @@ class TbSharedPref {
     return _guestLogin;
   }
 
-  static void setUserLogin(User user) {
+  static void setUserLogin(User? user) {
     _userLogin = user;
   }
 

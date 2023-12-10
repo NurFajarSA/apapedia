@@ -1,3 +1,3 @@
 class Api {
-  static const String baseUrl = 'https://localhost:8000/api';
+  static const String baseUrl = 'https://apap-102.cs.ui.ac.id/api';
 }

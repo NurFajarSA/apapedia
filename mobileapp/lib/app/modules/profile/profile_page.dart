@@ -12,7 +12,7 @@ class ProfilePage extends StatelessWidget {
     final profileController = Get.find<ProfileController>();
     return Scaffold(
         appBar: AppBar(
-          title: Text('Profile'),
+          title: const Text('Profile'),
           centerTitle: true,
         ),
         bottomNavigationBar: Container(
@@ -29,9 +29,11 @@ class ProfilePage extends StatelessWidget {
                 height: 48,
                 backgroundColor: Theme.of(context).colorScheme.error,
                 text: 'Logout',
-                onPressed: () {},
+                onPressed: () {
+                  profileController.logout();
+                },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               SecondaryButton(
                 width: double.infinity,
                 height: 48,
@@ -51,12 +53,12 @@ class ProfilePage extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 30,
                       backgroundImage: NetworkImage(
                           'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250'),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +68,7 @@ class ProfilePage extends StatelessWidget {
                             style: Theme.of(context).textTheme.headlineMedium,
                             overflow: TextOverflow.fade,
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text('@username',
                               style: Theme.of(context).textTheme.bodyLarge),
                         ],
@@ -74,20 +76,20 @@ class ProfilePage extends StatelessWidget {
                     )
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text('Email', style: Theme.of(context).textTheme.bodyLarge),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text('johndoe@gmail.com',
                     style: Theme.of(context).textTheme.headlineMedium),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   'Alamat',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text('Jl. Jalan No. 1',
                     style: Theme.of(context).textTheme.headlineMedium),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 PrimaryButton(
                   width: double.infinity,
                   height: 48,

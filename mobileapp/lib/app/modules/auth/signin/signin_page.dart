@@ -54,7 +54,8 @@ class SigninPage extends StatelessWidget {
                               hint: "username@mail.com",
                               isMandatory: true,
                               background: MyColors.background,
-                              controller: signinController.emailController,
+                              controller:
+                                  signinController.usernameEmailController,
                               validator: (val) =>
                                   signinController.isValidEmailorUsername(val),
                             ),
