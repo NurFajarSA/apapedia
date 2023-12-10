@@ -8,6 +8,29 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.8/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function submitCatalog() {
+            const form = document.getElementById('catalogForm');
+            const formData = new FormData(form);
+
+            axios.post('http://localhost:8081/api/catalogue/add-catalogue', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then((response) => {
+                // Handle success
+                console.log('Catalog created successfully:', response.data);
+                // Perform any other actions you need on success
+            })
+            .catch((error) => {
+                // Handle error
+                console.error('Error creating catalog:', error.response.data);
+                // Perform any other actions you need on error
+            });
+        }
+    </script>
     <title>Add Catalogue</title>
 </head>
 
@@ -29,7 +52,7 @@
             </button>
           </div>
 
-        <form class="max-w-md mx-auto w-1/2" th:action="@{/catalogue/add-catalogue}" th:object="${catalogue}" method="POST">
+        <form id="catalogForm" class="max-w-md mx-auto w-1/2" th:action="@{/catalogue/add-catalogue}" th:object="${catalogue}" method="POST" enctype="multipart/form-data">
 
             <div class="relative z-0 w-full mb-5 group">
                 <input type="text" name="floating_productName" id="floating_productName" th:field="*{productName}"
@@ -76,10 +99,10 @@
 
             <div class="relative z-0 w-full mb-5 group">
                 <label for="image">Image:</label>
-                <input type="file" name="file" accept=".jpg, .jpeg, .png" class="form-control-file">
+                <input type="file" name="image" accept=".jpg, .jpeg, .png" class="form-control-file">
             </div>
 
-            <button type="submit"
+            <button type="button" onclick="submitCatalog()"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
         </form>
 

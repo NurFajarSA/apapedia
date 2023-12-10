@@ -24,6 +24,7 @@ import com.apapedia.webapp.restservice.CategoryRestService;
 
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -47,7 +48,7 @@ public class CatalogueController {
     }
 
     @PostMapping("/catalogue/add-catalogue")
-    public String addCatalogue(@ModelAttribute CreateCatalogueDTO catalogueDTO, BindingResult bindingResult, @RequestParam("image") MultipartFile image, Model model, RedirectAttributes redirectAttrs){
+    public String addCatalogue(@ModelAttribute CreateCatalogueDTO catalogueDTO, BindingResult bindingResult, @RequestPart("image") MultipartFile image, Model model, RedirectAttributes redirectAttrs){
         var catalogueFromDTO = new Catalogue();
         catalogueFromDTO.setProductName(catalogueDTO.getProductName());
         catalogueFromDTO.setPrice(catalogueDTO.getPrice());
