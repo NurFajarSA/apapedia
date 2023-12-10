@@ -3,11 +3,14 @@ package com.apapedia.webapp.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +23,8 @@ import com.apapedia.webapp.restservice.CatalogueRestService;
 import com.apapedia.webapp.restservice.CategoryRestService;
 
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -42,7 +47,7 @@ public class CatalogueController {
     }
 
     @PostMapping("/catalogue/add-catalogue")
-    public String addCatalogue(@ModelAttribute CreateCatalogueDTO catalogueDTO, Model model, RedirectAttributes redirectAttrs){
+    public String addCatalogue(@ModelAttribute CreateCatalogueDTO catalogueDTO, BindingResult bindingResult, @RequestParam("image") MultipartFile image, Model model, RedirectAttributes redirectAttrs){
         var catalogueFromDTO = new Catalogue();
         catalogueFromDTO.setProductName(catalogueDTO.getProductName());
         catalogueFromDTO.setPrice(catalogueDTO.getPrice());
@@ -56,6 +61,23 @@ public class CatalogueController {
                 catalogueFromDTO.setCategory(category);
             }
         }
+
+         if (!image.isEmpty()) {
+            try {
+                // Convert the uploaded image to a Base64 String
+                byte[] imageBytes = image.getBytes();
+                String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                catalogueDTO.setImage(imageBase64);
+
+            } catch (IOException e) {
+                // Handle the exception appropriately
+                bindingResult.rejectValue("image", "upload.error");
+            }
+        } else {
+            // Handle the case when no image is uploaded
+            bindingResult.rejectValue("image", "upload.empty");
+        }
+
         var catalogue = catalogueRestService.createCatalogue(catalogueFromDTO);
         model.addAttribute("catalogueName", catalogue.getProductName());
         redirectAttrs.addFlashAttribute("success",
