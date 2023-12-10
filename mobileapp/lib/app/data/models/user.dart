@@ -4,7 +4,7 @@ class User {
   final String username;
   final String email;
   final String address;
-  final int balance;
+  int balance;
 
   User({
     required this.id,
