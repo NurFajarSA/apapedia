@@ -1,7 +1,9 @@
 package com.apapedia.catalogue.service;
 
 import com.apapedia.catalogue.model.Catalogue;
+import com.apapedia.catalogue.model.Category;
 import com.apapedia.catalogue.repository.CatalogueDb;
+import com.apapedia.catalogue.repository.CategoryDb;
 import com.apapedia.catalogue.service.DTO.NewCatalogueDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class CatalogueServiceImpl implements CatalogueService{
 
     @Autowired
     private CatalogueDb catalogueDb;
+
+    @Autowired
+    private CategoryDb categoryDb;
 
     @Override
     public List<Catalogue> getCatalogListByName (String productName){
@@ -100,7 +105,16 @@ public class CatalogueServiceImpl implements CatalogueService{
         catalogueDb.save(catalogue);
         return catalogue;
     }
+
+    @Override
+    public Category createCategory(Category categoryDTO) {
+        Category category = new Category();
+        category.setName(categoryDTO.getName());
+        categoryDb.save(category);
+        return category;
+    }
     
+    @Override
     public void deleteCatalogue(Catalogue catalogue) {
         catalogueDb.delete(catalogue);
     }
