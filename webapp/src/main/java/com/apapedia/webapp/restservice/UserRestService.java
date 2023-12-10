@@ -8,5 +8,5 @@ import com.apapedia.webapp.dto.response.ReadUserResponseDTO;
 public interface UserRestService {
     
     ReadUserResponseDTO registerUser (CreateUserRequestDTO userDTO) throws IOException, InterruptedException;
-    
+    String getToken(String username, String password);
 }

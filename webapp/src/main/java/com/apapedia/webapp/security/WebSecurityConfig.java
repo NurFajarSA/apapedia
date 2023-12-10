@@ -17,17 +17,17 @@ public class WebSecurityConfig {
                     .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
                     .requestMatchers(new AntPathRequestMatcher("/js/**")).permitAll()
                     .requestMatchers(new AntPathRequestMatcher("/validate-ticket")).permitAll()
-                    .requestMatchers(new AntPathRequestMatcher("/logout")).permitAll()
+                    .requestMatchers(new AntPathRequestMatcher("/logout-sso")).permitAll()
                     .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
                     .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                    .loginPage("/login")
+                    .loginPage("/login-sso")
                     .permitAll()
                     .defaultSuccessUrl("/")
                 )
                 .logout((logout) -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/login"))
+                        .logoutSuccessUrl("/login-sso"))
         ;
         return http.build();
     }

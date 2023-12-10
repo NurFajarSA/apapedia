@@ -27,6 +27,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
             .bodyToMono(Catalogue.class);
         var response = catalogueMono.block();
         return response;
+    }
 
     @Override
     public List<Catalogue> viewAllCatalogue() {

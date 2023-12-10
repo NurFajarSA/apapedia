@@ -1,4 +1,4 @@
-package com.apapedia.webapp.DTO;
+package com.apapedia.webapp.dto;
 
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
