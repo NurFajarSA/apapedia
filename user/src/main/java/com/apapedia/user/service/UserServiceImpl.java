@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService{
         }
 
         UserModel oldUser = userDb.findById(updatedUser.getId()).get();
-        oldUser.setEmail(updatedUser.getEmail());
+        oldUser.setName(updatedUser.getName());
         oldUser.setAddress(updatedUser.getAddress());
         oldUser.setUpdatedAt(updatedUser.getUpdatedAt());
         return userDb.save(oldUser);

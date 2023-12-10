@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class UpdateUserRequestDTO{
     private UUID id;
-    private String email;
+    private String name;
     private String address;
     private LocalDateTime updatedAt = LocalDateTime.now();
 
