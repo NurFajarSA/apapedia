@@ -37,10 +37,14 @@ public class AuthController {
         }
 
         UserModel user;
-        if (loginReq.getUsernameEmail().contains("@")) {
-            user = userService.getUserByEmail(loginReq.getUsernameEmail());
-        } else {
-            user = userService.getUserByUsername(loginReq.getUsernameEmail());
+        try {
+            if (loginReq.getUsernameEmail().contains("@")) {
+                user = userService.getUserByEmail(loginReq.getUsernameEmail());
+            } else {
+                user = userService.getUserByUsername(loginReq.getUsernameEmail());
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
         // Salah password
@@ -50,21 +54,34 @@ public class AuthController {
         }
 
         if (user.getRole().getRole().equals(Constant.ROLE_SELLER)) {
-            // TODO: SSO
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new TemplateRes<>(false, "Seller cannot login!", null));
-        } else{
+            if (userService.login(user) == Constant.ROLE_SELLER){
+                return ResponseEntity.ok().body(new TemplateRes<>(true, "SSO Login Success!", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new TemplateRes<>(false, "Invalid Credentials!", null));
+            }
+        } else {
             String tokenCustomer = userService.login(user);
             return ResponseEntity.ok().body(new TemplateRes<>(true, "Login Success!", new LoginRes(tokenCustomer)));
         }
 
-
     }
 
-    @PostMapping("/signup")
-    private UserModel signUp(@Valid @RequestBody SignUpUserRequestDTO newUser) {
+    @PostMapping("/signup/customer")
+    private ResponseEntity<TemplateRes<UserModel>> signUpCustomer(@Valid @RequestBody SignUpUserRequestDTO newUser) {
         try {
-            return userService.signUp(newUser);
+            UserModel user = userService.signUpCustomer(newUser);
+            return ResponseEntity.ok().body(new TemplateRes<>(true, "Success!", user));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
+        }
+    }
+
+    @PostMapping("/signup/seller")
+    private ResponseEntity<TemplateRes<UserModel>> signUpSeller(@Valid @RequestBody SignUpUserRequestDTO newUser) {
+        try {
+            UserModel user = userService.signUpSeller(newUser); 
+            return ResponseEntity.ok().body(new TemplateRes<>(true, "Success!", user));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
         }

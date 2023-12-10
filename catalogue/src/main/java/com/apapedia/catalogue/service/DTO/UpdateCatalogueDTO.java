@@ -16,4 +16,5 @@ public class UpdateCatalogueDTO{
     private int price;
     private String productDescription;
     private UUID idCategory;
+    private byte[] image;
 }
