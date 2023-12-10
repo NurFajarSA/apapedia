@@ -21,6 +21,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
         Mono<Catalogue> catalogueMono = WebClient.create()
             .post()
             .uri("https://apap-103.cs.ui.ac.id/api/catalogue/add-catalogue")
+            .header("Content-Type", "multipart/form-data")
             .body(Mono.just(catalogue), Catalogue.class)
             .retrieve()
             .bodyToMono(Catalogue.class);
