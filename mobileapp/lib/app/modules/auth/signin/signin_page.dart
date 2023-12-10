@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobileapp/app/modules/auth/signin/sign_controller.dart';
 import 'package:mobileapp/app/widgets/custom_textfield.dart';
+import 'package:mobileapp/app/widgets/show_loading.dart';
 import 'package:mobileapp/core/theme/colors.dart';
 import 'package:mobileapp/routes/routes.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
@@ -141,17 +142,5 @@ class SigninPage extends StatelessWidget {
             ]),
           ],
         )));
-  }
-
-  showLoading(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
   }
 }
