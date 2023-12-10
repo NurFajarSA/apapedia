@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobileapp/app/data/services/auth_service.dart';
-import 'package:mobileapp/routes/routes.dart';
 
 class RegisterController extends GetxController {
   @override
@@ -44,20 +41,14 @@ class RegisterController extends GetxController {
     return null;
   }
 
-  void register() async {
+  register() async {
     if (_isValid()) {
-      final response = await authService.register(
+      return await authService.register(
           email: emailController.text,
           password: passwordController.text,
           name: nameController.text,
           username: usernameController.text,
           address: addressController.text);
-      if (response == HttpStatus.created) {
-        Get.snackbar("Success", "Register Success");
-        Get.offAllNamed(Routes.LOGIN);
-      } else {
-        Get.snackbar("Error", response.toString());
-      }
     }
   }
 

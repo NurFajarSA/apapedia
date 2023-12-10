@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mobileapp/app/modules/auth/signin/sign_controller.dart';
 import 'package:mobileapp/app/widgets/custom_textfield.dart';
 import 'package:mobileapp/core/theme/colors.dart';
+import 'package:mobileapp/routes/routes.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 
 class SigninPage extends StatelessWidget {
@@ -79,8 +80,29 @@ class SigninPage extends StatelessWidget {
                         width: MediaQuery.sizeOf(context).width - 40,
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         text: "Sign In",
-                        onPressed: () {
-                          signinController.signIn();
+                        onPressed: () async {
+                          try {
+                            showLoading(context);
+                            await signinController.signIn().then((value) {
+                              if (value) {
+                                Get.offAllNamed(Routes.HOME);
+                                Get.snackbar(
+                                  "Success",
+                                  "Sign in successful",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                );
+                              } else {
+                                Get.back();
+                                Get.snackbar(
+                                  "Error",
+                                  "Sign in failed",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                );
+                              }
+                            });
+                          } catch (e) {
+                            Get.snackbar("Error", e.toString());
+                          }
                         },
                       ),
                       const SizedBox(height: 14),
@@ -119,5 +141,17 @@ class SigninPage extends StatelessWidget {
             ]),
           ],
         )));
+  }
+
+  showLoading(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 }

@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobileapp/app/modules/auth/register/register_controller.dart';
 import 'package:mobileapp/app/widgets/custom_textfield.dart';
 import 'package:mobileapp/core/theme/colors.dart';
+import 'package:mobileapp/routes/routes.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -110,8 +113,25 @@ class RegisterPage extends StatelessWidget {
                       width: MediaQuery.sizeOf(context).width - 40,
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       text: "Register",
-                      onPressed: () {
-                        registerController.register();
+                      onPressed: () async {
+                        showLoading(context);
+                        await registerController.register().then((value) {
+                          if (value.statusCode == HttpStatus.ok) {
+                            Get.offAllNamed(Routes.LOGIN);
+                            Get.snackbar(
+                              "Success",
+                              "Register successful! Please login using your account",
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          } else {
+                            Get.back();
+                            Get.snackbar(
+                              "Error",
+                              "Register failed",
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          }
+                        });
                       },
                     ),
                     const SizedBox(height: 14),
@@ -139,5 +159,17 @@ class RegisterPage extends StatelessWidget {
             )
           ],
         )));
+  }
+
+  showLoading(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 }

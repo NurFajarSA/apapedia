@@ -42,39 +42,19 @@ class SigninController extends GetxController {
     return false;
   }
 
-  void signIn() {
+  Future<bool> signIn() async {
     if (_isValid()) {
-      _signIn(
+      return await _signIn(
           usernameEmail: usernameEmailController.text,
           password: passwordController.text);
     }
+    return false;
   }
 
-  void _signIn({required usernameEmail, required password}) async {
-    try {
-      var response = await authService.signIn(
-          usernameEmail: usernameEmail, password: password);
-      if (response) {
-        Get.offAllNamed(Routes.HOME);
-        Get.snackbar(
-          "Success",
-          "Sign in successful",
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      } else {
-        Get.snackbar(
-          "Error",
-          "Sign in failed",
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      }
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    }
+  Future<bool> _signIn({required usernameEmail, required password}) async {
+    var response = await authService.signIn(
+        usernameEmail: usernameEmail, password: password);
+    return response;
   }
 
   void toSignUp() {

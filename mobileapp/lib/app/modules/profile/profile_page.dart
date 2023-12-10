@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobileapp/app/modules/profile/profile_controller.dart';
 import 'package:mobileapp/core/theme/colors.dart';
+import 'package:mobileapp/routes/routes.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -17,30 +18,41 @@ class ProfilePage extends StatelessWidget {
         ),
         bottomNavigationBar: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          height: 120,
+          height: profileController.user != null ? 120 : 60,
           decoration: BoxDecoration(
             color: MyColors.white,
             boxShadow: BoxShadowDecorator().defaultShadow(context),
           ),
           child: Column(
             children: [
-              PrimaryButton(
-                width: double.infinity,
-                height: 48,
-                backgroundColor: Theme.of(context).colorScheme.error,
-                text: 'Logout',
-                onPressed: () {
-                  profileController.logout();
-                },
-              ),
-              const SizedBox(height: 16),
-              SecondaryButton(
-                width: double.infinity,
-                height: 48,
-                backgroundColor: Theme.of(context).colorScheme.error,
-                text: 'Delete Account',
-                onPressed: () {},
-              ),
+              if (profileController.user != null)
+                PrimaryButton(
+                  width: double.infinity,
+                  height: 48,
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  text: 'Logout',
+                  onPressed: () {
+                    profileController.logout();
+                  },
+                ),
+              if (profileController.user != null) const SizedBox(height: 16),
+              if (profileController.user != null)
+                SecondaryButton(
+                  width: double.infinity,
+                  height: 48,
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  text: 'Delete Account',
+                  onPressed: () {},
+                ),
+              if (profileController.user == null)
+                PrimaryButton(
+                  width: double.infinity,
+                  height: 48,
+                  text: 'Login',
+                  onPressed: () {
+                    Get.offAllNamed(Routes.LOGIN);
+                  },
+                ),
             ],
           ),
         ),
@@ -64,12 +76,13 @@ class ProfilePage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'John Doe',
+                            profileController.user?.name ?? 'Belum login',
                             style: Theme.of(context).textTheme.headlineMedium,
                             overflow: TextOverflow.fade,
                           ),
                           const SizedBox(height: 4),
-                          Text('@username',
+                          Text(
+                              "@${profileController.user?.username ?? 'Belum login'}",
                               style: Theme.of(context).textTheme.bodyLarge),
                         ],
                       ),
@@ -79,7 +92,7 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text('Email', style: Theme.of(context).textTheme.bodyLarge),
                 const SizedBox(height: 4),
-                Text('johndoe@gmail.com',
+                Text(profileController.user?.email ?? 'Belum login',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(height: 16),
                 Text(
@@ -87,7 +100,7 @@ class ProfilePage extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 4),
-                Text('Jl. Jalan No. 1',
+                Text(profileController.user?.address ?? 'Belum login',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(height: 16),
                 PrimaryButton(
@@ -95,7 +108,15 @@ class ProfilePage extends StatelessWidget {
                   height: 48,
                   text: 'Edit Profile',
                   onPressed: () {
-                    profileController.goToEditProfile();
+                    if (profileController.user != null) {
+                      profileController.goToEditProfile();
+                    } else {
+                      Get.snackbar(
+                        'Error',
+                        'Please login first',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    }
                   },
                 ),
               ],

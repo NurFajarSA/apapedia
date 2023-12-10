@@ -11,7 +11,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 class AuthService extends GetxService {
   Future<bool> signIn(
       {required String usernameEmail, required String password}) async {
-    var url = Uri.parse(Api.baseUrl + '/auth/login');
+    var url = Uri.parse('${Api.baseUrl}/auth/login');
     var headers = <String, String>{
       'Content-Type': 'application/json',
     };
@@ -33,32 +33,32 @@ class AuthService extends GetxService {
       TbSharedPref.setUserLogin(user);
       return true;
     } else {
-      throw Exception('Failed to login');
+      throw Exception(jsonDecode(response.body)['message']);
     }
   }
 
-  Future<Response> register(
+  Future<http.Response> register(
       {required email,
       required name,
       required username,
       required password,
       required address}) async {
-    var url = Uri.parse(Api.baseUrl + '/auth/signup/customer');
+    var url = Uri.parse('${Api.baseUrl}/auth/signup/customer');
     var headers = <String, String>{
       'Content-Type': 'application/json',
     };
     var body = <String, String>{
-      'email': email,
       'name': name,
       'username': username,
       'password': password,
+      'email': email,
       'address': address,
     };
 
     var response =
         await http.post(url, headers: headers, body: jsonEncode(body));
 
-    return Response(statusCode: response.statusCode, body: response.body);
+    return response;
   }
 
   Future<void> logout() async {
