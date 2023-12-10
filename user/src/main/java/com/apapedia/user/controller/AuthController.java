@@ -1,6 +1,5 @@
 package com.apapedia.user.controller;
 
-import com.apapedia.user.constant.Constant;
 import com.apapedia.user.dto.request.SignUpUserRequestDTO;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.model.request.LoginReq;
@@ -44,7 +43,7 @@ public class AuthController {
                 user = userService.getUserByUsername(loginReq.getUsernameEmail());
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not registered");
         }
 
         // Salah password
@@ -53,18 +52,8 @@ public class AuthController {
                     .body(new TemplateRes<>(false, "Invalid Credentials!", null));
         }
 
-        if (user.getRole().getRole().equals(Constant.ROLE_SELLER)) {
-            if (userService.login(user) == Constant.ROLE_SELLER){
-                return ResponseEntity.ok().body(new TemplateRes<>(true, "SSO Login Success!", null));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new TemplateRes<>(false, "Invalid Credentials!", null));
-            }
-        } else {
-            String tokenCustomer = userService.login(user);
-            return ResponseEntity.ok().body(new TemplateRes<>(true, "Login Success!", new LoginRes(tokenCustomer)));
-        }
-
+        String tokenCustomer = userService.login(user);
+        return ResponseEntity.ok().body(new TemplateRes<>(true, "Login Success!", new LoginRes(tokenCustomer)));
     }
 
     @PostMapping("/signup/customer")
