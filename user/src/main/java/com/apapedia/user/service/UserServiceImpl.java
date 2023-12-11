@@ -103,7 +103,17 @@ public class UserServiceImpl implements UserService{
         }
 
         UserModel oldUser = userDb.findById(updatedUser.getId()).get();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (passwordEncoder.matches(updatedUser.getPassword(), oldUser.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password must be different");
+        }
+        if (updatedUser.getPassword() != null) oldUser.setPassword(encrypt(updatedUser.getPassword()));
+        if (getUserByUsername(updatedUser.getUsername()) != null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
+        if (getUserByEmail(updatedUser.getEmail()) != null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
+        
+        oldUser.setUsername(updatedUser.getUsername());
         oldUser.setName(updatedUser.getName());
+        oldUser.setEmail(updatedUser.getEmail());
         oldUser.setAddress(updatedUser.getAddress());
         oldUser.setUpdatedAt(updatedUser.getUpdatedAt());
         return userDb.save(oldUser);

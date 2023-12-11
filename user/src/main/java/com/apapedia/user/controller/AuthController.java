@@ -26,7 +26,7 @@ public class AuthController {
 
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<TemplateRes<LoginRes>> login(@RequestBody LoginReq loginReq) {
+    public ResponseEntity<?> login(@RequestBody LoginReq loginReq) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         // Username/email kosong
@@ -42,8 +42,15 @@ public class AuthController {
             } else {
                 user = userService.getUserByUsername(loginReq.getUsernameEmail());
             }
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not registered");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new TemplateRes<>(false, "User not found!", null));
         }
 
         // Salah password
@@ -57,22 +64,37 @@ public class AuthController {
     }
 
     @PostMapping("/signup/customer")
-    private ResponseEntity<TemplateRes<UserModel>> signUpCustomer(@Valid @RequestBody SignUpUserRequestDTO newUser) {
+    private ResponseEntity<?> signUpCustomer(@Valid @RequestBody SignUpUserRequestDTO newUser) {
         try {
+            var tempUser = userService.getUserByUsername(newUser.getUsername());
+            if (tempUser != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new TemplateRes<>(false, "Username already exists", null));
+            }
             UserModel user = userService.signUpCustomer(newUser);
             return ResponseEntity.ok().body(new TemplateRes<>(true, "Success!", user));
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PostMapping("/signup/seller")
-    private ResponseEntity<TemplateRes<UserModel>> signUpSeller(@Valid @RequestBody SignUpUserRequestDTO newUser) {
+    private ResponseEntity<?> signUpSeller(@Valid @RequestBody SignUpUserRequestDTO newUser) {
         try {
+            var tempUser = userService.getUserByUsername(newUser.getUsername());
+            if (tempUser != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new TemplateRes<>(false, "Username already exists", null));
+            }
+
             UserModel user = userService.signUpSeller(newUser); 
             return ResponseEntity.ok().body(new TemplateRes<>(true, "Success!", user));
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }
