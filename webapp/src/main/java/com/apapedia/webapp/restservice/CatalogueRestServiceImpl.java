@@ -5,9 +5,14 @@ import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.apapedia.webapp.DTO.request.CategoryDTO;
 import com.apapedia.webapp.model.Catalogue;
 import com.apapedia.webapp.model.Category;
 import reactor.core.publisher.Flux;
@@ -18,11 +23,11 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
 
     @Override
     public Catalogue createCatalogue(Catalogue catalogue){
+
         Mono<Catalogue> catalogueMono = WebClient.create()
             .post()
-            .uri("https://apap-103.cs.ui.ac.id/api/catalogue/add-catalogue")
-            .header("Content-Type", "multipart/form-data")
-            .body(Mono.just(catalogue), Catalogue.class)
+            .uri("http://localhost:8081/api/catalogue/add-catalogue")
+            .body(BodyInserters.fromValue(catalogue))
             .retrieve()
             .bodyToMono(Catalogue.class);
         var response = catalogueMono.block();
@@ -33,17 +38,10 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public List<Catalogue> viewAllCatalogue() {
         Flux<Catalogue> catalogueFlux = WebClient.create()
             .get()
-            .uri("https://apap-103.cs.ui.ac.id/api/catalogue/view-all")
+            .uri("http://localhost:8081/api/catalogue/view-all")
             .retrieve()
             .bodyToFlux(Catalogue.class);
         var listCatalogue = catalogueFlux.collectList().block();
-
-        listCatalogue.forEach(catalog -> {
-            // Explicitly convert the image field to a byte array
-            byte[] imageBytes;
-            imageBytes = ((String) catalog.getImageBase64()).getBytes(StandardCharsets.UTF_8);
-            catalog.setImageBase64(Base64.getEncoder().encodeToString(imageBytes));
-        });
 
         return listCatalogue;
     }
@@ -59,13 +57,13 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     }
 
     @Override
-    public Category getCategoryById(UUID id) {
-        Flux<Category> categoryFlux = WebClient.create()
+    public CategoryDTO getCategoryById(UUID id) {
+        Flux<CategoryDTO> categoryFlux = WebClient.create()
             .get()
             .uri("https://apap-103.cs.ui.ac.id/api/category/view-all")
             .retrieve()
-            .bodyToFlux(Category.class);
-        for(Category category : categoryFlux.collectList().block()){
+            .bodyToFlux(CategoryDTO.class);
+        for(CategoryDTO category : categoryFlux.collectList().block()){
             if(category.getId().equals(id)){
                 return category;
             }

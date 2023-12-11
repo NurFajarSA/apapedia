@@ -1,4 +1,4 @@
-package com.apapedia.webapp.dto;
+package com.apapedia.webapp.DTO.request;
 
 import java.util.UUID;
 
@@ -18,7 +18,7 @@ public class UpdateCatalogueDTO {
     private String productName;
     private String productDescription;
     private long stock;
-    private String image;
+    private byte[] image;
     private Category category;
     private boolean deleted;
 }

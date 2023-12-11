@@ -14,9 +14,9 @@ import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
-import com.apapedia.webapp.dto.CatalogueMapper;
-import com.apapedia.webapp.dto.CreateCatalogueDTO;
-import com.apapedia.webapp.dto.UpdateCatalogueDTO;
+import com.apapedia.webapp.DTO.CatalogueMapper;
+import com.apapedia.webapp.DTO.request.CreateCatalogueDTO;
+import com.apapedia.webapp.DTO.request.UpdateCatalogueDTO;
 import com.apapedia.webapp.model.Catalogue;
 import com.apapedia.webapp.model.Category;
 import com.apapedia.webapp.restservice.CatalogueRestService;
@@ -48,42 +48,24 @@ public class CatalogueController {
     }
 
     @PostMapping("/catalogue/add-catalogue")
-    public String addCatalogue(@ModelAttribute CreateCatalogueDTO catalogueDTO, BindingResult bindingResult, @RequestPart("image") MultipartFile image, Model model, RedirectAttributes redirectAttrs){
-        var catalogueFromDTO = new Catalogue();
-        catalogueFromDTO.setProductName(catalogueDTO.getProductName());
-        catalogueFromDTO.setPrice(catalogueDTO.getPrice());
-        catalogueFromDTO.setProductDescription(catalogueDTO.getProductDescription());
-        catalogueFromDTO.setStock(catalogueDTO.getStock());
-        catalogueFromDTO.setImageBase64(catalogueDTO.getImage());
+    public String addCatalogue(@ModelAttribute Catalogue catalogue, BindingResult bindingResult, @RequestParam("image") String imageBase64, RedirectAttributes redirectAttrs){
+        try {
+            // Decode base64 string to byte array
+            byte[] imageByteArray = Base64.getDecoder().decode(imageBase64);
 
-        List<Category> listCategory = categoryRestService.viewAllCategory();
-        for(Category category : listCategory){
-            if(category.getId().equals(UUID.fromString(catalogueDTO.getCategory()))){
-                catalogueFromDTO.setCategory(category);
-            }
+            // Create a CatalogDTO instance and set the image byte array
+            catalogue.setImage(imageByteArray);
+            // Call the service to add the catalog
+            catalogueRestService.createCatalogue(catalogue);
+
+            redirectAttrs
+                .addFlashAttribute("success", String.format("Catalogue %s has been created", catalogue.getProductName()));
+
+            return "redirect:/catalogue/view-all";
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle the exception
+            return "error-page"; // Redirect to an error page or appropriate handling
         }
-
-         if (!image.isEmpty()) {
-            try {
-                // Convert the uploaded image to a Base64 String
-                byte[] imageBytes = image.getBytes();
-                String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-                catalogueDTO.setImage(imageBase64);
-
-            } catch (IOException e) {
-                // Handle the exception appropriately
-                bindingResult.rejectValue("image", "upload.error");
-            }
-        } else {
-            // Handle the case when no image is uploaded
-            bindingResult.rejectValue("image", "upload.empty");
-        }
-
-        var catalogue = catalogueRestService.createCatalogue(catalogueFromDTO);
-        model.addAttribute("catalogueName", catalogue.getProductName());
-        redirectAttrs.addFlashAttribute("success",
-                String.format("Produk baru %s berhasil disimpan", catalogue.getProductName()));
-        return "redirect:/catalogue/view-all";
     }
     
     @GetMapping("/catalogue/view-all")

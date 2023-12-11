@@ -20,11 +20,8 @@ public interface CatalogueService {
     Catalogue getCatalogueById(UUID id);
     Catalogue updateCatalogue(Catalogue catalogue, UUID id);
     List<Catalogue> getCataloguesBySellerId(UUID idSeller);
-    Catalogue saveCatalogue(Catalogue catalogue);
     Catalogue createCatalogue(NewCatalogueDTO catalogueDTO);
 
     void deleteCatalogue(Catalogue catalogue);
-
-    byte[] cekFile(MultipartFile file) throws IOException;
 
     }
