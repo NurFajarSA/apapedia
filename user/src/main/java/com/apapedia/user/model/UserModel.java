@@ -25,7 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
-@SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE user_table SET is_deleted = true WHERE id=?")
 @Where(clause = "is_deleted = false")
 @Table(name = "user_table")
 public class UserModel implements Serializable{

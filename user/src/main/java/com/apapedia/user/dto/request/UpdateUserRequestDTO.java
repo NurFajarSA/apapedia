@@ -4,17 +4,16 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-public class UpdateUserRequestDTO extends SignUpUserRequestDTO{
+@Data
+public class UpdateUserRequestDTO{
     private UUID id;
-    private long balance;
+    private String name;
+    private String address;
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     public void setId(String id) {

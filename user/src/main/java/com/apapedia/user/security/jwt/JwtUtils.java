@@ -48,7 +48,7 @@ public class JwtUtils {
     }
 
     public String getTokenFromHeader(HashMap<String, String> header){
-        return header.get("Authorization").substring(7);
+        return header.get("authorization").substring(7);
     }
 
     public boolean validateJwtToken(String authToken){
