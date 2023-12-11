@@ -2,13 +2,10 @@ package com.apapedia.webapp.controller;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Enumeration;
 import java.util.UUID;
 
-import com.apapedia.webapp.dto.request.CreateUserRequestDTO;
 import com.apapedia.webapp.restservice.SellerRestService;
 import com.apapedia.webapp.security.jwt.JwtUtils;
-import jakarta.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.codec.xml.Jaxb2XmlDecoder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,13 +18,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.apapedia.webapp.DTO.request.CreateUserRequestDTO;
 import com.apapedia.webapp.restservice.UserRestService;
-import com.apapedia.webapp.security.xml.Attributes;
 import com.apapedia.webapp.security.xml.ServiceResponse;
 import com.apapedia.webapp.setting.Setting;
 
@@ -63,14 +59,14 @@ public class UserController {
             )
         ).retrieve().bodyToMono(ServiceResponse.class).block();
         
-        Attributes attributes = serviceResponse.getAuthenticationSuccess().getAttributes();
+        // Attributes attributes = serviceResponse.getAuthenticationSuccess().getAttributes();
         String username = serviceResponse.getAuthenticationSuccess().getUser();
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, "dummy", null);
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(authentication);
 
-        String name = attributes.getNama();
+        // String name = attributes.getNama();
         var token = userRestService.getToken(username, "dummy");
 
         HttpSession httpSession = request.getSession(true);
@@ -95,6 +91,7 @@ public class UserController {
         return "register";
     }
 
+
     @PostMapping("/register")
     public String registerUser(@ModelAttribute CreateUserRequestDTO createUserDTO)
             throws IOException, InterruptedException {
@@ -102,7 +99,6 @@ public class UserController {
         createUserDTO.setRole("Seller");
         createUserDTO.setEmail(createUserDTO.getUsername() + "@ui.ac.id");
         userRestService.registerUser(createUserDTO);
-
         return "redirect:/home";
     }
 
@@ -115,9 +111,4 @@ public class UserController {
         model.addAttribute("seller", seller);
         return "profile";
     }
-
-
-
-
-    
 }

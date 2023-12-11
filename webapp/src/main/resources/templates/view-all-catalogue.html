@@ -16,19 +16,21 @@
         <div class="text-center pt-5">
             <h1 class="text-3xl font-bold ">Catalogue List</h1> <br>
             <p class="text">- Username -</p><br>
-            <button class="btn btn-primary">Add Product</button>
+            <button class="btn btn-primary" href="/catalogue/add-catalogue">Add Product</button>
         </div>
         <div class="grid grid-cols-3 gap-4">
             <div th:each="catalogue: ${listCatalogue}">
                 <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                     <div
                         class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                        <figure><img th:src="'data:image/jpeg;base64,' + ${catalogue.imageBase64}" class="card-img-top" alt="Product Image"></figure>
+                        <figure><img th:src="'http://apap-103.cs.ui.ac.id/api/catalogue/image/' + ${catalogue.id}"
+                                class="card-img-top" alt="Product Image"></figure>
                         <div class="card-body">
                             <h2 class="card-title" th:text="${catalogue.productName}"></h2>
                             <p th:text="'Price: ' + ${catalogue.price}"></p>
                             <div class="card-actions justify-between">
-                                <button class="btn btn-primary">Edit Product</button>                            </div>
+                                <button class="btn btn-primary">Edit Product</button>
+                            </div>
                         </div>
                     </div>
                 </div>

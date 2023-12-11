@@ -1,6 +1,6 @@
 package com.apapedia.catalogue.service;
 import com.apapedia.catalogue.model.Catalogue;
-import com.apapedia.catalogue.service.DTO.NewCatalogueDTO;
+import com.apapedia.catalogue.DTO.NewCatalogueDTO;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,11 +20,8 @@ public interface CatalogueService {
     Catalogue getCatalogueById(UUID id);
     Catalogue updateCatalogue(Catalogue catalogue, UUID id);
     List<Catalogue> getCataloguesBySellerId(UUID idSeller);
-    Catalogue saveCatalogue(Catalogue catalogue);
     Catalogue createCatalogue(NewCatalogueDTO catalogueDTO);
 
     void deleteCatalogue(Catalogue catalogue);
-
-    byte[] cekFile(MultipartFile file) throws IOException;
 
     }

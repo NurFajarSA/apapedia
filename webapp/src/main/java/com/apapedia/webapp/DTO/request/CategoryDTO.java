@@ -1,13 +1,15 @@
 package com.apapedia.webapp.DTO.request;
 
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-public class LoginRequestDTO {
-    private String usernameEmail;
-    private String password;
+@NoArgsConstructor
+@AllArgsConstructor
+public class CategoryDTO{
+    private UUID id;
+    private String name;
 }

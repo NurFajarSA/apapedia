@@ -35,9 +35,9 @@ public class CartServiceImpl implements CartService{
     public Cart addCartItem(AddCartItemRequestDTO cartItemDTO) {
         Cart cart = getCartById(cartItemDTO.getCartId());
         CartItem cartItem = cartMapper.addCartItemRequestDTOtoCartItem(cartItemDTO);
+        cartItem = cartItemDb.save(cartItem);
         cartItem.setCart(cart);
-        cartItem.setProductId(UUID.randomUUID()); // TODO: change to real product id
-        cartItemDb.save(cartItem);
+        cartItem.setProductId(UUID.randomUUID()); 
 
         updateTotalPrice(cart);
         return cartDb.save(cart);
@@ -66,7 +66,9 @@ public class CartServiceImpl implements CartService{
 
     @Override
     public List<CartItem> getCartItemsByUserId(UUID userId) {
-        return cartDb.findByCartUserId(userId);
+
+        Cart cart = cartDb.findByCartUserId(userId);
+        return cart.getListCartItem();
     }
 
     @Override
