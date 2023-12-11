@@ -4,7 +4,7 @@ import com.apapedia.catalogue.model.Catalogue;
 import com.apapedia.catalogue.model.Category;
 import com.apapedia.catalogue.repository.CatalogueDb;
 import com.apapedia.catalogue.repository.CategoryDb;
-import com.apapedia.catalogue.service.DTO.NewCatalogueDTO;
+import com.apapedia.catalogue.DTO.NewCatalogueDTO;
 
 import jakarta.transaction.Transactional;
 

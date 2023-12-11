@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
-import com.apapedia.catalogue.service.DTO.CatalogueMapper;
-import com.apapedia.catalogue.service.DTO.NewCatalogueDTO;
-import com.apapedia.catalogue.service.DTO.UpdateCatalogueDTO;
+import com.apapedia.catalogue.DTO.CatalogueMapper;
+import com.apapedia.catalogue.DTO.NewCatalogueDTO;
+import com.apapedia.catalogue.DTO.UpdateCatalogueDTO;
 
 import jakarta.validation.Valid;
 
