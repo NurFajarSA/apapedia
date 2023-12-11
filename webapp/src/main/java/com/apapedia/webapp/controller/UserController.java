@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.apapedia.webapp.DTO.request.CreateUserRequestDTO;
+import com.apapedia.webapp.dto.request.CreateUserRequestDTO;
 import com.apapedia.webapp.restservice.UserRestService;
 import com.apapedia.webapp.security.xml.Attributes;
 import com.apapedia.webapp.security.xml.ServiceResponse;
@@ -96,10 +96,10 @@ public class UserController {
     }
     
 
-    @GetMapping("/profile")
-    public String profile(Seller seller, Model model){
-        var sellerMap = sellerMapper.sellerResponseDTO(seller);
-        model.addAttribute("seller", sellerMap);
-        return "profile";
-    }
+    // @GetMapping("/profile")
+    // public String profile(Seller seller, Model model){
+    //     var sellerMap = sellerMapper.sellerResponseDTO(seller);
+    //     model.addAttribute("seller", sellerMap);
+    //     return "profile";
+    // }
 }
