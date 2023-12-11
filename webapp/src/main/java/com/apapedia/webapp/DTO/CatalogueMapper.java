@@ -1,5 +1,6 @@
-package com.apapedia.webapp.dto;
+package com.apapedia.webapp.DTO;
 
+import com.apapedia.webapp.dto.UpdateCatalogueDTO;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 
