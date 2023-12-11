@@ -18,7 +18,8 @@ public interface UserService {
     String login(UserModel user);
 
     UserModel updateUser(UpdateUserRequestDTO updatedUser, String token);
-    UserModel updateBalance(UUID id, long amount, String token);
+    UserModel topUp(UUID id, long amount, String token);
+    UserModel withdraw(UUID id, long amount, String token);
     void deleteUser(UUID id, String token);
 
     String encrypt(String password);

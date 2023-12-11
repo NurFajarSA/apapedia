@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserModel updateBalance(UUID id, long amount, String token) {
+    public UserModel topUp(UUID id, long amount, String token) {
         UserModel user = userDb.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
 
         if (!isSameUser(id, token)) {
@@ -128,12 +128,30 @@ public class UserServiceImpl implements UserService{
         }
     
         // Add validation for non-negative balance
-        if (amount < 0 && user.getBalance() < Math.abs(amount)) {
-            throw new IllegalArgumentException("Insufficient balance");
+        if (amount < 0 ) {
+            throw new IllegalArgumentException("Amount must be positive");
         }
     
         // Update balance
         user.setBalance(user.getBalance() + amount);
+        return userDb.save(user);
+    }
+
+    @Override
+    public UserModel withdraw(UUID id, long amount, String token) {
+        UserModel user = userDb.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if (!isSameUser(id, token)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this user");
+        }
+    
+        // Add validation for non-negative balance
+        if (amount < 0 || user.getBalance() < amount) {
+            throw new IllegalArgumentException("Insufficient balance");
+        }
+    
+        // Update balance
+        user.setBalance(user.getBalance() - amount);
         return userDb.save(user);
     }
 

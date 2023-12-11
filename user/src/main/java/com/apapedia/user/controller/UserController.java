@@ -82,11 +82,24 @@ public class UserController {
         return ResponseEntity.ok("User deleted");
     }
 
-    @PutMapping("/update-balance/{id}")
-    private ResponseEntity<?> updateBalance(@PathVariable UUID id, @RequestParam("amount") long amount,
+    @PutMapping("/{id}/top-up")
+    private ResponseEntity<?> topUp(@PathVariable UUID id, @RequestParam("amount") long amount,
             @RequestHeader HashMap<String, String> headers) {
         try{
-            var user = userService.updateBalance(id, amount, jwtUtils.getTokenFromHeader(headers)); 
+            var user = userService.topUp(id, amount, jwtUtils.getTokenFromHeader(headers)); 
+            return ResponseEntity.ok().body(user);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/withdraw")
+    private ResponseEntity<?> withdraw(@PathVariable UUID id, @RequestParam("amount") long amount,
+            @RequestHeader HashMap<String, String> headers) {
+        try{
+            var user = userService.withdraw(id, amount, jwtUtils.getTokenFromHeader(headers)); 
             return ResponseEntity.ok().body(user);
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
