@@ -58,12 +58,10 @@ public class OrderController {
 
     @GetMapping(value = "order/top5-status-order")
     public Map<Integer,Long> top5Month(){
+
         return orderService.getStatusCounts();
     }
 
-    @Autowired
-    private OrderService orderService;
-    
     @GetMapping("/order/view-all-order-customer/{customer}")
     public List<Order> getOrderByCustomer(@PathVariable("customer") UUID customer) {
         try{

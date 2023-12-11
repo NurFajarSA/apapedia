@@ -21,6 +21,7 @@ import com.apapedia.order.model.CartItem;
 import com.apapedia.order.service.CartService;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -51,6 +52,7 @@ public class CartController {
     @PutMapping("/cartItem/update")
     public Cart updateCartItem(@RequestBody UpdateCartItemRequestDTO cartItemDTO) {
         return cartService.updateCartItem(cartItemDTO);
+    }
 
     @GetMapping("/items/{userId}")
     public List<CartItem> getCartItemsByUserId(@PathVariable UUID userId) {

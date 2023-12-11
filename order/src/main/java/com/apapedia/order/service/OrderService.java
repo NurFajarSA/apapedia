@@ -15,4 +15,5 @@ public interface OrderService {
     Order updateStatusOrder(Order orderDTO, UUID id);
     Map<Integer,Long > getStatusCounts();
     Map<Integer, Long> getSalesCounts();
+//    List<Integer> getSalesPerDayForMonth(UUID userId);
 }

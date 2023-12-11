@@ -8,6 +8,7 @@ import com.apapedia.order.repository.OrderItemDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +39,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getOrderBySeller(UUID seller) {
         return orderDb.findBySeller(seller);
+    }
 
     @Override
     public Order addOrder(Order order){
@@ -80,25 +82,40 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Map<Integer, Long> getSalesCounts(){
-        List<OrderItem> listOrderItem = orderItemDb.findAll();
-        Map<Integer, Long> salesCounts = new HashMap<>();
+    public Map<Integer, Long> getSalesCounts() {
+            List<OrderItem> listOrderItem = orderItemDb.findAll();
+            Map<Integer, Long> salesCounts = new HashMap<>();
 
-        for(OrderItem orderItem : listOrderItem){
-            int productName = orderItem.getProductName();
-            int quantity = orderItem.getQuantity();
+            for (OrderItem orderItem : listOrderItem) {
+                int productName = orderItem.getProductName();
+                int quantity = orderItem.getQuantity();
 
-            salesCounts.put(productName, salesCounts.getOrDefault(productName, 0L)+ quantity);
+                salesCounts.put(productName, salesCounts.getOrDefault(productName, 0L) + quantity);
+            }
+            List<Map.Entry<Integer, Long>> sortedSalesList = salesCounts.entrySet().stream()
+                    .sorted(Map.Entry.<Integer, Long>comparingByValue().reversed())
+                    .limit(5)
+                    .collect(Collectors.toList());
+
+            Map<Integer, Long> top5ProductSales = new LinkedHashMap<>();
+            for (Map.Entry<Integer, Long> entry : sortedSalesList) {
+                top5ProductSales.put(entry.getKey(), entry.getValue());
+            }
+
+            return top5ProductSales;
         }
-        List<Map.Entry<Integer, Long>> sortedSalesList = salesCounts.entrySet().stream()
-                .sorted(Map.Entry.<Integer, Long>comparingByValue().reversed())
-                .limit(5)
-                .collect(Collectors.toList());
 
-        Map<Integer, Long> top5ProductSales = new LinkedHashMap<>();
-        for (Map.Entry<Integer, Long> entry : sortedSalesList) {
-            top5ProductSales.put(entry.getKey(), entry.getValue());
-        }
-
-        return top5ProductSales;
+//        public List<Integer> getSalesPerDayForMonth(UUID userId) {
+//            LocalDateTime startOfMonth = LocalDateTime.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1, 0, 0);
+//            LocalDateTime endOfMonth = LocalDateTime.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().lengthOfMonth(), 23, 59);
+//
+//            List<Order> orders = orderDb.findBySellerAndCreatedAtBetween(userId, startOfMonth, endOfMonth);
+//
+//            List<Integer> salesPerDay = orders.stream()
+//                    .map(order -> order.getListOrderItem().stream()
+//                            .mapToInt(orderItem -> orderItem.getQuantity()).sum())
+//                    .collect(Collectors.toList());
+//
+//            return salesPerDay;
+//        }
 }
