@@ -1,6 +1,5 @@
 package com.apapedia.webapp.model;
 
-import com.apapedia.webapp.model.UserModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

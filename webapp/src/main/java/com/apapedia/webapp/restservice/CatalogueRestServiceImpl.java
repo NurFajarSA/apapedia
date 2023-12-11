@@ -1,20 +1,14 @@
 package com.apapedia.webapp.restservice;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.apapedia.webapp.DTO.request.CategoryDTO;
+import com.apapedia.webapp.dto.request.CategoryDTO;
 import com.apapedia.webapp.model.Catalogue;
-import com.apapedia.webapp.model.Category;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

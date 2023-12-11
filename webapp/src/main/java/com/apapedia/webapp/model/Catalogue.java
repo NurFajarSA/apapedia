@@ -1,8 +1,6 @@
 package com.apapedia.webapp.model;
 
-import com.apapedia.webapp.DTO.request.CategoryDTO;
-import com.fasterxml.jackson.annotation.*;
-
+import com.apapedia.webapp.dto.request.CategoryDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

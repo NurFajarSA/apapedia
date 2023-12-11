@@ -1,13 +1,7 @@
 package com.apapedia.webapp.restservice;
 
-import com.apapedia.webapp.model.Seller;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 @Service
 public class SellerRestServiceImpl implements SellerRestService {
