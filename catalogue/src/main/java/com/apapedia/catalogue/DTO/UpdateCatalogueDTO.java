@@ -1,4 +1,4 @@
-package com.apapedia.catalogue.service.DTO;
+package com.apapedia.catalogue.DTO;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

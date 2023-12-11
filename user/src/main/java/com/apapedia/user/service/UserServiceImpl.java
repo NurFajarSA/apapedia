@@ -13,8 +13,12 @@ import com.apapedia.user.constant.Constant;
 import com.apapedia.user.dto.UserMapper;
 import com.apapedia.user.dto.request.SignUpUserRequestDTO;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
+import com.apapedia.user.model.Customer;
 import com.apapedia.user.model.Role;
+import com.apapedia.user.model.Seller;
 import com.apapedia.user.model.UserModel;
+import com.apapedia.user.repository.CustomerDb;
+import com.apapedia.user.repository.SellerDb;
 import com.apapedia.user.repository.UserDb;
 import com.apapedia.user.security.jwt.JwtUtils;
 
@@ -24,6 +28,12 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserDb userDb;
+
+    @Autowired
+    private CustomerDb customerDb;
+
+    @Autowired
+    private SellerDb sellerDb;
 
     @Autowired
     private UserMapper userMapper;
@@ -36,7 +46,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserModel getUserById(UUID id) {
-        return userDb.findById(id).get();
+        return userDb.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 
     @Override
@@ -57,54 +67,60 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserModel signUpCustomer(SignUpUserRequestDTO newUser) {
-        UserModel user = userMapper.signUpUserRequestDTOToUser(newUser);
+        Customer user = userMapper.signUpUserRequestDTOToCustomer(newUser);
         String hashedPassword = encrypt(newUser.getPassword());
         user.setPassword(hashedPassword);
         Role newRole = roleService.getRoleByRoleName(Constant.ROLE_CUSTOMER);
         user.setRole(newRole);
-        return userDb.save(user);
+
+        // TODO: Generate cartId
+        user.setCartId(UUID.randomUUID());
+
+        return customerDb.save(user);
     }
 
     @Override
     public UserModel signUpSeller(SignUpUserRequestDTO newUser) {
-        UserModel user = userMapper.signUpUserRequestDTOToUser(newUser);
+        Seller user = userMapper.signUpUserRequestDTOToSeller(newUser);
         String hashedPassword = encrypt(newUser.getPassword());
         user.setPassword(hashedPassword);
         Role newRole = roleService.getRoleByRoleName(Constant.ROLE_SELLER);
         user.setRole(newRole);
-        return userDb.save(user);
+        user.setCategory(newUser.getCategory());
+        
+        return sellerDb.save(user);
     }
 
     @Override
     public String login(UserModel user) {
-        if (user.getRole().getRole().equals(Constant.ROLE_SELLER)) {
-            if (!isUserExist(user.getId())) {
-                throw new NoSuchElementException("Seller not registered");
-            }
-            return Constant.ROLE_SELLER; 
-        }
         return jwtUtils.generateJwtToken(user);
     }
 
     @Override
     public UserModel updateUser(UpdateUserRequestDTO updatedUser, String token) {
-        if (isSameUser(updatedUser.getId(), token)){
+        if (!isSameUser(updatedUser.getId(), token)){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this user");
         }
 
         UserModel oldUser = userDb.findById(updatedUser.getId()).get();
-        oldUser.setName(updatedUser.getName());
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (passwordEncoder.matches(updatedUser.getPassword(), oldUser.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password must be different");
+        }
+        if (updatedUser.getPassword() != null) oldUser.setPassword(encrypt(updatedUser.getPassword()));
+        if (getUserByUsername(updatedUser.getUsername()) != null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
+        if (getUserByEmail(updatedUser.getEmail()) != null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
+        
         oldUser.setUsername(updatedUser.getUsername());
-        oldUser.setPassword(encrypt(updatedUser.getPassword()));
+        oldUser.setName(updatedUser.getName());
         oldUser.setEmail(updatedUser.getEmail());
-        oldUser.setBalance(updatedUser.getBalance());
         oldUser.setAddress(updatedUser.getAddress());
         oldUser.setUpdatedAt(updatedUser.getUpdatedAt());
         return userDb.save(oldUser);
     }
 
     @Override
-    public UserModel updateBalance(UUID id, long amount, String token) {
+    public UserModel topUp(UUID id, long amount, String token) {
         UserModel user = userDb.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
 
         if (!isSameUser(id, token)) {
@@ -112,12 +128,30 @@ public class UserServiceImpl implements UserService{
         }
     
         // Add validation for non-negative balance
-        if (amount < 0 && user.getBalance() < Math.abs(amount)) {
-            throw new IllegalArgumentException("Insufficient balance");
+        if (amount < 0 ) {
+            throw new IllegalArgumentException("Amount must be positive");
         }
     
         // Update balance
         user.setBalance(user.getBalance() + amount);
+        return userDb.save(user);
+    }
+
+    @Override
+    public UserModel withdraw(UUID id, long amount, String token) {
+        UserModel user = userDb.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if (!isSameUser(id, token)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this user");
+        }
+    
+        // Add validation for non-negative balance
+        if (amount < 0 || user.getBalance() < amount) {
+            throw new IllegalArgumentException("Insufficient balance");
+        }
+    
+        // Update balance
+        user.setBalance(user.getBalance() - amount);
         return userDb.save(user);
     }
 
@@ -139,12 +173,24 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean isSameUser(UUID userId, String token) {
-        return userId.equals(UUID.fromString(jwtUtils.getClaimsFromJwtToken(token).getSubject()));
+        var id = jwtUtils.getClaimsFromJwtToken(token).getSubject();
+        return userId.toString().equals(id);
     }
 
     @Override
     public String getToken(String token) {
         return jwtUtils.getClaimsFromJwtToken(token).getSubject();
+    }
+
+
+    @Override
+    public Customer getCustomerById(UUID id) {
+        return customerDb.findById(id).orElseThrow(() -> new NoSuchElementException("Customer not found"));
+    }
+
+    @Override
+    public Seller getSellerById(UUID id) {
+        return sellerDb.findById(id).orElseThrow(() -> new NoSuchElementException("Seller not found"));
     }
     
 }

@@ -4,7 +4,10 @@ package com.apapedia.catalogue.controller;
 import com.apapedia.catalogue.model.Catalogue;
 import com.apapedia.catalogue.service.CatalogueService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
-import com.apapedia.catalogue.service.DTO.CatalogueMapper;
-import com.apapedia.catalogue.service.DTO.NewCatalogueDTO;
-import com.apapedia.catalogue.service.DTO.UpdateCatalogueDTO;
+import com.apapedia.catalogue.DTO.CatalogueMapper;
+import com.apapedia.catalogue.DTO.NewCatalogueDTO;
+import com.apapedia.catalogue.DTO.UpdateCatalogueDTO;
 
 import jakarta.validation.Valid;
 
@@ -44,6 +47,12 @@ public class CatalogueController {
         return catalogueService.getAllCatalogue();
     }
 
+    @GetMapping(value = "/catalogue/image/{catalogId}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public Resource getImage(@PathVariable(value = "catalogId") UUID catalogId) {
+        var catalog = catalogueService.getCatalogueById(catalogId);
+        return new ByteArrayResource(catalog.getImage());
+    }
+
     @GetMapping(value = "/catalogue/view-catalogue-by-id")
     public Catalogue getCatalogueById(UUID id) {
         return catalogueService.getCatalogueById(id);
@@ -61,28 +70,15 @@ public class CatalogueController {
     }
 
     @PostMapping(value = "/catalogue/add-catalogue")
-    public Catalogue addCatalogue(@Valid @RequestBody NewCatalogueDTO newCatalogueDTO, BindingResult bindingResult, @RequestPart("file") MultipartFile file) {
+    public Catalogue addCatalogue(@Valid @RequestBody NewCatalogueDTO newCatalogueDTO, BindingResult bindingResult) {
         if(bindingResult.hasFieldErrors()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
         }else{
-            var catalogue = catalogueService.createCatalogue(newCatalogueDTO);
-
-            byte[] content;
-
-            try {
-                content = catalogueService.cekFile(file);
-            } catch (IOException e) {
-                throw new ResponseStatusException(
-                        HttpStatus.INTERNAL_SERVER_ERROR, "Error processing the file"
-                );
-            }
-
-            catalogue.setImage(content);
-            return catalogueService.saveCatalogue(catalogue);
+                var catalogueSave = catalogueService.createCatalogue(newCatalogueDTO);
+                return catalogueSave;
         }
         
     }
-
 
     @DeleteMapping(value = "/catalogue/{id}")
     public String deleteCatalogue(@PathVariable ("id") UUID id){

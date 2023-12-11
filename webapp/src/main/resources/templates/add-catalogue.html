@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.8/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Add Catalogue</title>
+
+    <script>
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const binaryString = event.target.result;
+
+                // Convert binary string to base64
+                const base64String = btoa(binaryString);
+
+                // Send the base64 string to server using AJAX
+                $.ajax({
+                    type: "POST",
+                    url: "catalogue/add-catalogue",
+                    data: {
+                        image: base64String
+                    },
+                    success: function (response) {
+                        // Handle success response
+                        console.log(response);
+                    },
+                    error: function (error) {
+                        // Handle error response
+                        console.error(error);
+                    }
+                });
+            };
+
+            reader.readAsBinaryString(file);
+        }
+    </script>
+
+</head>
+
+<body>
+    <section class="bg-gray-50 dark:bg-gray-900 h-screen flex items-center justify-center">
+
+        <div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></div>
+
+        <form id="catalogForm" class="max-w-md mx-auto w-1/2" th:action="@{/catalogue/add-catalogue}"
+            th:object="${catalogue}" method="POST" enctype="multipart/form-data">
+
+            <div class="relative z-0 w-full mb-5 group">
+                <input type="text" name="floating_productName" id="floating_productName" th:field="*{productName}"
+                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" " required />
+                <label for="floating_productName"
+                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product
+                    Name</label>
+            </div>
+
+            <div class="relative z-0 w-full mb-5 group">
+                <input type="number" name="floating_price" id="floating_price" th:field="*{price}"
+                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" " required />
+                <label for="floating_price"
+                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Price</label>
+            </div>
+
+            <div class="relative z-0 w-full mb-5 group">
+                <input type="text" name="floating_description" id="floating_description"
+                    th:field="*{productDescription}"
+                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" " required />
+                <label for="floating_description"
+                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Description</label>
+            </div>
+
+            <div class="relative z-0 w-full mb-5 group">
+                <input type="number" name="floating_stock" id="floating_stock" th:field="*{stock}"
+                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" " required />
+                <label for="floating_stock"
+                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Stock</label>
+            </div>
+
+            <div class="relative z-0 w-full mb-5 group">
+                <label for="floating_stock"
+                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Category</label>
+                <br>
+                <select class="form-control" name="idCategory" id="idCategory" th:field="*{category}">
+                    <option th:each="categorySelect: ${listCategory}" th:value="${categorySelect.id}"
+                        th:text="${categorySelect.name}"></option>
+                </select>
+            </div>
+
+            <input type="hidden" id="imageByteArray" name="image" />
+
+            <div class="relative z-0 w-full mb-5 group">
+                <label>Image:</label>
+                <input type="file" id="imageBase64" onchange="handleFileSelect(event)" />
+            </div>
+
+            <button type="submit"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+        </form>
+
+    </section>
+</body>
+
+
+</html>

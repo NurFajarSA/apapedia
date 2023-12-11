@@ -14,7 +14,6 @@ import lombok.Setter;
 @Setter
 public class UpdateUserRequestDTO extends SignUpUserRequestDTO{
     private UUID id;
-    private long balance;
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     public void setId(String id) {

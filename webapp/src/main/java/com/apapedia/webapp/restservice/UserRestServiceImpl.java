@@ -4,8 +4,10 @@ import java.io.IOException;
 
 import org.springframework.stereotype.Service;
 
-import com.apapedia.webapp.dto.request.CreateUserRequestDTO;
-import com.apapedia.webapp.dto.response.ReadUserResponseDTO;
+import com.apapedia.webapp.DTO.request.CreateUserRequestDTO;
+import com.apapedia.webapp.DTO.request.LoginRequestDTO;
+import com.apapedia.webapp.DTO.response.ReadUserResponseDTO;
+import com.apapedia.webapp.DTO.response.TokenDTO;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,6 +23,26 @@ public class UserRestServiceImpl implements UserRestService {
         this.webClient = webClientBuilder.baseUrl("https://apap-102.cs.ui.ac.id")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
+    }
+
+    @Override
+    public String getToken(String username, String password) {
+
+        var body = new LoginRequestDTO(username, password);
+
+        var response = this.webClient
+                .post()
+                .uri("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(body)
+                .retrieve()
+                .bodyToMono(TokenDTO.class)
+                .block();
+
+        var token = response.getContent().getToken();
+
+
+        return token;
     }
 
     @Override

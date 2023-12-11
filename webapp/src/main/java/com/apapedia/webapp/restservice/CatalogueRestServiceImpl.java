@@ -1,56 +1,80 @@
 package com.apapedia.webapp.restservice;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.HashMap;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import com.apapedia.webapp.DTO.request.CategoryDTO;
 import com.apapedia.webapp.model.Catalogue;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.apapedia.webapp.model.Category;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class CatalogueRestServiceImpl implements CatalogueRestService{
 
     @Override
-    public List<Map<String, Object>> viewAllCatalogue() throws IOException, InterruptedException{
-        //Send Request To Get JSON Data Catalogue
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://apap-103.cs.ui.ac.id/api/catalogue/view-all"))
-            .method("GET", HttpRequest.BodyPublishers.noBody())
-            .build();
-        
-        HttpClient httpClient = HttpClient.newHttpClient();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    public Catalogue createCatalogue(Catalogue catalogue){
 
-        //Convert JSON Data Catalogue To Map
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Map<String, Object>> catalogueList = objectMapper.readValue(response.body(), new TypeReference<List<Map<String, Object>>>(){});
-
-        return catalogueList;
+        Mono<Catalogue> catalogueMono = WebClient.create()
+            .post()
+            .uri("http://apap-103.cs.ui.ac.id/api/catalogue/add-catalogue")
+            .body(BodyInserters.fromValue(catalogue))
+            .retrieve()
+            .bodyToMono(Catalogue.class);
+        var response = catalogueMono.block();
+        return response;
     }
 
     @Override
-    public Catalogue getCatalogueById(String id) throws IOException, InterruptedException{
-        //Send Request To Get JSON Data Catalogue
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("http://api.apapedia.com/catalogue/get-by-id/" + id))
-            .method("GET", HttpRequest.BodyPublishers.noBody())
-            .build();
-        
-        HttpClient httpClient = HttpClient.newHttpClient();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    public List<Catalogue> viewAllCatalogue() {
+        Flux<Catalogue> catalogueFlux = WebClient.create()
+            .get()
+            .uri("http://apap-103.cs.ui.ac.id/api/catalogue/view-all")
+            .retrieve()
+            .bodyToFlux(Catalogue.class);
+        var listCatalogue = catalogueFlux.collectList().block();
 
-        //Convert JSON Data Catalogue To Map
-        ObjectMapper objectMapper = new ObjectMapper();
-        Catalogue catalogue = objectMapper.readValue(response.body(), Catalogue.class);
+        return listCatalogue;
+    }
 
-        return catalogue;
+    @Override
+    public Catalogue getCatalogueById(UUID id){
+        Mono<Catalogue> catalogueMono = WebClient.create()
+            .get()
+            .uri("https://apap-103.cs.ui.ac.id/api/catalogue/view-catalogue-by-id/" + id)
+            .retrieve()
+            .bodyToMono(Catalogue.class);
+        return catalogueMono.block();
+    }
+
+    @Override
+    public CategoryDTO getCategoryById(UUID id) {
+        Flux<CategoryDTO> categoryFlux = WebClient.create()
+            .get()
+            .uri("https://apap-103.cs.ui.ac.id/api/category/view-all")
+            .retrieve()
+            .bodyToFlux(CategoryDTO.class);
+        for(CategoryDTO category : categoryFlux.collectList().block()){
+            if(category.getId().equals(id)){
+                return category;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Catalogue updateCatalogue(Catalogue catalogueDTO, UUID id){
+        var category = getCategoryById(catalogueDTO.getCategory().getId());
+        catalogueDTO.setCategory(category);
+        return catalogueDTO;
     }
 }

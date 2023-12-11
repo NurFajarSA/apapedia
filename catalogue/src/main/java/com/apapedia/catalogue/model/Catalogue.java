@@ -42,9 +42,10 @@ public class Catalogue {
     private int stock;
 
     @Lob
-    @Basic(fetch = FetchType.EAGER)
-    @Column(name = "image")
+    @Column(name = "image", nullable = true)
+    @Basic(fetch = FetchType.LAZY)
     private byte[] image;
+
 
     @ManyToOne
     @JoinColumn(name="category_id")

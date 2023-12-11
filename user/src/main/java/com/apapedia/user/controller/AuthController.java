@@ -1,6 +1,5 @@
 package com.apapedia.user.controller;
 
-import com.apapedia.user.constant.Constant;
 import com.apapedia.user.dto.request.SignUpUserRequestDTO;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.model.request.LoginReq;
@@ -27,7 +26,7 @@ public class AuthController {
 
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<TemplateRes<LoginRes>> login(@RequestBody LoginReq loginReq) {
+    public ResponseEntity<?> login(@RequestBody LoginReq loginReq) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         // Username/email kosong
@@ -43,8 +42,15 @@ public class AuthController {
             } else {
                 user = userService.getUserByUsername(loginReq.getUsernameEmail());
             }
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new TemplateRes<>(false, "User not found!", null));
         }
 
         // Salah password
@@ -53,35 +59,42 @@ public class AuthController {
                     .body(new TemplateRes<>(false, "Invalid Credentials!", null));
         }
 
-        if (user.getRole().getRole().equals(Constant.ROLE_SELLER)) {
-            if (userService.login(user) == Constant.ROLE_SELLER){
-                return ResponseEntity.ok().body(new TemplateRes<>(true, "SSO Login Success!", null));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new TemplateRes<>(false, "Invalid Credentials!", null));
-            }
-        } else {
-            String tokenCustomer = userService.login(user);
-            return ResponseEntity.ok().body(new TemplateRes<>(true, "Login Success!", new LoginRes(tokenCustomer)));
-        }
-
+        String tokenCustomer = userService.login(user);
+        return ResponseEntity.ok().body(new TemplateRes<>(true, "Login Success!", new LoginRes(tokenCustomer)));
     }
 
     @PostMapping("/signup/customer")
-    private UserModel signUpCustomer(@Valid @RequestBody SignUpUserRequestDTO newUser) {
+    private ResponseEntity<?> signUpCustomer(@Valid @RequestBody SignUpUserRequestDTO newUser) {
         try {
-            return userService.signUpCustomer(newUser);
+            var tempUser = userService.getUserByUsername(newUser.getUsername());
+            if (tempUser != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new TemplateRes<>(false, "Username already exists", null));
+            }
+            UserModel user = userService.signUpCustomer(newUser);
+            return ResponseEntity.ok().body(new TemplateRes<>(true, "Success!", user));
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PostMapping("/signup/seller")
-    private UserModel signUpSeller(@Valid @RequestBody SignUpUserRequestDTO newUser) {
+    private ResponseEntity<?> signUpSeller(@Valid @RequestBody SignUpUserRequestDTO newUser) {
         try {
-            return userService.signUpSeller(newUser);
+            var tempUser = userService.getUserByUsername(newUser.getUsername());
+            if (tempUser != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new TemplateRes<>(false, "Username already exists", null));
+            }
+
+            UserModel user = userService.signUpSeller(newUser); 
+            return ResponseEntity.ok().body(new TemplateRes<>(true, "Success!", user));
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }
