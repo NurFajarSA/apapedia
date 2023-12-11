@@ -26,7 +26,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
 
         Mono<Catalogue> catalogueMono = WebClient.create()
             .post()
-            .uri("http://localhost:8081/api/catalogue/add-catalogue")
+            .uri("http://apap-103.cs.ui.ac.id/api/catalogue/add-catalogue")
             .body(BodyInserters.fromValue(catalogue))
             .retrieve()
             .bodyToMono(Catalogue.class);
@@ -38,7 +38,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public List<Catalogue> viewAllCatalogue() {
         Flux<Catalogue> catalogueFlux = WebClient.create()
             .get()
-            .uri("http://localhost:8081/api/catalogue/view-all")
+            .uri("http://apap-103.cs.ui.ac.id/api/catalogue/view-all")
             .retrieve()
             .bodyToFlux(Catalogue.class);
         var listCatalogue = catalogueFlux.collectList().block();
