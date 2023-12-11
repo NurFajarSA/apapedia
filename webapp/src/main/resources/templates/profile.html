@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/output.css}">
+    <script th:src="@{/js/tailwind.config.js}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.8/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Profile</title>
+</head>
+<body>
+<section class="bg-gray-50 dark:bg-gray-900">
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                <div class="flex items-center justify-center mt-4">
+                    <img class="w-32 h-32 object-cover rounded-full" src="https://via.placeholder.com/150" alt="Profil">
+                    <div class="ml-4">
+                        <h1 class="text-xl font-bold" th:text="${seller.username}"></h1>
+                        <p class="text-gray-500 text-sm mt-1" th:text="${seller.category}"></p>
+                    </div>
+                </div>
+                <!--                    <div class="text-center mt-4">-->
+                <!--                        <h1 class="text-xl font-bold">Nama Penjual</h1>-->
+                <!--                        <p class="text-gray-500 text-sm mt-1">Category Penjual</p>-->
+                <!--                    </div>-->
+                <div class="border-t border-gray-300 mt-6 pt-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-gray-500">Email:</p>
+                            <p class="font-semibold" th:text="${seller.email}"></p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500">Alamat:</p>
+                            <p class="font-semibold" th:text="${seller.address}"></p>
+                        </div>
+
+                    </div>
+                    <div class="flex justify-center mt-6 space-x-4">
+                        <div class="text-center m-3">
+                            <a type="button" class="bg-gray-500 hover:bg-gray-600 text-gray-100 font-bold py-2 px-4 rounded" href="/edit-profile">Edit Profile</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-300 mt-6 pt-6">
+                    <h1 class="text-xl font-bold text-center">Apapay</h1>
+
+                    <!--                        <div class="grid grid-cols-2 gap-4">-->
+                    <!--                            </div>-->
+                    <div>
+                        <p class="font-semibold" th:text="'Balance : ' + ${seller.balance}"></p>
+                        <!--                            <p class="font-semibold">1200000</p>-->
+                    </div>
+                    <div class="flex justify-center mt-6 space-x-4">
+                        <div class="text-center m-3">
+                            <a type="button" class="bg-gray-500 hover:bg-gray-600 text-gray-100 font-bold py-2 px-4 rounded" href="/withdraw">Withdraw</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-300 mt-6 pt-6">
+                    <div class="flex justify-center mt-4">
+                        <div class="text-center m-2">
+                            <a type="button" class="bg-gray-500 hover:bg-gray-600 text-gray-100 font-bold py-2 px-4 rounded" href="/">Delete Account</a>
+                        </div>
+                        <div class="text-center m-2">
+                            <a type="button" class="bg-gray-500 hover:bg-gray-600 text-gray-100 font-bold py-2 px-4 rounded" href="/">Sign Out</a>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+
+
+</html>
+

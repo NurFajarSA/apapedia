@@ -2,7 +2,12 @@ package com.apapedia.webapp.controller;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Enumeration;
+import java.util.UUID;
 
+import com.apapedia.webapp.restservice.SellerRestService;
+import com.apapedia.webapp.security.jwt.JwtUtils;
+import jakarta.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.codec.xml.Jaxb2XmlDecoder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.apapedia.webapp.dto.request.CreateUserRequestDTO;
+import com.apapedia.webapp.DTO.request.CreateUserRequestDTO;
 import com.apapedia.webapp.restservice.UserRestService;
 import com.apapedia.webapp.security.xml.Attributes;
 import com.apapedia.webapp.security.xml.ServiceResponse;
@@ -35,6 +40,12 @@ public class UserController {
 
     @Autowired
     UserRestService userRestService;
+
+    @Autowired
+    SellerRestService sellerRestService;
+
+    @Autowired
+    JwtUtils jwtUtils;
 
     private WebClient webClient = WebClient.builder()
                     .codecs(configurer -> configurer.defaultCodecs()
@@ -95,7 +106,17 @@ public class UserController {
         return "redirect:/home";
     }
 
-    @GetMapping
+    @GetMapping("/profile")
+    public String profile(Model model, HttpServletRequest request){
+        HttpSession httpSession = request.getSession();
+        var token = httpSession.getAttribute("token");
+        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(9, 44);
+        var seller = sellerRestService.readSeller(UUID.fromString(sellerId), token.toString());
+        model.addAttribute("seller", seller);
+        return "profile";
+    }
+
+
 
 
     

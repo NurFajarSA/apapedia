@@ -1,4 +1,4 @@
-package com.apapedia.webapp.dto;
+package com.apapedia.webapp.DTO;
 
 import java.util.UUID;
 
