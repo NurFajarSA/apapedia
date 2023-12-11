@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.util.Enumeration;
 import java.util.UUID;
 
+import com.apapedia.webapp.dto.request.CreateUserRequestDTO;
 import com.apapedia.webapp.restservice.SellerRestService;
 import com.apapedia.webapp.security.jwt.JwtUtils;
 import jakarta.servlet.ServletContext;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.apapedia.webapp.DTO.request.CreateUserRequestDTO;
 import com.apapedia.webapp.restservice.UserRestService;
 import com.apapedia.webapp.security.xml.Attributes;
 import com.apapedia.webapp.security.xml.ServiceResponse;
@@ -110,7 +110,7 @@ public class UserController {
     public String profile(Model model, HttpServletRequest request){
         HttpSession httpSession = request.getSession();
         var token = httpSession.getAttribute("token");
-        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(9, 44);
+        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(8, 44);
         var seller = sellerRestService.readSeller(UUID.fromString(sellerId), token.toString());
         model.addAttribute("seller", seller);
         return "profile";

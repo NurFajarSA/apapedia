@@ -3,16 +3,15 @@ package com.apapedia.webapp.restservice;
 import java.io.IOException;
 
 import org.springframework.stereotype.Service;
-
-import com.apapedia.webapp.DTO.request.CreateUserRequestDTO;
-import com.apapedia.webapp.DTO.request.LoginRequestDTO;
-import com.apapedia.webapp.DTO.response.ReadUserResponseDTO;
-import com.apapedia.webapp.DTO.response.TokenDTO;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.apapedia.webapp.dto.request.CreateUserRequestDTO;
+import com.apapedia.webapp.dto.request.LoginRequestDTO;
+import com.apapedia.webapp.dto.response.ReadUserResponseDTO;
+import com.apapedia.webapp.dto.response.TokenDTO;
 
 @Service
 public class UserRestServiceImpl implements UserRestService {

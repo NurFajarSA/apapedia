@@ -15,7 +15,7 @@ public class SellerRestServiceImpl implements SellerRestService {
     public Seller readSeller(UUID sellerId, String token) {
         Mono<Seller> sellerFlux = WebClient.create()
                 .get()
-                .uri("https://apap-102.cs.ui.ac.id/api/user/" + "c2c4f53b-f653-46ba-99b2-69f8a6e18948")
+                .uri("https://apap-102.cs.ui.ac.id/api/user/" + sellerId.toString())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer "+token)
                 .retrieve()
                 .bodyToMono(Seller.class);
