@@ -1,9 +1,6 @@
-package com.apapedia.webapp.DTO.request;
+package com.apapedia.webapp.dto.request;
 
 import java.math.BigInteger;
-import java.util.UUID;
-
-import com.apapedia.webapp.model.Category;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
