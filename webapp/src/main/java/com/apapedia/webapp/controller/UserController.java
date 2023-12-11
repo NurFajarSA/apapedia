@@ -84,6 +84,7 @@ public class UserController {
         return "register";
     }
 
+
     @PostMapping("/register")
     public String registerUser(@ModelAttribute CreateUserRequestDTO createUserDTO)
             throws IOException, InterruptedException {
@@ -91,8 +92,14 @@ public class UserController {
         createUserDTO.setRole("Seller");
         createUserDTO.setEmail(createUserDTO.getUsername() + "@ui.ac.id");
         userRestService.registerUser(createUserDTO);
-
         return "redirect:/home";
     }
     
+
+    @GetMapping("/profile")
+    public String profile(Seller seller, Model model){
+        var sellerMap = sellerMapper.sellerResponseDTO(seller);
+        model.addAttribute("seller", sellerMap);
+        return "profile";
+    }
 }
