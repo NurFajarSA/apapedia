@@ -20,7 +20,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
 
         Mono<Catalogue> catalogueMono = WebClient.create()
             .post()
-            .uri("http://apap-103.cs.ui.ac.id/api/catalogue/add-catalogue")
+            .uri("http://103.41.205.41:10103/api/catalogue/add-catalogue")
             .body(BodyInserters.fromValue(catalogue))
             .retrieve()
             .bodyToMono(Catalogue.class);
@@ -32,7 +32,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public List<Catalogue> viewAllCatalogue() {
         Flux<Catalogue> catalogueFlux = WebClient.create()
             .get()
-            .uri("http://apap-103.cs.ui.ac.id/api/catalogue/view-all")
+            .uri("http://103.41.205.41:10103/api/catalogue/view-all")
             .retrieve()
             .bodyToFlux(Catalogue.class);
         var listCatalogue = catalogueFlux.collectList().block();
@@ -44,7 +44,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public Catalogue getCatalogueById(UUID id){
         Mono<Catalogue> catalogueMono = WebClient.create()
             .get()
-            .uri("https://apap-103.cs.ui.ac.id/api/catalogue/view-catalogue-by-id/" + id)
+            .uri("http://103.41.205.41:10103/api/catalogue/view-catalogue-by-id/" + id)
             .retrieve()
             .bodyToMono(Catalogue.class);
         return catalogueMono.block();
@@ -54,7 +54,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public CategoryDTO getCategoryById(UUID id) {
         Flux<CategoryDTO> categoryFlux = WebClient.create()
             .get()
-            .uri("https://apap-103.cs.ui.ac.id/api/category/view-all")
+            .uri("http://103.41.205.41:10103/api/category/view-all")
             .retrieve()
             .bodyToFlux(CategoryDTO.class);
         for(CategoryDTO category : categoryFlux.collectList().block()){
