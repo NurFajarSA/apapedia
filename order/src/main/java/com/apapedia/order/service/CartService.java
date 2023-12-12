@@ -14,6 +14,6 @@ public interface CartService {
     Cart addCartItem(AddCartItemRequestDTO cartItemDTO);
     Cart updateCartItem(UpdateCartItemRequestDTO cartItemDTO);
     Cart getCartById(UUID cartId);
-    List<CartItem> getCartItemsByUserId(UUID userId);
+    List<CartItem> getCartItemsByCustomerId(UUID userId);
     void deleteCartItem(UUID cartItemId);
 }

@@ -23,8 +23,8 @@ public class Cart {
     private UUID cartId = UUID.randomUUID();
 
     @NotNull
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    @Column(name = "customer_id", nullable = false)
+    private UUID customerId;
 
     @NotNull
     @Column(name = "total_price", nullable = false)
