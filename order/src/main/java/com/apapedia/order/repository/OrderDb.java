@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface OrderDb extends JpaRepository<Order, UUID>{
-    List<Order> findByCustomer(UUID userId);
-    List<Order> findBySeller(UUID userId);
-    List<Order> findBySellerAndCreatedAtBetween(UUID userId, LocalDateTime startOfMonth, LocalDateTime endOfMonth);
+    List<Order> findByCustomerId(UUID customerId);
+    List<Order> findBySellerId(UUID sellerId);
+    List<Order> findBySellerIdAndCreatedAtBetween(UUID sellerId, LocalDateTime startOfMonth, LocalDateTime endOfMonth);
 }

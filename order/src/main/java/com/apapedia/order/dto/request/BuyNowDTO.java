@@ -1,19 +1,18 @@
 package com.apapedia.order.dto.request;
 
-import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class AddCartItemRequestDTO {
-    private UUID cartId;
+@NoArgsConstructor
+public class BuyNowDTO {
     private UUID productId;
+    private UUID customerId;
     private UUID sellerId;
-    private String productName;
     private int productPrice;
-    private int quantity;
+    private String productName;
 }
