@@ -1,22 +1,22 @@
 version: '3.3'
 services:
-  order:
-    platform: linux/amd64
-    build:
-      context: ./order
-    restart: always
-    ports:
-      - "10104:8080"
-    volumes:
-      - ./file-storage:/file-storage
-      - ./log:/log
-    env_file:
-      - order/.env
-    depends_on:
-      - order_db
-    networks:
-      - frontend-network
-      - backend-network
+  # order:
+  #   platform: linux/amd64
+  #   build:
+  #     context: ./order
+  #   restart: always
+  #   ports:
+  #     - "10104:8080"
+  #   volumes:
+  #     - ./file-storage:/file-storage
+  #     - ./log:/log
+  #   env_file:
+  #     - order/.env
+  #   depends_on:
+  #     - order_db
+  #   networks:
+  #     - frontend-network
+  #     - backend-network
 
   order_db:
     image: postgres:14-alpine
@@ -31,23 +31,23 @@ services:
     networks:
       - backend-network
 
-  catalogue:
-    platform: linux/amd64
-    build:
-      context: ./catalogue
-    restart: always
-    ports:
-      - "10103:8080"
-    volumes:
-      - ./file-storage:/file-storage
-      - ./log:/log
-    env_file:
-      - catalogue/.env
-    depends_on:
-      - catalogue_db
-    networks:
-      - frontend-network
-      - backend-network
+  # catalogue:
+  #   platform: linux/amd64
+  #   build:
+  #     context: ./catalogue
+  #   restart: always
+  #   ports:
+  #     - "10103:8080"
+  #   volumes:
+  #     - ./file-storage:/file-storage
+  #     - ./log:/log
+  #   env_file:
+  #     - catalogue/.env
+  #   depends_on:
+  #     - catalogue_db
+  #   networks:
+  #     - frontend-network
+  #     - backend-network
 
   catalogue_db:
     image: postgres:14-alpine
@@ -62,23 +62,23 @@ services:
     networks:
       - backend-network
 
-  user:
-    platform: linux/amd64
-    build:
-      context: ./user
-    restart: always
-    ports:
-      - "10102:8080"
-    volumes:
-      - ./file-storage:/file-storage
-      - ./log:/log
-    env_file:
-      - user/.env
-    depends_on:
-      - user_db
-    networks:
-      - frontend-network
-      - backend-network
+  # user:
+  #   platform: linux/amd64
+  #   build:
+  #     context: ./user
+  #   restart: always
+  #   ports:
+  #     - "10102:8080"
+  #   volumes:
+  #     - ./file-storage:/file-storage
+  #     - ./log:/log
+  #   env_file:
+  #     - user/.env
+  #   depends_on:
+  #     - user_db
+  #   networks:
+  #     - frontend-network
+  #     - backend-network
 
   user_db:
     image: postgres:14-alpine
@@ -93,19 +93,19 @@ services:
     networks:
       - backend-network
 
-  frontend:
-    platform: linux/amd64
-    build:
-      context: ./webapp
-    restart: always
-    ports:
-      - "10105:8080"
-    volumes:
-      - ./file-storage:/file-storage
-      - ./log:/log
-    networks:
-      - frontend-network
-      - backend-network
+  # frontend:
+  #   platform: linux/amd64
+  #   build:
+  #     context: ./webapp
+  #   restart: always
+  #   ports:
+  #     - "10105:8080"
+  #   volumes:
+  #     - ./file-storage:/file-storage
+  #     - ./log:/log
+  #   networks:
+  #     - frontend-network
+  #     - backend-network
 
 volumes:
   db:

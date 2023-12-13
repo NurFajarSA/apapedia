@@ -9,11 +9,13 @@ import com.apapedia.order.model.OrderItem;
 import com.apapedia.order.repository.CartDb;
 import com.apapedia.order.repository.CartItemDb;
 import com.apapedia.order.repository.OrderDb;
+import com.apapedia.order.repository.OrderItemDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -29,6 +31,9 @@ public class OrderServiceImpl implements OrderService {
     
     @Autowired
     private CartItemDb cartItemDb;
+
+    @Autowired
+    private OrderItemDb orderItemDb;
 
     @Override
     public Map<UUID, Order> addOrderByCartId(UUID cartId) {
@@ -152,29 +157,30 @@ public class OrderServiceImpl implements OrderService {
         return statusCounts;
     }
 
-    // @Override
-    // public Map<Integer, Long> getSalesCounts() {
-    //         List<OrderItem> listOrderItem = orderItemDb.findAll();
-    //         Map<Integer, Long> salesCounts = new HashMap<>();
+    @Override
+    public Map<String, Long> getSalesCounts() {
+        List<OrderItem> listOrderItem = orderItemDb.findAll();
+        Map<String, Long> salesCounts = new HashMap<>();
 
-    //         for (OrderItem orderItem : listOrderItem) {
-    //             String productName = orderItem.getProductName();
-    //             int quantity = orderItem.getQuantity();
+        for (OrderItem orderItem : listOrderItem) {
+            String productName = orderItem.getProductName();
+            int quantity = orderItem.getQuantity();
 
-    //             salesCounts.put(productName, salesCounts.getOrDefault(productName, 0L) + quantity);
-    //         }
-    //         List<Map.Entry<Integer, Long>> sortedSalesList = salesCounts.entrySet().stream()
-    //                 .sorted(Map.Entry.<Integer, Long>comparingByValue().reversed())
-    //                 .limit(5)
-    //                 .collect(Collectors.toList());
+            salesCounts.put(productName, salesCounts.getOrDefault(productName, 0L) + quantity);
+        }
+        List<Map.Entry<String, Long>> sortedSalesList = salesCounts.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(5)
+                .collect(Collectors.toList());
 
-    //         Map<Integer, Long> top5ProductSales = new LinkedHashMap<>();
-    //         for (Map.Entry<Integer, Long> entry : sortedSalesList) {
-    //             top5ProductSales.put(entry.getKey(), entry.getValue());
-    //         }
+        Map<String, Long> top5ProductSales = new LinkedHashMap<>();
+        for (Map.Entry<String, Long> entry : sortedSalesList) {
+            top5ProductSales.put(entry.getKey(), entry.getValue());
+        }
 
-    //         return top5ProductSales;
-    //     }
+        return top5ProductSales;
+    }
+
 
 //        public List<Integer> getSalesPerDayForMonth(UUID userId) {
 //            LocalDateTime startOfMonth = LocalDateTime.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1, 0, 0);
