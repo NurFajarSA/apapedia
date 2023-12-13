@@ -1,6 +1,7 @@
 package com.apapedia.user.service;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -209,6 +210,22 @@ public class UserServiceImpl implements UserService{
     @Override
     public Seller getSellerById(UUID id) {
         return sellerDb.findById(id).orElseThrow(() -> new NoSuchElementException("Seller not found"));
+    }
+
+
+    @Override
+    public List<UserModel> transaction(long amount, UUID sellerId, UUID customerId) {
+        var seller = getSellerById(sellerId);
+        var customer = getCustomerById(customerId);
+        if (customer.getBalance() < amount) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance");
+        }
+        customer.setBalance(customer.getBalance() - amount);
+        seller.setBalance(seller.getBalance() + amount);
+        customerDb.save(customer);
+        sellerDb.save(seller);
+        List<UserModel> user = List.of(customer, seller);
+        return user;
     }
     
 }
