@@ -53,15 +53,15 @@ public class CatalogueController {
         return new ByteArrayResource(catalog.getImage());
     }
 
-    @GetMapping(value = "/catalogue/view-catalogue-by-id")
-    public Catalogue getCatalogueById(UUID id) {
+    @GetMapping(value = "/catalogue/view-catalogue-by-id/{id}")
+    public Catalogue getCatalogueById(@PathVariable("id") UUID id) {
         return catalogueService.getCatalogueById(id);
     }
 
-    @PutMapping(value = "/catalogue/update-catalogue")
-    public Catalogue updateCatalogue(UpdateCatalogueDTO catalogueDTO) {
+    @PutMapping(value = "/catalogue/update-catalogue/{id}")
+    public Catalogue updateCatalogue(UpdateCatalogueDTO catalogueDTO, @PathVariable("id") UUID id) {
         var catalogue = catalogueMapper.updateCatalogueDTOToCatalogue(catalogueDTO);
-        return catalogueService.updateCatalogue(catalogue, catalogueDTO.getId());
+        return catalogueService.updateCatalogue(catalogueDTO, id);
     }
 
     @GetMapping(value = "/catalogue/view-catalogue-by-seller-id")

@@ -15,7 +15,7 @@ public class CategoryRestServiceImpl implements CategoryRestService{
     public List<Category> viewAllCategory(){
         Flux<Category> categoryFlux = WebClient.create()
             .get()
-            .uri("https://apap-103.cs.ui.ac.id/api/category/view-all")
+            .uri("http://103.41.205.41:10103/api/category/view-all")
             .retrieve()
             .bodyToFlux(Category.class);
         return categoryFlux.collectList().block();

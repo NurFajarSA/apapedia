@@ -8,12 +8,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "catalog")
+@JsonIgnoreProperties(value = {"image"}, allowSetters = true)
 public class Catalogue {
     @Id
     private UUID id = UUID.randomUUID();
@@ -43,7 +46,6 @@ public class Catalogue {
 
     @Lob
     @Column(name = "image", nullable = true)
-    @Basic(fetch = FetchType.LAZY)
     private byte[] image;
 
 

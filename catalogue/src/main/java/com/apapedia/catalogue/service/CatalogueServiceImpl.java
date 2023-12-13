@@ -5,6 +5,7 @@ import com.apapedia.catalogue.model.Category;
 import com.apapedia.catalogue.repository.CatalogueDb;
 import com.apapedia.catalogue.repository.CategoryDb;
 import com.apapedia.catalogue.DTO.NewCatalogueDTO;
+import com.apapedia.catalogue.DTO.UpdateCatalogueDTO;
 
 import jakarta.transaction.Transactional;
 
@@ -65,17 +66,18 @@ public class CatalogueServiceImpl implements CatalogueService{
     
     @Override
     public Catalogue getCatalogueById(UUID id) {
-        for (Catalogue catalogue : getAllCatalogue()) {
-            if (catalogue.getId().equals(id)) {
-                return catalogue;
-            }
-        }
-        return null;
+        return catalogueDb.findById(id).orElse(null);
     }
 
     @Override
-    public Catalogue updateCatalogue(Catalogue catalogueDTO, UUID id){
+    public Catalogue updateCatalogue(UpdateCatalogueDTO catalogueDTO, UUID id){
         Catalogue catalogue = getCatalogueById(id);
+        System.out.println(catalogue.getId());
+        System.out.println(catalogue.getProductName());
+        System.out.println(catalogue.getPrice());
+        System.out.println(catalogue.getProductDescription());
+        System.out.println(catalogue.getStock());
+        System.out.println(catalogue.getCategory().getName());
         if(catalogue != null){
             var category = new Category();
             catalogue.setProductName(catalogueDTO.getProductName());
@@ -103,7 +105,7 @@ public class CatalogueServiceImpl implements CatalogueService{
             catalogue.setProductName(catalogueDTO.getProductName());
             catalogue.setPrice(catalogueDTO.getPrice());
             catalogue.setProductDescription(catalogueDTO.getProductDescription());
-            catalogue.setCategory(catalogueDTO.getCategory());
+            catalogue.setCategory(categoryDb.findByName(catalogueDTO.getCategory()));
             catalogue.setStock(catalogueDTO.getStock());
             catalogue.setImage(catalogueDTO.getImage());
             catalogueDb.save(catalogue);

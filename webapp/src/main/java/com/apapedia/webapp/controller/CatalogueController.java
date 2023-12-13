@@ -14,9 +14,9 @@ import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
-import com.apapedia.webapp.dto.CatalogueMapper;
-import com.apapedia.webapp.dto.request.CreateCatalogueDTO;
-import com.apapedia.webapp.dto.request.UpdateCatalogueDTO;
+import com.apapedia.webapp.DTO.CatalogueMapper;
+import com.apapedia.webapp.DTO.request.CreateCatalogueDTO;
+import com.apapedia.webapp.DTO.request.UpdateCatalogueDTO;
 import com.apapedia.webapp.model.Catalogue;
 import com.apapedia.webapp.model.Category;
 import com.apapedia.webapp.restservice.CatalogueRestService;
@@ -48,18 +48,19 @@ public class CatalogueController {
     }
 
     @PostMapping("/catalogue/add-catalogue")
-    public String addCatalogue(@ModelAttribute Catalogue catalogue, BindingResult bindingResult, @RequestParam("image") String imageBase64, RedirectAttributes redirectAttrs){
+    public String addCatalogue(@ModelAttribute CreateCatalogueDTO catalogueDTO, BindingResult bindingResult, @RequestParam("image") String imageBase64, RedirectAttributes redirectAttrs){
         try {
             // Decode base64 string to byte array
             byte[] imageByteArray = Base64.getDecoder().decode(imageBase64);
 
             // Create a CatalogDTO instance and set the image byte array
-            catalogue.setImage(imageByteArray);
+            catalogueDTO.setImage(imageByteArray);
+
             // Call the service to add the catalog
-            catalogueRestService.createCatalogue(catalogue);
+            catalogueRestService.createCatalogue(catalogueDTO);
 
             redirectAttrs
-                .addFlashAttribute("success", String.format("Catalogue %s has been created", catalogue.getProductName()));
+                .addFlashAttribute("success", String.format("Catalogue %s has been created", catalogueDTO.getProductName()));
 
             return "redirect:/catalogue/view-all";
         } catch (Exception e) {
@@ -88,14 +89,31 @@ public class CatalogueController {
 
         var catalogueDTO = catalogueMapper.catalogueToUpdateCatalogueDTO(catalogue);
         model.addAttribute("catalogueDTO", catalogueDTO);
+        model.addAttribute("listCategory", categoryRestService.viewAllCategory());
         return "update-catalogue";
     }
 
-    @PutMapping("catalogue/update")
-    public String updateCatalogue(@ModelAttribute UpdateCatalogueDTO catalogueDTO, Model model) {
-        var catalogueFromDTO = catalogueMapper.updateCatalogueDTOToCatalogue(catalogueDTO);
-        var catalogue = catalogueRestService.updateCatalogue(catalogueFromDTO, catalogueDTO.getId());
-        model.addAttribute("catalogueName", catalogue.getProductName());
-        return "update-catalogue-success";
+    @PostMapping("catalogue/update")
+    public String updateCatalogue(@ModelAttribute UpdateCatalogueDTO catalogueDTO, Model model, @RequestParam("image") String imageBase64, RedirectAttributes redirectAttrs) {
+
+        try {
+            // Decode base64 string to byte array
+            byte[] imageByteArray = Base64.getDecoder().decode(imageBase64);
+
+            // Create a CatalogDTO instance and set the image byte array
+            catalogueDTO.setImage(imageByteArray);
+            //Map the DTO to the Catalogue model
+            var catalogue = catalogueMapper.updateCatalogueDTOToCatalogue(catalogueDTO);
+            // Call the service to add the catalog
+            catalogueRestService.updateCatalogue(catalogue, catalogueDTO.getId());
+
+            redirectAttrs
+                .addFlashAttribute("success", String.format("Catalogue %s has been update", catalogue.getProductName()));
+
+            return "redirect:/catalogue/view-all";
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle the exception
+            return "error-page"; // Redirect to an error page or appropriate handling
+        }
     }
 }

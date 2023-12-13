@@ -15,21 +15,21 @@
     <section class="bg-gray-50 dark:bg-gray-900">
         <div class="text-center pt-5">
             <h1 class="text-3xl font-bold ">Catalogue List</h1> <br>
-            <p class="text">- Username -</p><br>
-            <button class="btn btn-primary" href="/catalogue/add-catalogue">Add Product</button>
+            <p class="text">- APAPEDIA -</p><br>
+            <a class="btn btn-primary" th:href="@{/catalogue/add-catalogue}">Add Product</a>
         </div>
         <div class="grid grid-cols-3 gap-4">
             <div th:each="catalogue: ${listCatalogue}">
                 <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                     <div
                         class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                        <figure><img th:src="'http://apap-103.cs.ui.ac.id/api/catalogue/image/' + ${catalogue.id}"
+                        <figure><img th:src="'http://localhost:8081/api/catalogue/image/' + ${catalogue.id}"
                                 class="card-img-top" alt="Product Image"></figure>
                         <div class="card-body">
                             <h2 class="card-title" th:text="${catalogue.productName}"></h2>
                             <p th:text="'Price: ' + ${catalogue.price}"></p>
                             <div class="card-actions justify-between">
-                                <button class="btn btn-primary">Edit Product</button>
+                                <a class="btn btn-primary" th:href="@{/catalogue/update/{id}(id=${catalogue.id})}">Edit Product</a>
                             </div>
                         </div>
                     </div>
