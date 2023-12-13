@@ -34,6 +34,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private CartItemDb cartItemDb;
 
+    @Autowired
+    private OrderItemDb orderItemDb;
+
     private final WebClient webClientUser;
 
     public OrderServiceImpl(WebClient.Builder webClientBuilder){
