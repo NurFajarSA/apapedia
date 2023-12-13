@@ -9,23 +9,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.io.IOException;
 import java.util.Base64;
-import java.util.List;
 import java.util.UUID;
 
-import com.apapedia.webapp.DTO.CatalogueMapper;
-import com.apapedia.webapp.DTO.request.CreateCatalogueDTO;
-import com.apapedia.webapp.DTO.request.UpdateCatalogueDTO;
-import com.apapedia.webapp.model.Catalogue;
-import com.apapedia.webapp.model.Category;
+import com.apapedia.webapp.dto.CatalogueMapper;
+import com.apapedia.webapp.dto.request.CreateCatalogueDTO;
+import com.apapedia.webapp.dto.request.UpdateCatalogueDTO;
 import com.apapedia.webapp.restservice.CatalogueRestService;
 import com.apapedia.webapp.restservice.CategoryRestService;
 
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller

@@ -1,4 +1,4 @@
-// package com.apapedia.webapp.model;
+package com.apapedia.webapp.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

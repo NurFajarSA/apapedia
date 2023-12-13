@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.UUID;
 
-import com.apapedia.webapp.DTO.SellerMapper;
-import com.apapedia.webapp.DTO.request.UpdateSellerDTO;
-import com.apapedia.webapp.model.Seller;
+import com.apapedia.webapp.dto.SellerMapper;
 import com.apapedia.webapp.restservice.SellerRestService;
 import com.apapedia.webapp.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.apapedia.webapp.DTO.request.CreateUserRequestDTO;
+import com.apapedia.webapp.dto.request.CreateUserRequestDTO;
 import com.apapedia.webapp.restservice.UserRestService;
 import com.apapedia.webapp.security.xml.ServiceResponse;
 import com.apapedia.webapp.setting.Setting;

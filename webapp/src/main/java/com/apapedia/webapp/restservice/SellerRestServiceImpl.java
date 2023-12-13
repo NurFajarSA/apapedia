@@ -1,13 +1,9 @@
 package com.apapedia.webapp.restservice;
 
-import com.apapedia.webapp.DTO.SellerResponseDTO;
-import com.apapedia.webapp.model.Catalogue;
 import com.apapedia.webapp.model.Seller;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;

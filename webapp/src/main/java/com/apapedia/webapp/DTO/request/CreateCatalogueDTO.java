@@ -1,4 +1,4 @@
-package com.apapedia.webapp.DTO.request;
+package com.apapedia.webapp.dto.request;
 
 import java.math.BigInteger;
 
