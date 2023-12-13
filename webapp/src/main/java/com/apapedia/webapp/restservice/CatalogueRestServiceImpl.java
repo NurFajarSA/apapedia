@@ -1,14 +1,21 @@
 package com.apapedia.webapp.restservice;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.apapedia.webapp.dto.request.CategoryDTO;
+import com.apapedia.webapp.DTO.request.CategoryDTO;
+import com.apapedia.webapp.DTO.request.CreateCatalogueDTO;
 import com.apapedia.webapp.model.Catalogue;
+import com.apapedia.webapp.model.Category;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -16,7 +23,7 @@ import reactor.core.publisher.Mono;
 public class CatalogueRestServiceImpl implements CatalogueRestService{
 
     @Override
-    public Catalogue createCatalogue(Catalogue catalogue){
+    public Catalogue createCatalogue(CreateCatalogueDTO catalogueDTO){
 
         Mono<Catalogue> catalogueMono = WebClient.create()
             .post()
@@ -67,8 +74,12 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
 
     @Override
     public Catalogue updateCatalogue(Catalogue catalogueDTO, UUID id){
-        var category = getCategoryById(catalogueDTO.getCategory().getId());
-        catalogueDTO.setCategory(category);
-        return catalogueDTO;
+        Mono<Catalogue> catalogueMono = WebClient.create()
+            .put()
+            .uri("http://localhost:8081/api/catalogue/update-catalogue/" + id)
+            .body(BodyInserters.fromValue(catalogueDTO))
+            .retrieve()
+            .bodyToMono(Catalogue.class);
+        return catalogueMono.block();
     }
 }

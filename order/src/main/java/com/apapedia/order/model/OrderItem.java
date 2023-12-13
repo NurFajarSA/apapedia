@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "order_item")
 
 public class OrderItem {
+
     @Id
     private UUID orderItemId = UUID.randomUUID();
 
@@ -37,7 +38,7 @@ public class OrderItem {
 
     @NotNull
     @Column(name = "product_name", nullable = false)
-    private int productName;
+    private String productName;
 
     @NotNull
     @Column(name = "product_price", nullable = false)

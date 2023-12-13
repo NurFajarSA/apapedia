@@ -11,14 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UpdateCatalogueDTO {
+public class UpdateCatalogueDTO extends CreateCatalogueDTO{
     private UUID id;
-    private UUID idSeller;
-    private long price;
-    private String productName;
-    private String productDescription;
-    private long stock;
-    private byte[] image;
-    private Category category;
-    private boolean deleted;
 }

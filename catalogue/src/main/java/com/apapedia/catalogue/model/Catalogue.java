@@ -13,13 +13,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "catalog")
+@Table(name = "catalogue")
 public class Catalogue {
     @Id
     private UUID id = UUID.randomUUID();
 
-    @Column(name="id_seller")
-    private UUID idSeller;
+    @Column(name="seller_Id")
+    private UUID sellerId;
 
     @NotNull
     @Column(name="price", nullable=false)
@@ -33,17 +33,12 @@ public class Catalogue {
     @Column(name="product_description", nullable=false)
     private String productDescription;
 
-    // @NotNull
-    // @Column(name="id_category", nullable=false)
-    // private UUID idCategory;
-
     @NotNull
     @Column(name="stock", nullable=false)
     private int stock;
 
     @Lob
-    @Column(name = "image", nullable = true)
-    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "image", length = 1000)
     private byte[] image;
 
 

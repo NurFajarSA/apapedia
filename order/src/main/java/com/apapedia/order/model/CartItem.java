@@ -20,12 +20,25 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "cart_item")
 
 public class CartItem {
+
     @Id
     private UUID cartItemId = UUID.randomUUID();
 
     @NotNull
     @Column(name = "product_id", nullable = false)
     private UUID productId;
+
+    @NotNull
+    @Column(name = "seller_id", nullable = false)
+    private UUID sellerId;
+
+    @NotNull
+    @Column(name = "product_name", nullable = false)
+    private String productName;
+
+    @NotNull
+    @Column(name = "product_price", nullable = false)
+    private int productPrice;
 
     @NotNull
     @Column(name = "quantity", nullable = false)

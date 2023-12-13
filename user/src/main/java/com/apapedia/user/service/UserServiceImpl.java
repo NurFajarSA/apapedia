@@ -1,5 +1,6 @@
 package com.apapedia.user.service;
 
+import java.util.LinkedHashMap;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.constant.Constant;
@@ -17,6 +19,7 @@ import com.apapedia.user.model.Customer;
 import com.apapedia.user.model.Role;
 import com.apapedia.user.model.Seller;
 import com.apapedia.user.model.UserModel;
+import com.apapedia.user.model.response.WebClientRes;
 import com.apapedia.user.repository.CustomerDb;
 import com.apapedia.user.repository.SellerDb;
 import com.apapedia.user.repository.UserDb;
@@ -43,6 +46,13 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private RoleService roleService;
+
+    private final WebClient webClientOrder;
+
+    public UserServiceImpl(WebClient.Builder webClientBuilder){
+        this.webClientOrder = webClientBuilder.baseUrl("http://localhost:8081/api").build();
+    }
+
 
     @Override
     public UserModel getUserById(UUID id) {
@@ -73,11 +83,19 @@ public class UserServiceImpl implements UserService{
         Role newRole = roleService.getRoleByRoleName(Constant.ROLE_CUSTOMER);
         user.setRole(newRole);
 
-        // TODO: Generate cartId
-        user.setCartId(UUID.randomUUID());
+        var cartId = createCartId(user.getId());
+        user.setCartId(cartId);
 
         return customerDb.save(user);
     }
+
+    private UUID createCartId(UUID id) {
+        var response = webClientOrder.post().uri("/order/cart/add?userId=" + id.toString()).retrieve().bodyToMono(WebClientRes.class);
+        WebClientRes webClientRes = response.block();
+        UUID cartId = UUID.fromString(((LinkedHashMap<?, ?>) webClientRes.getData()).get("cartId").toString());
+        return cartId;
+    }
+
 
     @Override
     public UserModel signUpSeller(SignUpUserRequestDTO newUser) {
