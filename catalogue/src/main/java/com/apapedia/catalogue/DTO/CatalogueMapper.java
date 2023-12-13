@@ -1,16 +1,13 @@
-package com.apapedia.catalogue.DTO;
+package com.apapedia.catalogue.dto;
 
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import com.apapedia.catalogue.dto.request.CreateCatalogueRequestDTO;
+import com.apapedia.catalogue.dto.request.UpdateCatalogueRequestDTO;
 import com.apapedia.catalogue.model.Catalogue;
-import com.apapedia.catalogue.service.CategoryService;
 
 @Mapper(componentModel = "spring")
 public interface CatalogueMapper {
-
-    Catalogue updateCatalogueDTOToCatalogue(UpdateCatalogueDTO updateCatalogueDTO);
-    UpdateCatalogueDTO catalogueToUpdateCatalogueDTO(Catalogue catalogue);
+    Catalogue createCatalogueRequestToCatalogue(CreateCatalogueRequestDTO createCatalogueRequestDTO);
+    Catalogue updateCatalogueRequestToCatalogue(UpdateCatalogueRequestDTO updateCatalogueRequestDTO);
 }
