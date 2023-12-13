@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.UUID;
 
+import com.apapedia.webapp.DTO.SellerMapper;
+import com.apapedia.webapp.DTO.request.UpdateSellerDTO;
+import com.apapedia.webapp.model.Seller;
 import com.apapedia.webapp.restservice.SellerRestService;
 import com.apapedia.webapp.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +18,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.apapedia.webapp.dto.request.CreateUserRequestDTO;
+import com.apapedia.webapp.DTO.request.CreateUserRequestDTO;
 import com.apapedia.webapp.restservice.UserRestService;
 import com.apapedia.webapp.security.xml.ServiceResponse;
 import com.apapedia.webapp.setting.Setting;
@@ -39,6 +39,9 @@ public class UserController {
 
     @Autowired
     SellerRestService sellerRestService;
+
+    @Autowired
+    SellerMapper sellerMapper;
 
     @Autowired
     JwtUtils jwtUtils;
@@ -110,5 +113,46 @@ public class UserController {
         var seller = sellerRestService.readSeller(UUID.fromString(sellerId), token.toString());
         model.addAttribute("seller", seller);
         return "profile";
+    }
+
+//
+//    @GetMapping("/withdraw")
+//    public String withdraw(){
+//        return "withdraw";
+//    }
+
+    @GetMapping("/withdraw")
+    public String formWithdraw(Model model, HttpServletRequest request){
+        HttpSession httpSession = request.getSession();
+        var token = httpSession.getAttribute("token");
+        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(8, 44);
+        var seller = sellerRestService.readSeller(UUID.fromString(sellerId), token.toString());
+
+        var sellerDTO= sellerMapper.sellerToUpdateSellerDTO(seller);
+        model.addAttribute("seller", sellerDTO);
+        return "withdraw";
+    }
+
+//    @GetMapping("/withdraw")
+//    public String withdraw(Model model, HttpServletRequest request){
+//        HttpSession httpSession = request.getSession();
+//        var token = httpSession.getAttribute("token");
+//        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(8, 44);
+//        var seller = sellerRestService.readSeller(UUID.fromString(sellerId), token.toString());
+//        model.addAttribute("seller", seller);
+//
+////        var sellerDTO = sellerMapper.sellerToUpdateSellerDTO(seller);
+////        model.addAttribute("sellerDTO", sellerDTO)
+//        return "withdraw";
+//    }
+
+    @PostMapping("/withdraw")
+    public String postWithdraw(@RequestParam("withdraw") long withdraw, Model model, HttpServletRequest request){
+        HttpSession httpSession = request.getSession();
+        var token = httpSession.getAttribute("token");
+        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(8, 44);
+        var seller = sellerRestService.withdraw(UUID.fromString(sellerId), token.toString(), withdraw);
+        model.addAttribute("seller", seller);
+        return "redirect:/profile";
     }
 }

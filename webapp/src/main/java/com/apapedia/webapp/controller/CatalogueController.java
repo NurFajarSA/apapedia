@@ -14,9 +14,9 @@ import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
-import com.apapedia.webapp.dto.CatalogueMapper;
-import com.apapedia.webapp.dto.request.CreateCatalogueDTO;
-import com.apapedia.webapp.dto.request.UpdateCatalogueDTO;
+import com.apapedia.webapp.DTO.CatalogueMapper;
+import com.apapedia.webapp.DTO.request.CreateCatalogueDTO;
+import com.apapedia.webapp.DTO.request.UpdateCatalogueDTO;
 import com.apapedia.webapp.model.Catalogue;
 import com.apapedia.webapp.model.Category;
 import com.apapedia.webapp.restservice.CatalogueRestService;

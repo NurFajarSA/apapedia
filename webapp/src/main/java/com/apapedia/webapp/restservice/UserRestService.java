@@ -2,8 +2,8 @@ package com.apapedia.webapp.restservice;
 
 import java.io.IOException;
 
-import com.apapedia.webapp.dto.request.CreateUserRequestDTO;
-import com.apapedia.webapp.dto.response.ReadUserResponseDTO;
+import com.apapedia.webapp.DTO.request.CreateUserRequestDTO;
+import com.apapedia.webapp.DTO.response.ReadUserResponseDTO;
 
 public interface UserRestService {
     

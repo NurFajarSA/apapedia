@@ -1,4 +1,4 @@
-package com.apapedia.webapp.dto.response;
+package com.apapedia.webapp.DTO.response;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

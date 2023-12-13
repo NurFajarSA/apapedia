@@ -1,8 +1,8 @@
-package com.apapedia.webapp.dto;
+package com.apapedia.webapp.DTO;
 
 import org.mapstruct.Mapper;
 
-import com.apapedia.webapp.dto.request.UpdateCatalogueDTO;
+import com.apapedia.webapp.DTO.request.UpdateCatalogueDTO;
 import com.apapedia.webapp.model.Catalogue;
 
 @Mapper(componentModel = "spring")
