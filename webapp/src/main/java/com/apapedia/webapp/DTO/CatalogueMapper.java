@@ -13,7 +13,7 @@ public interface CatalogueMapper {
     CatalogueMapper INSTANCE = Mappers.getMapper(CatalogueMapper.class);
     Catalogue updateCatalogueDTOToCatalogue(UpdateCatalogueDTO catalogueDTO);
 
-    @Mapping(source = "category.name", target = "category")
+    // @Mapping(source = "category.name", target = "category")
     UpdateCatalogueDTO catalogueToUpdateCatalogueDTO(Catalogue catalogue);
 
     // @AfterMapping

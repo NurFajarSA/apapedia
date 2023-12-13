@@ -3,8 +3,9 @@ package com.apapedia.webapp.dto;
 import com.apapedia.webapp.dto.request.UpdateSellerDTO;
 import com.apapedia.webapp.model.Seller;
 import com.apapedia.webapp.dto.response.SellerResponseDTO;
+import org.mapstruct.Mapper;
 
-// @Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring")
 public interface SellerMapper{
 
     SellerResponseDTO sellerResponseDTO(Seller seller);
