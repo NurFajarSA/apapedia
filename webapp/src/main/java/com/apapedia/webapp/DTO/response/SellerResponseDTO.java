@@ -1,4 +1,5 @@
-package com.apapedia.webapp.dto;
+package com.apapedia.webapp.dto.response;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 
-public class SellerResponseDTO{
-    private String address;
-    private long balance;
-    private String category;
+public class SellerResponseDTO {
+    private String username;
     private String email;
-    private String name;
+    private String address;
+    private String category;
+    private long balance;
 }

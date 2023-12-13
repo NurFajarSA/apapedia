@@ -1,16 +1,17 @@
-package com.apapedia.webapp.dto.request;
-
-import java.util.UUID;
+package com.apapedia.catalogue.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
+import java.util.UUID;
+
+
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-public class UpdateCatalogueDTO extends CreateCatalogueDTO{
+public class UpdateCatalogueRequestDTO extends CreateCatalogueRequestDTO{
     private UUID id;
 }

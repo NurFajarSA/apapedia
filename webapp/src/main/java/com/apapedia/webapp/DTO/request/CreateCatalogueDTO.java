@@ -15,5 +15,5 @@ public class CreateCatalogueDTO {
     private String productDescription;
     private int stock;
     private byte[] image; // Tambahkan atribut baru untuk representasi Base64 dari gambar
-    private CategoryDTO category;
+    private com.apapedia.webapp.dto.request.CategoryDTO category;
 }

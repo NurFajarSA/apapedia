@@ -11,7 +11,9 @@ import com.apapedia.order.repository.CartItemDb;
 import com.apapedia.order.repository.OrderDb;
 import com.apapedia.order.repository.OrderItemDb;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -32,8 +34,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private CartItemDb cartItemDb;
 
-    @Autowired
-    private OrderItemDb orderItemDb;
+    private final WebClient webClientUser;
+
+    public OrderServiceImpl(WebClient.Builder webClientBuilder){
+        this.webClientUser = webClientBuilder.baseUrl("http://localhost:8081/api").build();
+    }
 
     @Override
     public Map<UUID, Order> addOrderByCartId(UUID cartId) {
@@ -67,17 +72,21 @@ public class OrderServiceImpl implements OrderService {
 
     private void withdrawBalance(UUID customerId, int globalTotalPrice) {
         // TODO : withdraw balance
+        webClientUser.put().uri("/user/" + customerId.toString() + "/withdraw?amount=" + globalTotalPrice).header(HttpHeaders.AUTHORIZATION, "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlY2EyMmIyZS0zNmJiLTQ2OTQtYTgzMC00MWE3MmY4NGQyZjYiLCJuYW1lIjoiQ3VzdG9tZXIxIiwidXNlck5hbWUiOiJjdXN0b21lcjEiLCJlbWFpbCI6ImN1c3RvbWVyMUBnbWFpbC5jb20iLCJhZGRyZXNzIjoiQXB0LiAwNjYgSmwuIEdhamFobWFkYSBOby4gMjUsIFR1bHVuZ2FndW5nLCBQQSA2MzM5OCIsImJhbGFuY2UiOjc1MDAwLCJpYXQiOjE3MDIzODcyOTAsImV4cCI6MTcwMjQ3MzY5MH0.ANFZujicah505FQVq6r63G5Bf2ZNYQTXbRIgtRi7kIu5eG1WFvyYdAnHdelsiKpn-wR4JcCfuQfbwu4YR6e-8g").retrieve().bodyToMono(String.class);
+        // System.out.println(response.block());
     }
 
     private void topUpBalance(UUID sellerId, int totalPrice) {
         // TODO : top up balance
+        webClientUser.put().uri("/user/" + sellerId.toString() + "/top-up?amount=" + totalPrice).retrieve().bodyToMono(String.class);
+        // System.out.println(response.block());
     }
 
     private void deleteAllCartItem(UUID cartId) {
         Cart cart = cartService.getCartById(cartId);
         List<CartItem> listCartItem = cart.getListCartItem();
         for (CartItem cartItem : listCartItem) {
-            cartItemDb.delete(cartItem);
+            cartItemDb.deleteById(cartItem.getCartItemId());
         }
         cartDb.save(cart);
     }

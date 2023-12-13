@@ -2,7 +2,11 @@ package com.apapedia.webapp.controller;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.UUID;
 
+import com.apapedia.webapp.dto.SellerMapper;
+import com.apapedia.webapp.restservice.SellerRestService;
+import com.apapedia.webapp.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.codec.xml.Jaxb2XmlDecoder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,17 +16,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.apapedia.webapp.dto.request.CreateUserRequestDTO;
 import com.apapedia.webapp.restservice.UserRestService;
-import com.apapedia.webapp.security.xml.Attributes;
 import com.apapedia.webapp.security.xml.ServiceResponse;
 import com.apapedia.webapp.setting.Setting;
 
@@ -35,6 +34,15 @@ public class UserController {
 
     @Autowired
     UserRestService userRestService;
+
+    @Autowired
+    SellerRestService sellerRestService;
+
+    @Autowired
+    SellerMapper sellerMapper;
+
+    @Autowired
+    JwtUtils jwtUtils;
 
     private WebClient webClient = WebClient.builder()
                     .codecs(configurer -> configurer.defaultCodecs()
@@ -52,14 +60,14 @@ public class UserController {
             )
         ).retrieve().bodyToMono(ServiceResponse.class).block();
         
-        Attributes attributes = serviceResponse.getAuthenticationSuccess().getAttributes();
+        // Attributes attributes = serviceResponse.getAuthenticationSuccess().getAttributes();
         String username = serviceResponse.getAuthenticationSuccess().getUser();
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, "dummy", null);
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(authentication);
 
-        String name = attributes.getNama();
+        // String name = attributes.getNama();
         var token = userRestService.getToken(username, "dummy");
 
         HttpSession httpSession = request.getSession(true);
@@ -94,12 +102,55 @@ public class UserController {
         userRestService.registerUser(createUserDTO);
         return "redirect:/home";
     }
-    
 
-    // @GetMapping("/profile")
-    // public String profile(Seller seller, Model model){
-    //     var sellerMap = sellerMapper.sellerResponseDTO(seller);
-    //     model.addAttribute("seller", sellerMap);
-    //     return "profile";
-    // }
+    @GetMapping("/profile")
+    public String profile(Model model, HttpServletRequest request){
+        HttpSession httpSession = request.getSession();
+        var token = httpSession.getAttribute("token");
+        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(8, 44);
+        var seller = sellerRestService.readSeller(UUID.fromString(sellerId), token.toString());
+        model.addAttribute("seller", seller);
+        return "profile";
+    }
+
+//
+//    @GetMapping("/withdraw")
+//    public String withdraw(){
+//        return "withdraw";
+//    }
+
+    @GetMapping("/withdraw")
+    public String formWithdraw(Model model, HttpServletRequest request){
+        HttpSession httpSession = request.getSession();
+        var token = httpSession.getAttribute("token");
+        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(8, 44);
+        var seller = sellerRestService.readSeller(UUID.fromString(sellerId), token.toString());
+
+        var sellerDTO= sellerMapper.sellerToUpdateSellerDTO(seller);
+        model.addAttribute("seller", sellerDTO);
+        return "withdraw";
+    }
+
+//    @GetMapping("/withdraw")
+//    public String withdraw(Model model, HttpServletRequest request){
+//        HttpSession httpSession = request.getSession();
+//        var token = httpSession.getAttribute("token");
+//        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(8, 44);
+//        var seller = sellerRestService.readSeller(UUID.fromString(sellerId), token.toString());
+//        model.addAttribute("seller", seller);
+//
+////        var sellerDTO = sellerMapper.sellerToUpdateSellerDTO(seller);
+////        model.addAttribute("sellerDTO", sellerDTO)
+//        return "withdraw";
+//    }
+
+    @PostMapping("/withdraw")
+    public String postWithdraw(@RequestParam("withdraw") long withdraw, Model model, HttpServletRequest request){
+        HttpSession httpSession = request.getSession();
+        var token = httpSession.getAttribute("token");
+        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(8, 44);
+        var seller = sellerRestService.withdraw(UUID.fromString(sellerId), token.toString(), withdraw);
+        model.addAttribute("seller", seller);
+        return "redirect:/profile";
+    }
 }
