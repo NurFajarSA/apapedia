@@ -96,16 +96,16 @@ public class OrderController {
     }
     
 
-    @GetMapping(value = "/top5-status-order")
-    public Map<Integer,Long> top5Month(){
-        return orderService.getStatusCounts();
-    }
+//    @GetMapping(value = "/top5-status-order")
+//    public Map<Integer,Long> top5Month(){
+//        return orderService.getStatusCounts();
+//    }
 
-    // @GetMapping(value = "orderItem/top5-sold-this-month")
-    // public Map<Integer, Long> top5Sold() {
-    //     return orderService.getSalesCounts();
+     @GetMapping(value = "orderItem/top5-sold-this-month")
+     public Map<String, Long> top5Sold() {
+         return orderService.getSalesCounts();
 
-    // }
+     }
 
 //    @GetMapping("/orderItem/perday")
 //    public ResponseEntity<List<Integer>> getSalesPerDayMonth() {
