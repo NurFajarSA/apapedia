@@ -6,7 +6,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
-import com.apapedia.webapp.DTO.request.CategoryDTO;
 import com.apapedia.webapp.DTO.request.UpdateCatalogueDTO;
 import com.apapedia.webapp.model.Catalogue;
 
