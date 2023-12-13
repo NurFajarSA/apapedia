@@ -1,6 +1,7 @@
 package com.apapedia.catalogue.service;
 import com.apapedia.catalogue.model.Catalogue;
 import com.apapedia.catalogue.DTO.NewCatalogueDTO;
+import com.apapedia.catalogue.DTO.UpdateCatalogueDTO;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,7 +19,7 @@ public interface CatalogueService {
 
     List<Catalogue> getAllCatalogue();
     Catalogue getCatalogueById(UUID id);
-    Catalogue updateCatalogue(Catalogue catalogue, UUID id);
+    Catalogue updateCatalogue(UpdateCatalogueDTO catalogue, UUID id);
     List<Catalogue> getCataloguesBySellerId(UUID idSeller);
     Catalogue createCatalogue(NewCatalogueDTO catalogueDTO);
 

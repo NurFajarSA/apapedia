@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.apapedia.catalogue.model.Category;
 
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 
