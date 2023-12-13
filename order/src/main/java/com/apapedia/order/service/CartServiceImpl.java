@@ -59,7 +59,12 @@ public class CartServiceImpl implements CartService{
     
     private void updateTotalPrice(Cart cart) {
         // TODO: get price product
-        // cart.setTotalPrice(cart.getListCartItem().stream().mapToInt(cartItem -> cartItem.getQuantity() * {{get price product}}).sum());
+        List<CartItem> cartItemList = cart.getListCartItem();
+        int totalPrice = 0;
+        for (CartItem cartItem : cartItemList) {
+            totalPrice += cartItem.getProductPrice();
+        }
+        cart.setTotalPrice(totalPrice);
     }
 
     @Override

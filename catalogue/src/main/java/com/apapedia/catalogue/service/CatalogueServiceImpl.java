@@ -103,7 +103,7 @@ public class CatalogueServiceImpl implements CatalogueService{
             catalogue.setProductName(catalogueDTO.getProductName());
             catalogue.setPrice(catalogueDTO.getPrice());
             catalogue.setProductDescription(catalogueDTO.getProductDescription());
-            catalogue.setCategory(catalogueDTO.getCategory());
+            catalogue.setCategory(categoryDb.findById(catalogueDTO.getCategory()).get());
             catalogue.setStock(catalogueDTO.getStock());
             catalogue.setImage(catalogueDTO.getImage());
             catalogueDb.save(catalogue);

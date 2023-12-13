@@ -21,5 +21,5 @@ public class NewCatalogueDTO {
     private String productDescription;
     private int stock;
     private byte[] image;
-    private Category category;
+    private UUID category;
 }

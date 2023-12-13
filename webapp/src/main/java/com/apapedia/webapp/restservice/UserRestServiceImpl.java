@@ -19,7 +19,7 @@ public class UserRestServiceImpl implements UserRestService {
     private final WebClient webClient;
 
     public UserRestServiceImpl(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("https://apap-102.cs.ui.ac.id")
+        this.webClient = webClientBuilder.baseUrl("http://103.41.205.41:10102")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
