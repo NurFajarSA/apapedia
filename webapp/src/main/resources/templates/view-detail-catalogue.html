@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.8/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Catalogue Detail</title>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900">
+    <section class="min-h-screen flex items-center justify-center">
+        <form th:action="@{/catalogue/delete/{id}(id=${catalogue.id})}" method="POST">
+        <div class="flex flex-col items-center">
+            <div class="text-center pt-5">
+                <h1 class="text-3xl font-bold ">Catalogue Detail</h1> <br>
+                <p class="text">Change Product</p><br>
+                <a class="btn btn-primary" th:href="@{/catalogue/update/{id}(id=${catalogue.id})}">Edit Product</a>
+            </div>
+            <div class="w-full max-w-3xl card lg:card-side bg-base-100 shadow-xl">
+                <figure><img th:src="'http://localhost:8081/api/catalogue/image/' + ${catalogue.id}"
+                    class="card-img-top" alt="Product Image"></figure>
+                </figure>
+                <div class="card-body">
+                    <h2 class="card-title" th:text="'Nama Produk : '+${catalogue.productName}"></h2>
+                    <p th:text="'Deskripsi : '+${catalogue.productDescription}"></p>
+                    <p th:text="'Category : '+${catalogue.category.name}"></p>
+                    <p th:text="'Harga : '+${catalogue.price}"></p>
+                    <p th:text="'Stok : '+${catalogue.stock}"></p>
+                    <div class="card-actions justify-end">
+                        <input type="submit" class="btn btn-danger" value="Hapus">
+                    </form>
+                    <a class="btn btn-primary" th:href="@{/catalogue/view-all}">Kembali</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
