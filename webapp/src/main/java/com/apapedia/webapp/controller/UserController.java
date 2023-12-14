@@ -101,7 +101,7 @@ public class UserController {
         createUserDTO.setRole("Seller");
         createUserDTO.setEmail(createUserDTO.getUsername() + "@ui.ac.id");
         userRestService.registerUser(createUserDTO);
-        return "redirect:/home";
+        return "redirect:/catalogue/view-all";
     }
 
     @GetMapping("/profile")
