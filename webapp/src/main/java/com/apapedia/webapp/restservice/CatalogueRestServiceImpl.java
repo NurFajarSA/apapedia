@@ -21,7 +21,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
 
         Mono<Catalogue> catalogueMono = WebClient.create()
             .post()
-            .uri("http://103.41.205.41:10103/api/catalogue/add-catalogue")
+            .uri("http://103.41.205.41:10103/api/catalogue/add")
             .body(BodyInserters.fromValue(catalogueDTO))
             .retrieve()
             .bodyToMono(Catalogue.class);
