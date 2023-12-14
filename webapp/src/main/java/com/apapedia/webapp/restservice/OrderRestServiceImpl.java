@@ -3,6 +3,7 @@ package com.apapedia.webapp.restservice;
 import com.apapedia.webapp.dto.response.ChartDTO;
 import com.apapedia.webapp.dto.response.ListChartDTO;
 import com.apapedia.webapp.model.Order;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,57 +20,15 @@ public class OrderRestServiceImpl implements OrderResrService {
 
     @Override
     public Map<String,Long> chart(){
-        Mono<ListChartDTO> orderMono = WebClient.create()
+        Mono<Map<String,Long>> orderMono = WebClient.create()
                 .get()
                 .uri("http://103.41.205.41:10104/api/order/orderItem/top5-sold-this-month")
-                //.header(HttpHeaders.AUTHORIZATION, "Bearer "+token)
                 .retrieve()
-                .bodyToMono(ListChartDTO.class);
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Long>>() {});
+
         var response = orderMono.block();
-        var list = response.getListChart();
-//        var response = orderMono.collectList().block();
-        //var response = orderMono.collectList().block();
-        //var lis
-
-//        Map<String, Long> result = new HashMap<>();
-//        list.forEach(a ->{
-//            var nama = a.getProductName();
-//            var jumlah = a.getQuantity();
-//            result.put(nama, jumlah);
-//        });
-
-
-        return list;
+        return response;
     }
-//    @Override
-//    public Map<String, Long> chart() {
-//        Mono<ListChartDTO>  orderMono = WebClient.create()
-//        //ListChartDTO listChartDTO = webClient.create()
-//                .get()
-//                .uri("http://103.41.205.41:10104/api/order/orderItem/top5-sold-this-month")
-//                .retrieve()
-//                .bodyToMono(ListChartDTO.class);
-//                //.block();
-//        var response = orderMono.block();
-//
-//        if (response != null) {
-//        // Ambil Map<String, Long> dari respons
-//            Map<String, Long> chartData = response.getListChart();
-//
-//        // Lakukan pengolahan data untuk mendapatkan top 5
-//            Map<String, Long> top5Sales = chartData.entrySet().stream()
-//                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
-//                    .limit(5)
-//                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-//
-//            return top5Sales;
-//        } else {
-//            // Handle jika respons null atau kosong
-//            return Collections.emptyMap();
-//    }
-//}
-//
-
 
 
 
