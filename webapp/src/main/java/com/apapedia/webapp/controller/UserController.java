@@ -21,6 +21,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.apapedia.webapp.dto.request.CreateUserRequestDTO;
+import com.apapedia.webapp.dto.request.UpdateProfileRequestDTO;
 import com.apapedia.webapp.restservice.UserRestService;
 import com.apapedia.webapp.security.xml.ServiceResponse;
 import com.apapedia.webapp.setting.Setting;
@@ -63,11 +64,11 @@ public class UserController {
         // Attributes attributes = serviceResponse.getAuthenticationSuccess().getAttributes();
         String username = serviceResponse.getAuthenticationSuccess().getUser();
 
+
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, "dummy", null);
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(authentication);
 
-        // String name = attributes.getNama();
         var token = userRestService.getToken(username, "dummy");
 
         HttpSession httpSession = request.getSession(true);
@@ -113,11 +114,41 @@ public class UserController {
         return "profile";
     }
 
-//
-//    @GetMapping("/withdraw")
-//    public String withdraw(){
-//        return "withdraw";
-//    }
+    @GetMapping("/edit-profile")
+    public String editProfile(Model model, HttpServletRequest request) {
+        HttpSession httpSession = request.getSession();
+        var token = httpSession.getAttribute("token");
+        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(8, 44);
+        
+        // Fetch the existing seller information
+        var seller = sellerRestService.readSeller(UUID.fromString(sellerId), token.toString());
+        
+        // Add the seller information to the model for prefilling the form
+        model.addAttribute("seller", seller);
+        
+        return "edit-profile";
+    }
+
+    @PostMapping("/edit-profile")
+    public String updateProfile(@ModelAttribute UpdateProfileRequestDTO updateProfileDTO, HttpServletRequest request)
+            throws IOException, InterruptedException {
+        HttpSession httpSession = request.getSession();
+        var token = httpSession.getAttribute("token");
+        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(8, 44);
+    
+        // Fetch the existing seller information
+        var existingSeller = sellerRestService.readSeller(UUID.fromString(sellerId), token.toString());
+    
+        // Perform the update
+        updateProfileDTO.setId(sellerId);
+        updateProfileDTO.setName(existingSeller.getName());
+        updateProfileDTO.setUsername(existingSeller.getUsername());
+        updateProfileDTO.setPassword("dummy");
+        sellerRestService.updateSeller(UUID.fromString(sellerId), updateProfileDTO, token.toString());
+    
+        return "redirect:/profile";
+    }
+    
 
     @GetMapping("/withdraw")
     public String formWithdraw(Model model, HttpServletRequest request){
@@ -131,18 +162,6 @@ public class UserController {
         return "withdraw";
     }
 
-//    @GetMapping("/withdraw")
-//    public String withdraw(Model model, HttpServletRequest request){
-//        HttpSession httpSession = request.getSession();
-//        var token = httpSession.getAttribute("token");
-//        String sellerId = jwtUtils.getClaimsFromJwtToken(token.toString()).substring(8, 44);
-//        var seller = sellerRestService.readSeller(UUID.fromString(sellerId), token.toString());
-//        model.addAttribute("seller", seller);
-//
-////        var sellerDTO = sellerMapper.sellerToUpdateSellerDTO(seller);
-////        model.addAttribute("sellerDTO", sellerDTO)
-//        return "withdraw";
-//    }
 
     @PostMapping("/withdraw")
     public String postWithdraw(@RequestParam("withdraw") long withdraw, Model model, HttpServletRequest request){
