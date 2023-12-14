@@ -3,7 +3,9 @@ package com.apapedia.user.controller;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,73 +17,95 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.apapedia.user.auth.JwtUtil;
+import com.apapedia.user.constant.Constant;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
-import com.apapedia.user.model.User;
+import com.apapedia.user.model.UserModel;
+import com.apapedia.user.security.jwt.JwtUtils;
 import com.apapedia.user.service.UserService;
 
-import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/user")
-@AllArgsConstructor
 public class UserController {
 
+    @Autowired
     private UserService userService;
 
-    private JwtUtil jwtUtil;
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @GetMapping("/{id}")
-    private User getUserById(@PathVariable UUID id) {
+    private ResponseEntity<?> getUserById(@PathVariable UUID id) {
         try {
-            return userService.getUserbyId(id);
+            UserModel user = userService.getUserById(id);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
+            }
+            if (user.getRole().getRole().equals(Constant.ROLE_CUSTOMER)) {
+                return ResponseEntity.ok(userService.getCustomerById(id));
+            } else {
+                return ResponseEntity.ok(userService.getSellerById(id));
+            }
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PutMapping("/update")
-    private User updateUser(@Valid @RequestBody UpdateUserRequestDTO updatedUser,
+    private ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserRequestDTO updatedUser,
             @RequestHeader HashMap<String, String> headers) {
-
-        String token = jwtUtil.resolveToken(headers);
-
-        // Jika token tidak ada
-        if (token == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+        try {
+            var user = userService.updateUser(updatedUser, jwtUtils.getTokenFromHeader(headers));
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
+            }
+            return ResponseEntity.ok(user);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
-        Claims claims = jwtUtil.parseJwtClaims(token);
-        UUID userId = UUID.fromString(claims.getSubject());
-
-        // Jika user yang mengakses bukan user yang ingin diupdate
-        if (!userId.equals(updatedUser.getId())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
-        }
-
-        User user = userService.updateUser(updatedUser);
-        return user;
     }
 
     @DeleteMapping("/delete/{id}")
-    private void deleteUser(@PathVariable UUID id) {
-        try {
-            userService.softDeleteUser(id);
+    private ResponseEntity<String> deleteUser(@PathVariable UUID id, @RequestHeader HashMap<String, String> headers) {
+        try{
+            userService.deleteUser(id, jwtUtils.getTokenFromHeader(headers));
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.ok("User deleted");
+    }
+
+    @PutMapping("/{id}/top-up")
+    private ResponseEntity<?> topUp(@PathVariable UUID id, @RequestParam("amount") long amount,
+            @RequestHeader HashMap<String, String> headers) {
+        try{
+            var user = userService.topUp(id, amount, jwtUtils.getTokenFromHeader(headers)); 
+            return ResponseEntity.ok().body(user);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @PutMapping("/update-balance/{id}")
-    private User updateBalance(@PathVariable UUID id, @RequestParam("amount") long amount) {
-        try {
-            return userService.updateBalance(id, amount);
+    @PutMapping("/{id}/withdraw")
+    private ResponseEntity<?> withdraw(@PathVariable UUID id, @RequestParam("amount") long amount,
+            @RequestHeader HashMap<String, String> headers) {
+        try{
+            var user = userService.withdraw(id, amount, jwtUtils.getTokenFromHeader(headers)); 
+            return ResponseEntity.ok().body(user);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
 
 }

@@ -1,80 +1,158 @@
 package com.apapedia.catalogue.controller;
 
-
-import com.apapedia.catalogue.model.Catalogue;
+import com.apapedia.catalogue.dto.request.CreateCatalogueRequestDTO;
+import com.apapedia.catalogue.dto.request.UpdateCatalogueRequestDTO;
 import com.apapedia.catalogue.service.CatalogueService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
-import com.apapedia.catalogue.service.DTO.CatalogueMapper;
-import com.apapedia.catalogue.service.DTO.NewCatalogueDTO;
-import com.apapedia.catalogue.service.DTO.UpdateCatalogueDTO;
-
-import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/catalogue")
 public class CatalogueController {
     @Autowired
     private CatalogueService catalogueService;
 
-    @Autowired
-    private CatalogueMapper catalogueMapper;
 
-    @GetMapping(value = "/catalogue/view-all")
-    public List<Catalogue> getAllCatalogue() {
-        return catalogueService.getAllCatalogue();
+    @GetMapping(value = "/view-all")
+    public ResponseEntity<?> getAllCatalogue() {
+        try{
+            var catalogue = catalogueService.getAllCatalogue();
+            return ResponseEntity.ok(catalogue);
+        } catch (ResponseStatusException e){
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @GetMapping(value = "/catalogue/view-catalogue-by-id")
-    public Catalogue getCatalogueById(UUID id) {
-        return catalogueService.getCatalogueById(id);
+    @GetMapping(value = "/image/{catalogId}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<?> getImage(@PathVariable(value = "catalogId") UUID catalogId) {
+        try {
+            var imageData = catalogueService.getImageByCatalogeId(catalogId);
+            return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf(MediaType.IMAGE_JPEG_VALUE))
+                .body(imageData);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @PutMapping(value = "/catalogue/update-catalogue")
-    public Catalogue updateCatalogue(UpdateCatalogueDTO catalogueDTO) {
-        var catalogue = catalogueMapper.updateCatalogueDTOToCatalogue(catalogueDTO);
-        return catalogueService.updateCatalogue(catalogue, catalogueDTO.getId());
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> getCatalogueById(@PathVariable("id") UUID id) {
+        try {
+            var catalogue = catalogueService.getCatalogueById(id);
+            return ResponseEntity.ok(catalogue);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @GetMapping(value = "/catalogue/view-catalogue-by-seller-id")
-    public List<Catalogue> getCataloguesBySellerId(@RequestParam UUID idSeller) {
-        return catalogueService.getCataloguesBySellerId(idSeller);
+    @PutMapping(value = "/update")
+    public ResponseEntity<?> updateCatalogue(@RequestBody UpdateCatalogueRequestDTO catalogueDTO) {
+        try {
+            var catalogue = catalogueService.updateCatalogue(catalogueDTO);
+            return ResponseEntity.ok(catalogue);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @PostMapping(value = "/catalogue/add-catalogue")
-    public Catalogue addCatalogue(@RequestBody NewCatalogueDTO newCatalogueDTO) {
-        var catalogue = catalogueMapper.newCatalogueDTOToCatalogue(newCatalogueDTO);
-        return catalogueService.addCatalogue(catalogue);
+    @GetMapping(value = "/seller")
+    public ResponseEntity<?> getCataloguesBySellerId(@RequestParam(value="sellerId", required = false) UUID sellerId) {
+        try {
+            var catalogues = catalogueService.getCataloguesBySellerId(sellerId);
+            return ResponseEntity.ok(catalogues);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-
-    @DeleteMapping(value = "/catalogue/{id}")
-    public String deleteCatalogue(@PathVariable ("id") UUID id){
-        var catalogue = catalogueService.getCatalogueById(id);
-        catalogueService.deleteCatalogue(catalogue);
-
-        return "Catalogue with id: " + id + " has been deleted";
+    @PostMapping(value = "/add")
+    public ResponseEntity<?> addCatalogue(
+        @RequestParam UUID sellerId,
+        @RequestParam int price,
+        @RequestParam String productName,
+        @RequestParam String productDescription,
+        @RequestParam int stock,
+        @RequestParam MultipartFile imageFile,
+        @RequestParam UUID categoryId) {
+        try {
+            var newCatalogueDTO = new CreateCatalogueRequestDTO();
+            newCatalogueDTO.setSellerId(sellerId);
+            newCatalogueDTO.setPrice(price);
+            newCatalogueDTO.setProductName(productName);
+            newCatalogueDTO.setProductDescription(productDescription);
+            newCatalogueDTO.setStock(stock);
+            newCatalogueDTO.setImageFile(imageFile);
+            newCatalogueDTO.setCategoryId(categoryId);
+            var catalogue = catalogueService.createCatalogue(newCatalogueDTO);
+            return ResponseEntity.ok(catalogue);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+        
     }
 
-    @GetMapping("/catalogue/productName/{productName}")
-    public List<Catalogue> getCatalogueByName(@PathVariable ("productName") String productName){
-        return catalogueService.getCatalogListByName(productName);
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<?> deleteCatalogue(@PathVariable ("id") UUID id){
+        try{
+            catalogueService.deleteCatalogue(id);
+            return ResponseEntity.ok("Catalogue with id " + id + " has been deleted");
+        } catch (ResponseStatusException e){
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @GetMapping("catalogue/price/{price}")
-    public List<Catalogue> getCatalogueByPrice(@PathVariable ("price") int price){
-        return catalogueService.getCatalogListByPrice(price);
+    @GetMapping(value = "/product")
+    public ResponseEntity<?> getCatalogueByName(@RequestParam (value="productName", required=false) String productName){
+        try{
+            var catalogue = catalogueService.getCatalogueByName(productName);
+            return ResponseEntity.ok(catalogue);
+        } catch (ResponseStatusException e){
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/price")
+    public ResponseEntity<?>getCatalogueByPrice(@RequestParam (value="price", required=false) int price){
+        try{
+            var catalogue = catalogueService.getCatalogListByPrice(price);
+            return ResponseEntity.ok(catalogue);
+        } catch (ResponseStatusException e){
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
 
     }
 
@@ -83,13 +161,19 @@ public class CatalogueController {
 //        return catalogueService.getCatalogListSorted(sortBy, sortOrder);
 //    }
 
-    @GetMapping("/catalogue/sorted/{sortCriteria}")
-    public List<Catalogue> getCatalogueListSorted(@PathVariable ("sortCriteria") String sortCriteria) {
-        String[] sortParams = sortCriteria.split("-");
-        String sortBy = sortParams[0];
-        String sortOrder = sortParams[1];
-
-        return catalogueService.getCatalogListSorted(sortBy, sortOrder);
+    @GetMapping("/sort")
+    public ResponseEntity<?> getCatalogueListSorted(@RequestParam (value="sortCriteria", required = false) String sortCriteria) {
+        try {
+            String[] sortParams = sortCriteria.split("-");
+            String sortBy = sortParams[0];
+            String sortOrder = sortParams[1];
+            var catalogue = catalogueService.getCatalogListSorted(sortBy, sortOrder);
+            return ResponseEntity.ok(catalogue);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
 }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/output.css}">
+    <script th:src="@{/js/tailwind.config.js}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.8/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Edit Profile</title>
+</head>
+
+<body>
+    <section class="bg-gray-50 dark:bg-gray-900">
+        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                    <h1 class="text-2xl font-bold text-center">Edit Profile</h1>
+
+                    <!-- Edit Profile Form -->
+                    <form method="post" th:action="@{/edit-profile}" th:object="${updateProfileDTO}">
+
+                        <!-- Email Input -->
+                        <div class="mt-4">
+                            <label for="email" class="text-gray-500">email:</label>
+                            <input type="text" id="email" name="email" class="form-input"
+                                th:value="${seller.email}">
+                        </div>
+
+
+                        <!-- Address Input -->
+                        <div class="mt-4">
+                            <label for="address" class="text-gray-500">Address:</label>
+                            <input type="text" id="address" name="address" class="form-input"
+                                th:value="${seller.address}">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="flex justify-center mt-6">
+                            <button type="submit"
+                                class="bg-gray-500 hover:bg-gray-600 text-gray-100 font-bold py-2 px-4 rounded">Save
+                                Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
