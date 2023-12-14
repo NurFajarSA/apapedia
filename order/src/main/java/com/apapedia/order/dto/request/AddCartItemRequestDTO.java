@@ -12,5 +12,8 @@ import lombok.NoArgsConstructor;
 public class AddCartItemRequestDTO {
     private UUID cartId;
     private UUID productId;
+    private UUID sellerId;
+    private String productName;
+    private int productPrice;
     private int quantity;
 }

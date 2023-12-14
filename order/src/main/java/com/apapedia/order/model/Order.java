@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "customer_order")
+@Table(name = "order_table")
 
 public class Order {
     @Id
@@ -25,27 +25,27 @@ public class Order {
 
     @NotNull
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @NotNull
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
     @NotNull
     @Column(name = "status", nullable = false)
-    private int status;
+    private int status = 0;
 
     @NotNull
     @Column(name = "total_price", nullable = false)
-    private int totalPrice;
+    private int totalPrice = 0;
 
     @NotNull
-    @Column(name = "customer", nullable = false)
-    private UUID customer;
+    @Column(name = "customer_id", nullable = false)
+    private UUID customerId;
 
     @NotNull
-    @Column(name = "seller", nullable = false)
-    private UUID seller;
+    @Column(name = "seller_id", nullable = false)
+    private UUID sellerId;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> listOrderItem;

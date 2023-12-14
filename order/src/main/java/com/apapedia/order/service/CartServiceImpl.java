@@ -35,10 +35,8 @@ public class CartServiceImpl implements CartService{
     public Cart addCartItem(AddCartItemRequestDTO cartItemDTO) {
         Cart cart = getCartById(cartItemDTO.getCartId());
         CartItem cartItem = cartMapper.addCartItemRequestDTOtoCartItem(cartItemDTO);
-        cartItem.setCart(cart);
-        cartItem.setProductId(UUID.randomUUID()); // TODO: change to real product id
-        cartItemDb.save(cartItem);
-
+        cartItem.setCart(cart); 
+        cart.getListCartItem().add(cartItem);
         updateTotalPrice(cart);
         return cartDb.save(cart);
     }
@@ -60,17 +58,22 @@ public class CartServiceImpl implements CartService{
     }
     
     private void updateTotalPrice(Cart cart) {
-        // TODO: get price product
-        // cart.setTotalPrice(cart.getListCartItem().stream().mapToInt(cartItem -> cartItem.getQuantity() * {{get price product}}).sum());
+        List<CartItem> cartItemList = cart.getListCartItem();
+        int totalPrice = 0;
+        for (CartItem cartItem : cartItemList) {
+            totalPrice += cartItem.getProductPrice();
+        }
+        cart.setTotalPrice(totalPrice);
     }
 
     @Override
-    public List<CartItem> getCartItemsByUserId(UUID userId) {
-        return cartDb.findByCart_UserId(userId);
+    public List<CartItem> getCartItemsByCustomerId(UUID customerId) {
+        Cart cart = cartDb.findByCustomerId(customerId);
+        return cart.getListCartItem();
     }
 
     @Override
     public void deleteCartItem(UUID cartItemId) {
-        cartDb.deleteById(cartItemId);
+        cartItemDb.deleteById(cartItemId);
     }
 }

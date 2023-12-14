@@ -2,7 +2,11 @@ package com.apapedia.order.controller;
 
 import com.apapedia.order.model.CartItem;
 import com.apapedia.order.service.CartService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.apapedia.order.dto.request.AddCartItemRequestDTO;
 import com.apapedia.order.dto.request.UpdateCartItemRequestDTO;
+import com.apapedia.order.dto.response.TemplateRes;
 import com.apapedia.order.model.Cart;
-import com.apapedia.order.model.CartItem;
-import com.apapedia.order.service.CartService;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -36,30 +39,32 @@ public class CartController {
      * @return new Cart
      */
     @PostMapping("/add")
-    public Cart addCart(@RequestParam(name = "userId") UUID userId) {
+    public ResponseEntity<?> addCart(@RequestParam(name = "userId") UUID customerId) {
+        // user id pastiin dulu pas di user service
         Cart cart = new Cart();
-        cart.setUserId(userId);
+        cart.setCustomerId(customerId);
         cart.setListCartItem(new ArrayList<CartItem>());
-        return cartService.addCart(cart);
+        cart = cartService.addCart(cart);
+        return ResponseEntity.ok(new TemplateRes("Cart created", cart));
     }
 
     @PostMapping("/cartItem/add")
-    public Cart addCartItem(@RequestBody AddCartItemRequestDTO cartItemDTO) {
-        return cartService.addCartItem(cartItemDTO);
+    public ResponseEntity<?> addCartItem(@RequestBody AddCartItemRequestDTO cartItemDTO) {
+        return ResponseEntity.ok(new TemplateRes("Cart item added", cartService.addCartItem(cartItemDTO)));
     }
 
-    @PutMapping("/cartItem/update")
-    public Cart updateCartItem(@RequestBody UpdateCartItemRequestDTO cartItemDTO) {
-        return cartService.updateCartItem(cartItemDTO);
-
-    @GetMapping("/items/{userId}")
-    public List<CartItem> getCartItemsByUserId(@PathVariable UUID userId) {
-        return cartService.getCartItemsByUserId(userId);
+    @PutMapping("/cartItem/update-quantity")
+    public ResponseEntity<?> updateCartItem(@Valid @RequestBody UpdateCartItemRequestDTO cartItemDTO) {
+        return ResponseEntity.ok(new TemplateRes("Cart item updated", cartService.updateCartItem(cartItemDTO)));
+    }
+    @GetMapping("/{customerId}")
+    public ResponseEntity<?> getCartItemsByUserId(@PathVariable UUID customerId) {
+        return ResponseEntity.ok(new TemplateRes("Cart items retrieved", cartService.getCartItemsByCustomerId(customerId)));
     }
 
-    @DeleteMapping("/items/{cartItemId}")
-    public void deleteCartItem(@PathVariable UUID cartItemId) {
+    @DeleteMapping("/cartItem/{cartItemId}/delete")
+    public ResponseEntity<?> deleteCartItem(@PathVariable UUID cartItemId) {
         cartService.deleteCartItem(cartItemId);
-
+        return ResponseEntity.ok(new TemplateRes("Cart item deleted", null));
     }
 }

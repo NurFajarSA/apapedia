@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.8/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Catalogue List</title>
+</head>
+
+<body>
+<section class="bg-gray-50 dark:bg-gray-900">
+    <div class="text-center pt-5">
+        <h1 class="text-3xl font-bold ">Catalogue List</h1> <br>
+        <p class="text">- APAPEDIA -</p><br>
+        <!--        <a class="btn btn-primary" th:href="@{/catalogue/add-catalogue}">Add Product</a>-->
+    </div>
+    <div class="grid grid-cols-3 gap-4">
+        <div th:each="catalogue: ${listCatalogue}">
+            <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+                <div
+                        class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                    <figure><img th:src="'http://localhost:8081/api/catalogue/image/' + ${catalogue.id}"
+                                 class="card-img-top" alt="Product Image"></figure>
+                    <div class="card-body">
+                        <h2 class="card-title" th:text="${catalogue.productName}"></h2>
+                        <p th:text="'Price: ' + ${catalogue.price}"></p>
+                        <!--                        <div class="card-actions justify-between">-->
+                        <!--                            <a class="btn btn-primary" th:href="@{/catalogue/update/{id}(id=${catalogue.id})}">Edit Product</a>-->
+                        <!--                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+
+
+</html>

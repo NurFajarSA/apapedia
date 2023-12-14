@@ -9,5 +9,4 @@ import com.apapedia.order.model.CartItem;
 
 @Repository
 public interface CartItemDb extends JpaRepository<CartItem, UUID>{
-    
 }

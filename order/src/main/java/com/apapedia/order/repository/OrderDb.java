@@ -1,5 +1,6 @@
 package com.apapedia.order.repository;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface OrderDb extends JpaRepository<Order, UUID>{
-    List<Order> findByCustomer(UUID customer);
-    List<Order> findBySeller(UUID seller);
+    List<Order> findByCustomerId(UUID customerId);
+    List<Order> findBySellerId(UUID sellerId);
+    List<Order> findBySellerIdAndCreatedAtBetween(UUID sellerId, LocalDateTime startOfMonth, LocalDateTime endOfMonth);
 }

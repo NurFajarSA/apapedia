@@ -9,17 +9,11 @@ import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;
 
 public interface CartService {
-
-    Cart addCart(Cart cart);
-
-    Cart addCartItem(AddCartItemRequestDTO cartItemDTO);
-
-    Cart updateCartItem(UpdateCartItemRequestDTO cartItemDTO);
-
-    Cart getCartById(UUID cartId);
-
-    List<CartItem> getCartItemsByUserId(UUID userId);
-
-    void deleteCartItem(UUID cartItemId);
     
+    Cart addCart(Cart cart);
+    Cart addCartItem(AddCartItemRequestDTO cartItemDTO);
+    Cart updateCartItem(UpdateCartItemRequestDTO cartItemDTO);
+    Cart getCartById(UUID cartId);
+    List<CartItem> getCartItemsByCustomerId(UUID userId);
+    void deleteCartItem(UUID cartItemId);
 }

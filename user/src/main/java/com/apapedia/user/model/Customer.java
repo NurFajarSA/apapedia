@@ -12,9 +12,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@DiscriminatorValue("CUSTOMER")
+@PrimaryKeyJoinColumn(name="id_user")
 @Entity
-public class Customer extends User {
+public class Customer extends UserModel {
     
     @Column(name="cart_id", nullable=true)
     private UUID cartId;

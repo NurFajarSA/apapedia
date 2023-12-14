@@ -1,11 +1,21 @@
 package com.apapedia.order.service;
 
-import java.util.List;
-import java.util.UUID;
-
+import com.apapedia.order.dto.request.BuyNowDTO;
 import com.apapedia.order.model.Order;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.List;
+
 public interface OrderService {
-    List<Order> getOrderByCustomer(UUID customer);
-    List<Order> getOrderBySeller(UUID seller);
+    Map<UUID, Order> addOrderByCartId(UUID cartId);
+    Order addOrderBuyNow(BuyNowDTO buyNowDTO);
+    Order updateOrderStatus(UUID orderId, int status);
+    List<Order> getOrderByCustomerId(UUID customerId);
+    List<Order> getOrderBySellerId(UUID sellerId);
+
+    Map<Integer,Long > getStatusCounts();
+    Map<String, Long> getSalesCounts();
+//    List<Integer> getSalesPerDayForMonth(UUID userId);
+    
 }
