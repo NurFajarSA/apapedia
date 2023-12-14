@@ -6,7 +6,6 @@ import com.apapedia.user.model.Customer;
 import com.apapedia.user.model.Seller;
 import com.apapedia.user.model.UserModel;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
@@ -29,5 +28,6 @@ public interface UserService {
     String getToken(String token);
     Customer getCustomerById(UUID id);
     Seller getSellerById(UUID id);
-    List<UserModel> transaction(long amount, UUID sellerId, UUID customerId);
+    Seller topUpSeller(long amaount, UUID sellerId);
+    Customer withdrawCustomer(long amount, UUID customerId);
 }

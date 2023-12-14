@@ -36,7 +36,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers("/api/user/**").hasAnyAuthority(Constant.ROLE_SELLER, Constant.ROLE_CUSTOMER)
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/apapedia/**").permitAll()
+                        .requestMatchers("/api/transaction/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

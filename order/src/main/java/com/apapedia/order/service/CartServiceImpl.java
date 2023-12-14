@@ -58,7 +58,6 @@ public class CartServiceImpl implements CartService{
     }
     
     private void updateTotalPrice(Cart cart) {
-        // TODO: get price product
         List<CartItem> cartItemList = cart.getListCartItem();
         int totalPrice = 0;
         for (CartItem cartItem : cartItemList) {

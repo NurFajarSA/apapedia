@@ -11,7 +11,6 @@ import com.apapedia.order.repository.CartItemDb;
 import com.apapedia.order.repository.OrderDb;
 import com.apapedia.order.repository.OrderItemDb;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -40,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
     private final WebClient webClientUser;
 
     public OrderServiceImpl(WebClient.Builder webClientBuilder){
-        this.webClientUser = webClientBuilder.baseUrl("http://localhost:8081/api").build();
+        this.webClientUser = webClientBuilder.baseUrl("http://sonsulung.com:10102/api").build();
     }
 
     @Override
@@ -66,7 +65,6 @@ public class OrderServiceImpl implements OrderService {
             totalPrice += cartItem.getProductPrice() * cartItem.getQuantity();
             order.setTotalPrice(order.getTotalPrice() + totalPrice);
             orderDb.save(order);
-            topUpBalance(order.getSellerId(), totalPrice);
         }
         withdrawBalance(cart.getCustomerId(), globalTotalPrice);
         deleteAllCartItem(cartId);
@@ -74,15 +72,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void withdrawBalance(UUID customerId, int globalTotalPrice) {
-        // TODO : withdraw balance
-        webClientUser.put().uri("/user/" + customerId.toString() + "/withdraw?amount=" + globalTotalPrice).header(HttpHeaders.AUTHORIZATION, "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlY2EyMmIyZS0zNmJiLTQ2OTQtYTgzMC00MWE3MmY4NGQyZjYiLCJuYW1lIjoiQ3VzdG9tZXIxIiwidXNlck5hbWUiOiJjdXN0b21lcjEiLCJlbWFpbCI6ImN1c3RvbWVyMUBnbWFpbC5jb20iLCJhZGRyZXNzIjoiQXB0LiAwNjYgSmwuIEdhamFobWFkYSBOby4gMjUsIFR1bHVuZ2FndW5nLCBQQSA2MzM5OCIsImJhbGFuY2UiOjc1MDAwLCJpYXQiOjE3MDIzODcyOTAsImV4cCI6MTcwMjQ3MzY5MH0.ANFZujicah505FQVq6r63G5Bf2ZNYQTXbRIgtRi7kIu5eG1WFvyYdAnHdelsiKpn-wR4JcCfuQfbwu4YR6e-8g").retrieve().bodyToMono(String.class);
-        // System.out.println(response.block());
+        var response = webClientUser.put().uri("/transaction/withdraw?amount=" + globalTotalPrice + "&customerId=" + customerId.toString()).retrieve().bodyToMono(String.class);
+        System.out.println(response.block());
     }
 
     private void topUpBalance(UUID sellerId, int totalPrice) {
-        // TODO : top up balance
-        webClientUser.put().uri("/user/" + sellerId.toString() + "/top-up?amount=" + totalPrice).retrieve().bodyToMono(String.class);
-        // System.out.println(response.block());
+        var response = webClientUser.put().uri("/transaction/top-up?amount=" + totalPrice + "&sellerId=" + sellerId.toString()).retrieve().bodyToMono(String.class);
+        System.out.println(response.block());
     }
 
     private void deleteAllCartItem(UUID cartId) {
@@ -139,6 +135,9 @@ public class OrderServiceImpl implements OrderService {
         Order order = getOrderById(orderId);
         order.setUpdatedAt(LocalDateTime.now());
         order.setStatus(status);
+        if (status == 5) {
+            topUpBalance(order.getSellerId(), order.getTotalPrice());
+        }
         return orderDb.save(order);
     }
 

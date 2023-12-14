@@ -14,16 +14,27 @@ import org.springframework.web.server.ResponseStatusException;
 import com.apapedia.user.service.UserService;
 
 @RestController
-@RequestMapping("/api/apapedia")
+@RequestMapping("/api/transaction")
 public class TransactionController {
     @Autowired
     private UserService userService;
 
-    @PutMapping("/transaction/withdraw")
-    private ResponseEntity<?> transaction(@RequestParam("amount") long amount, @RequestParam("sellerId") UUID sellerId,
-            @RequestParam("customerId") UUID customerId) {
+    @PutMapping("/withdraw")
+    private ResponseEntity<?> withdrawCustomer(@RequestParam("amount") long amount, @RequestParam("customerId") UUID customerId) {
         try{
-            var user = userService.transaction(amount, sellerId, customerId); 
+            var user = userService.withdrawCustomer(amount, customerId); 
+            return ResponseEntity.ok().body(user);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/top-up")
+    private ResponseEntity<?> topUpSeller(@RequestParam("amount") long amount, @RequestParam("sellerId") UUID sellerId) {
+        try{
+            var user = userService.topUpSeller(amount, sellerId); 
             return ResponseEntity.ok().body(user);
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());

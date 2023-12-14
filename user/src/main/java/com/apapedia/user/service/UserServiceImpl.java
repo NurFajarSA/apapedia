@@ -1,7 +1,6 @@
 package com.apapedia.user.service;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -51,7 +50,7 @@ public class UserServiceImpl implements UserService{
     private final WebClient webClientOrder;
 
     public UserServiceImpl(WebClient.Builder webClientBuilder){
-        this.webClientOrder = webClientBuilder.baseUrl("http://localhost:8081/api").build();
+        this.webClientOrder = webClientBuilder.baseUrl("http://sonsulung.com:10104/api").build();
     }
 
 
@@ -212,20 +211,21 @@ public class UserServiceImpl implements UserService{
         return sellerDb.findById(id).orElseThrow(() -> new NoSuchElementException("Seller not found"));
     }
 
+    @Override 
+    public Seller topUpSeller(long amount, UUID sellerId) {
+        var seller = getSellerById(sellerId);
+        seller.setBalance(seller.getBalance() + amount);
+        return sellerDb.save(seller);
+    }
 
     @Override
-    public List<UserModel> transaction(long amount, UUID sellerId, UUID customerId) {
-        var seller = getSellerById(sellerId);
+    public Customer withdrawCustomer(long amount, UUID customerId) {
         var customer = getCustomerById(customerId);
         if (customer.getBalance() < amount) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance");
         }
         customer.setBalance(customer.getBalance() - amount);
-        seller.setBalance(seller.getBalance() + amount);
-        customerDb.save(customer);
-        sellerDb.save(seller);
-        List<UserModel> user = List.of(customer, seller);
-        return user;
+        return customerDb.save(customer);
     }
     
 }
