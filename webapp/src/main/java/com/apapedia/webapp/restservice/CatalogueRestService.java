@@ -18,4 +18,6 @@ public interface CatalogueRestService {
     UpdateCatalogueDTO getCatalogueByIdUpdate(UUID id);
     CategoryDTO getCategoryById(UUID id);
     MultipartFile getImage(UUID id);
+    void deleteCatalogue(UUID id);
+
 }

@@ -13,6 +13,7 @@
 
 <body class="bg-gray-50 dark:bg-gray-900">
     <section class="min-h-screen flex items-center justify-center">
+        <form th:action="@{/catalogue/delete/{id}(id=${catalogue.id})}" method="POST">
         <div class="flex flex-col items-center">
             <div class="text-center pt-5">
                 <h1 class="text-3xl font-bold ">Catalogue Detail</h1> <br>
@@ -30,7 +31,9 @@
                     <p th:text="'Harga : '+${catalogue.price}"></p>
                     <p th:text="'Stok : '+${catalogue.stock}"></p>
                     <div class="card-actions justify-end">
-                        <a class="btn btn-primary" th:href="@{/catalogue/view-all}">Kembali</a>
+                        <input type="submit" class="btn btn-danger" value="Hapus">
+                    </form>
+                    <a class="btn btn-primary" th:href="@{/catalogue/view-all}">Kembali</a>
                     </div>
                 </div>
             </div>

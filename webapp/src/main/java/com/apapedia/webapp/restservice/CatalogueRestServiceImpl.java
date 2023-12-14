@@ -119,4 +119,14 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
             .bodyToMono(UpdateCatalogueDTO.class);
         return catalogueMono.block();
     }
+
+    @Override
+    public void deleteCatalogue(UUID id){
+        Mono<Void> catalogueMono = WebClient.create()
+            .delete()
+            .uri("http://sonsulung.com:10103/api/catalogue/delete/" + id)
+            .retrieve()
+            .bodyToMono(Void.class);
+        catalogueMono.block();
+    }
 }
