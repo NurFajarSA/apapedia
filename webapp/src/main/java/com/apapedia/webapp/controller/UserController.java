@@ -83,6 +83,8 @@ public class UserController {
         return new ModelAndView("redirect:" + Setting.SERVER_LOGIN + Setting.CLIENT_LOGIN);    
     }
 
+
+
     @GetMapping("/logout-sso")
     public ModelAndView logoutSSO(Principal principal) {
         return new ModelAndView("redirect:" + Setting.SERVER_LOGOUT + Setting.CLIENT_LOGOUT);

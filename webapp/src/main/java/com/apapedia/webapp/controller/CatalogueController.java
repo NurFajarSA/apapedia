@@ -170,4 +170,30 @@ public class CatalogueController {
             return "error-page";
         }
     }
+
+    @GetMapping("catalogue/sorted/{sortCriteria}")
+    public String getCatalogueSorted(@PathVariable ("sortCriteria") String sortCriteria, Model model) {
+        String[] sortParams = sortCriteria.split("-");
+        String sortBy = sortParams[0];
+        String sortOrder = sortParams[1];
+        var listCatalog = catalogueRestService.getCatalogueByListSorted(sortCriteria);
+        model.addAttribute("listCatalogName", listCatalog);
+        return "catalogbysort";
+    }
+
+    @GetMapping("catalogue/productName/{productName}")
+    public String getCatalogueByName(@PathVariable ("productName") String productName, Model model){
+        var listCatalog = catalogueRestService.getCatalogueByName(productName);
+        model.addAttribute("listCatalogName", listCatalog);
+        return "catalogbyname";
+    }
+
+    @GetMapping("catalogue/price/{price}")
+    public String getCatalogueByPrice(@PathVariable ("price") int price, Model model){
+        var listCatalog = catalogueRestService.getCatalogueByPrice(price);
+        model.addAttribute("listCatalog", listCatalog);
+        return "catalogbypric";
+    }
+
+
 }

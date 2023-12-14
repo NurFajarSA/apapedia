@@ -5,16 +5,16 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.apapedia.webapp.dto.request.UpdateCatalogueDTO;
-import com.apapedia.webapp.model.Catalogue;
+import com.apapedia.webapp.dto.response.CatalogueResponseDTO;
 
 @Mapper(componentModel = "spring")
 public interface CatalogueMapper {
 
     CatalogueMapper INSTANCE = Mappers.getMapper(CatalogueMapper.class);
-    Catalogue updateCatalogueDTOToCatalogue(UpdateCatalogueDTO catalogueDTO);
+    // Catalogue updateCatalogueDTOToCatalogue(UpdateCatalogueDTO catalogueDTO);
 
-    // @Mapping(source = "category.name", target = "category")
-    UpdateCatalogueDTO catalogueToUpdateCatalogueDTO(Catalogue catalogue);
+    // // @Mapping(source = "category.name", target = "category")
+    // UpdateCatalogueDTO catalogueToUpdateCatalogueDTO(Catalogue catalogue);
 
     // @AfterMapping
     // default void afterMapping(@MappingTarget UpdateCatalogueDTO catalogueDTO, Catalogue catalogue) {

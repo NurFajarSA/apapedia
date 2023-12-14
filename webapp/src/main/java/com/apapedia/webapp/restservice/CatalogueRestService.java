@@ -20,4 +20,7 @@ public interface CatalogueRestService {
     MultipartFile getImage(UUID id);
     void deleteCatalogue(UUID id);
 
+    List<CatalogueResponseDTO> getCatalogueByName(String productName);
+    List<CatalogueResponseDTO> getCatalogueByPrice(int price);
+    List<CatalogueResponseDTO> getCatalogueByListSorted(String sortCriteria);
 }

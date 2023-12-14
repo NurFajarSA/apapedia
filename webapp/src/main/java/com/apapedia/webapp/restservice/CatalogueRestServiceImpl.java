@@ -95,6 +95,42 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     }
 
     @Override
+    public List<CatalogueResponseDTO> getCatalogueByName(String productName) {
+        Flux<CatalogueResponseDTO> catalogueFlux = WebClient.create()
+                .get()
+                .uri("http://sonsulung.com:10103/api/catalogue/productName/" + productName)
+                .retrieve()
+                .bodyToFlux(CatalogueResponseDTO.class);
+        var listCatalogue = catalogueFlux.collectList().block();
+
+        return listCatalogue;
+    }
+
+    @Override
+    public List<CatalogueResponseDTO> getCatalogueByPrice(int price) {
+        Flux<CatalogueResponseDTO> catalogueFlux = WebClient.create()
+                .get()
+                .uri("http://sonsulung.com:10103/api/catalogue/price/" + price)
+                .retrieve()
+                .bodyToFlux(CatalogueResponseDTO.class);
+        var listCatalogue = catalogueFlux.collectList().block();
+
+        return listCatalogue;
+    }
+
+    @Override
+    public List<CatalogueResponseDTO> getCatalogueByListSorted(String sortCriteria) {
+        Flux<CatalogueResponseDTO> catalogueFlux = WebClient.create()
+                .get()
+                .uri("http://sonsulung.com:10103/api/catalogue/sorted/" + sortCriteria)
+                .retrieve()
+                .bodyToFlux(CatalogueResponseDTO.class);
+        var listCatalogue = catalogueFlux.collectList().block();
+
+        return listCatalogue;
+    }
+
+    @Override
     public CategoryDTO getCategoryById(UUID id) {
         Flux<CategoryDTO> categoryFlux = WebClient.create()
             .get()

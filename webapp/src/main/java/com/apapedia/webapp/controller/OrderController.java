@@ -1,5 +1,6 @@
 package com.apapedia.webapp.controller;
 
+import com.apapedia.webapp.dto.request.CreateCatalogueDTO;
 import com.apapedia.webapp.restservice.OrderResrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,4 +21,5 @@ public class OrderController {
         model.addAttribute("top5", top5);
         return "chart";
     }
+
 }
