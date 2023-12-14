@@ -16,7 +16,7 @@
     <div class="text-center pt-5">
         <h1 class="text-3xl font-bold ">Catalogue List</h1> <br>
         <p class="text">- APAPEDIA -</p><br>
-<!--        <a class="btn btn-primary" th:href="@{/catalogue/add-catalogue}">Add Product</a>-->
+        <!--        <a class="btn btn-primary" th:href="@{/catalogue/add-catalogue}">Add Product</a>-->
     </div>
     <div class="grid grid-cols-3 gap-4">
         <div th:each="catalogue: ${listCatalogue}">
@@ -28,9 +28,9 @@
                     <div class="card-body">
                         <h2 class="card-title" th:text="${catalogue.productName}"></h2>
                         <p th:text="'Price: ' + ${catalogue.price}"></p>
-<!--                        <div class="card-actions justify-between">-->
-<!--                            <a class="btn btn-primary" th:href="@{/catalogue/update/{id}(id=${catalogue.id})}">Edit Product</a>-->
-<!--                        </div>-->
+                        <!--                        <div class="card-actions justify-between">-->
+                        <!--                            <a class="btn btn-primary" th:href="@{/catalogue/update/{id}(id=${catalogue.id})}">Edit Product</a>-->
+                        <!--                        </div>-->
                     </div>
                 </div>
             </div>

@@ -33,7 +33,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public List<Catalogue> viewAllCatalogue() {
         Flux<Catalogue> catalogueFlux = WebClient.create()
             .get()
-            .uri("http://103.41.205.41:10103/api/catalogue/view-all")
+            .uri("http://sonsulung.com:10103/api/catalogue/view-all")
             .retrieve()
             .bodyToFlux(Catalogue.class);
         var listCatalogue = catalogueFlux.collectList().block();
@@ -45,7 +45,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public Catalogue getCatalogueById(UUID id){
         Mono<Catalogue> catalogueMono = WebClient.create()
             .get()
-            .uri("http://103.41.205.41:10103/api/catalogue/view-catalogue-by-id/" + id)
+            .uri("http://sonsulung.com:10103/api/catalogue/view-catalogue-by-id/" + id)
             .retrieve()
             .bodyToMono(Catalogue.class);
         return catalogueMono.block();
@@ -55,7 +55,31 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public List<Catalogue> getCatalogueByName(String productName) {
         Flux<Catalogue> catalogueFlux = WebClient.create()
                 .get()
-                .uri("http://103.41.205.41:10103/api/catalogue/productName/" + productName)
+                .uri("http://sonsulung.com:10103/api/catalogue/productName/" + productName)
+                .retrieve()
+                .bodyToFlux(Catalogue.class);
+        var listCatalogue = catalogueFlux.collectList().block();
+
+        return listCatalogue;
+    }
+
+    @Override
+    public List<Catalogue> getCatalogueByPrice(int price) {
+        Flux<Catalogue> catalogueFlux = WebClient.create()
+                .get()
+                .uri("http://sonsulung.com:10103/api/catalogue/price/" + price)
+                .retrieve()
+                .bodyToFlux(Catalogue.class);
+        var listCatalogue = catalogueFlux.collectList().block();
+
+        return listCatalogue;
+    }
+
+    @Override
+    public List<Catalogue> getCatalogueByListSorted(String sortCriteria) {
+        Flux<Catalogue> catalogueFlux = WebClient.create()
+                .get()
+                .uri("http://sonsulung.com:10103/api/catalogue/sorted/" + sortCriteria)
                 .retrieve()
                 .bodyToFlux(Catalogue.class);
         var listCatalogue = catalogueFlux.collectList().block();
