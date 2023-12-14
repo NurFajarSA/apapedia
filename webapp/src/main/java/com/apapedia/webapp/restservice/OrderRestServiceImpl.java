@@ -26,33 +26,35 @@ public class OrderRestServiceImpl implements OrderResrService {
                 .retrieve()
                 .bodyToMono(ListChartDTO.class);
         var response = orderMono.block();
-        var list = response.getChartDTOList();
+        var list = response.getListChart();
 //        var response = orderMono.collectList().block();
         //var response = orderMono.collectList().block();
         //var lis
 
-        Map<String, Long> result = new HashMap<>();
-        list.forEach(a ->{
-            var nama = a.getProductName();
-            var jumlah = a.getQuantity();
-            result.put(nama, jumlah);
-        });
+//        Map<String, Long> result = new HashMap<>();
+//        list.forEach(a ->{
+//            var nama = a.getProductName();
+//            var jumlah = a.getQuantity();
+//            result.put(nama, jumlah);
+//        });
 
 
-        return result;
+        return list;
     }
 //    @Override
 //    public Map<String, Long> chart() {
-//
-//        ListChartDTO listChartDTO = webClient.get()
+//        Mono<ListChartDTO>  orderMono = WebClient.create()
+//        //ListChartDTO listChartDTO = webClient.create()
+//                .get()
 //                .uri("http://103.41.205.41:10104/api/order/orderItem/top5-sold-this-month")
 //                .retrieve()
-//                .bodyToMono(ListChartDTO.class)
-//                .block();
+//                .bodyToMono(ListChartDTO.class);
+//                //.block();
+//        var response = orderMono.block();
 //
-//        if (listChartDTO != null) {
+//        if (response != null) {
 //        // Ambil Map<String, Long> dari respons
-//            Map<String, Long> chartData = listChartDTO.getListChart();
+//            Map<String, Long> chartData = response.getListChart();
 //
 //        // Lakukan pengolahan data untuk mendapatkan top 5
 //            Map<String, Long> top5Sales = chartData.entrySet().stream()
@@ -66,7 +68,7 @@ public class OrderRestServiceImpl implements OrderResrService {
 //            return Collections.emptyMap();
 //    }
 //}
-
+//
 
 
 

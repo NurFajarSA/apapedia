@@ -11,7 +11,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Data
 public class ListChartDTO {
-    //private Map<String, Long> listChart;
-    private List<ChartDTO> chartDTOList;
+    private Map<String, Long> listChart;
+    //private List<ChartDTO> chartDTOList;
 
 }
