@@ -52,6 +52,18 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     }
 
     @Override
+    public List<Catalogue> getCatalogueByName(String productName) {
+        Flux<Catalogue> catalogueFlux = WebClient.create()
+                .get()
+                .uri("http://103.41.205.41:10103/api/catalogue/productName/" + productName)
+                .retrieve()
+                .bodyToFlux(Catalogue.class);
+        var listCatalogue = catalogueFlux.collectList().block();
+
+        return listCatalogue;
+    }
+
+    @Override
     public CategoryDTO getCategoryById(UUID id) {
         Flux<CategoryDTO> categoryFlux = WebClient.create()
             .get()

@@ -13,4 +13,5 @@ public interface CatalogueRestService {
     Catalogue getCatalogueById(UUID id);
     Catalogue updateCatalogue(Catalogue catalogue, UUID id);
     CategoryDTO getCategoryById(UUID id);
+    List<Catalogue> getCatalogueByName(String productName);
 }

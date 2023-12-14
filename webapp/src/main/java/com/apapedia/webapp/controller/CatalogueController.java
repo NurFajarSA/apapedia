@@ -109,4 +109,14 @@ public class CatalogueController {
             return "error-page"; // Redirect to an error page or appropriate handling
         }
     }
+
+
+    @GetMapping("catalogue/productName/{productName}")
+    public String getCatalogueByName(@PathVariable ("productName") String productName, Model model){
+        var listCatalogName = catalogueRestService.getCatalogueByName(productName);
+        model.addAttribute("listCatalogName", listCatalogName);
+        return "catalogbyname";
+    }
+
+
 }
