@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap CSS atau tambahkan versi terbaru yang Anda gunakan -->
+</head>
+<body>
+<nav th:fragment="navbar(page)" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand fw-bold text-primary ms-3" href="/">Apapedia</a>
+    <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <ul class="navbar-nav ml-auto"> <!-- Mengubah kelas dari "mr-auto" menjadi "ml-auto" -->
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${page == 'home' ? 'active' : ''}" href="/">Beranda</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${page == 'orderHistory' ? 'active' : ''}" href="/">Order History</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${page == 'addProduct' ? 'active' : ''}" href="/">Add Product</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${page == 'chart' ? 'active' : ''}" href="/top5-sales-this-month">Top Sales Chart</a>
+            </li>
+            <!--            <li>-->
+            <!--                <a class="nav-item nav-link"-->
+            <!--                   th:classappend="${page == 'user' ? 'active' : ''}"-->
+            <!--                   href="/user/viewall">-->
+            <!--                    User-->
+            <!--                </a>-->
+            <!--            </li>-->
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/logout}">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Bootstrap JS atau tambahkan versi terbaru yang Anda gunakan -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
