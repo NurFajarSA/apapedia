@@ -3,13 +3,20 @@ package com.apapedia.webapp.restservice;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.http.client.reactive.ClientHttpRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.apapedia.webapp.dto.request.CategoryDTO;
 import com.apapedia.webapp.dto.request.CreateCatalogueDTO;
-import com.apapedia.webapp.model.Catalogue;
+import com.apapedia.webapp.dto.request.UpdateCatalogueDTO;
+import com.apapedia.webapp.dto.response.CatalogueResponseDTO;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -17,37 +24,73 @@ import reactor.core.publisher.Mono;
 public class CatalogueRestServiceImpl implements CatalogueRestService{
 
     @Override
-    public Catalogue createCatalogue(CreateCatalogueDTO catalogueDTO){
+    public CreateCatalogueDTO createCatalogue(CreateCatalogueDTO catalogueDTO){
 
-        Mono<Catalogue> catalogueMono = WebClient.create()
+        Mono<String> catalogueMono = WebClient.create()
             .post()
-            .uri("http://103.41.205.41:10103/api/catalogue/add-catalogue")
-            .body(BodyInserters.fromValue(catalogueDTO))
+            .uri("http://sonsulung.com:10103/api/catalogue/add"
+            )
+            .contentType(MediaType.MULTIPART_FORM_DATA)
+            .body(getMultipartFormData(catalogueDTO))
             .retrieve()
-            .bodyToMono(Catalogue.class);
+            .bodyToMono(String.class);
         var response = catalogueMono.block();
-        return response;
+        return catalogueDTO;
+    }
+
+    private BodyInserter<?, ? super ClientHttpRequest> getMultipartFormData(CreateCatalogueDTO catalogueDTO) {
+        // ubah semua data jadi multipart/form-data
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("productName", catalogueDTO.getProductName());
+        builder.part("productDescription", catalogueDTO.getProductDescription());
+        builder.part("categoryId", catalogueDTO.getCategory().toString());
+        builder.part("price", catalogueDTO.getPrice());
+        builder.part("stock", catalogueDTO.getStock());
+        builder.part("sellerId", catalogueDTO.getSellerId().toString());
+        // tambahkan juga image);
+        builder.part("imageFile", catalogueDTO.getImage().getResource());
+        return BodyInserters.fromMultipartData(builder.build());
     }
 
     @Override
-    public List<Catalogue> viewAllCatalogue() {
-        Flux<Catalogue> catalogueFlux = WebClient.create()
+    public List<CatalogueResponseDTO> viewAllCatalogue() {
+        Flux<CatalogueResponseDTO> catalogueFlux = WebClient.create()
             .get()
-            .uri("http://103.41.205.41:10103/api/catalogue/view-all")
+            .uri("http://sonsulung.com:10103/api/catalogue/view-all")
             .retrieve()
-            .bodyToFlux(Catalogue.class);
+            .bodyToFlux(CatalogueResponseDTO.class);
         var listCatalogue = catalogueFlux.collectList().block();
 
         return listCatalogue;
     }
 
     @Override
-    public Catalogue getCatalogueById(UUID id){
-        Mono<Catalogue> catalogueMono = WebClient.create()
+    public MultipartFile getImage(UUID id){
+        Mono<MultipartFile> imageMono = WebClient.create()
             .get()
-            .uri("http://103.41.205.41:10103/api/catalogue/view-catalogue-by-id/" + id)
+            .uri("http://sonsulung.com:10103/api/catalogue/get-image/" + id)
             .retrieve()
-            .bodyToMono(Catalogue.class);
+            .bodyToMono(MultipartFile.class);
+        return imageMono.block();
+    }
+
+    @Override
+    public CatalogueResponseDTO getCatalogueById(UUID id){
+        Mono<CatalogueResponseDTO> catalogueMono = WebClient.create()
+            .get()
+            .uri("http://sonsulung.com:10103/api/catalogue/" + id)
+            .retrieve()
+            .bodyToMono(CatalogueResponseDTO.class);
+        return catalogueMono.block();
+    }
+
+    @Override
+    public UpdateCatalogueDTO getCatalogueByIdUpdate(UUID id){
+        Mono<UpdateCatalogueDTO> catalogueMono = WebClient.create()
+            .get()
+            .uri("http://sonsulung.com:10103/api/catalogue/" + id)
+            .retrieve()
+            .bodyToMono(UpdateCatalogueDTO.class);
         return catalogueMono.block();
     }
 
@@ -55,7 +98,7 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public CategoryDTO getCategoryById(UUID id) {
         Flux<CategoryDTO> categoryFlux = WebClient.create()
             .get()
-            .uri("http://103.41.205.41:10103/api/category/view-all")
+            .uri("http://sonsulung.com:10103/api/category/view-all")
             .retrieve()
             .bodyToFlux(CategoryDTO.class);
         for(CategoryDTO category : categoryFlux.collectList().block()){
@@ -67,13 +110,13 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     }
 
     @Override
-    public Catalogue updateCatalogue(Catalogue catalogueDTO, UUID id){
-        Mono<Catalogue> catalogueMono = WebClient.create()
+    public UpdateCatalogueDTO updateCatalogue(UpdateCatalogueDTO catalogueDTO){
+        Mono<UpdateCatalogueDTO> catalogueMono = WebClient.create()
             .put()
-            .uri("http://localhost:8081/api/catalogue/update-catalogue/" + id)
+            .uri("http://sonsulung.com:10103/api/catalogue/update")
             .body(BodyInserters.fromValue(catalogueDTO))
             .retrieve()
-            .bodyToMono(Catalogue.class);
+            .bodyToMono(UpdateCatalogueDTO.class);
         return catalogueMono.block();
     }
 }

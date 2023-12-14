@@ -1,6 +1,8 @@
 package com.apapedia.webapp.dto.request;
 
-import java.math.BigInteger;
+import java.util.UUID;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,10 +12,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class CreateCatalogueDTO {
-    private BigInteger price;
-    private String productName;
+    private UUID id;
+    private UUID sellerId;
+    private int price;
+    private String productName;  
     private String productDescription;
     private int stock;
-    private byte[] image; // Tambahkan atribut baru untuk representasi Base64 dari gambar
-    private com.apapedia.webapp.dto.request.CategoryDTO category;
+    private MultipartFile image;
+    private UUID category;
 }

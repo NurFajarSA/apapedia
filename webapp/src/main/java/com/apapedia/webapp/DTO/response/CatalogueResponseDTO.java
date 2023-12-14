@@ -1,22 +1,23 @@
-package com.apapedia.webapp.model;
+package com.apapedia.webapp.dto.response;
+
+import java.util.UUID;
 
 import com.apapedia.webapp.dto.request.CategoryDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigInteger;
-import java.util.UUID;
-
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Catalogue {
+@NoArgsConstructor
+@Data
+public class CatalogueResponseDTO {
     private UUID id;
-    private BigInteger price;
     private String productName;
     private String productDescription;
-    private int stock;
-    private byte[] image; // Tambahkan atribut baru untuk representasi Base64 dari gambar
     private CategoryDTO category;
+    private byte[] image;
+    private int price;
+    private int stock;
 }
+
