@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobileapp/app/data/models/product.dart';
 import 'package:mobileapp/core/theme/colors.dart';
 import 'package:mobileapp/routes/routes.dart';
 import 'package:ristek_material_component/ristek_material_component.dart';
 
 class CardProduct extends StatelessWidget {
-  const CardProduct(
-      {super.key,
-      required this.productName,
-      required this.productPrice,
-      required this.productImage});
+  const CardProduct({super.key, required this.product});
   // parameternya nama produk, harga, dan gambar
-  final String productName;
-  final String productPrice;
-  final String productImage;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +26,10 @@ class CardProduct extends StatelessWidget {
           children: [
             Container(
               height: 150,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(productImage),
+                  image: NetworkImage(
+                      "https://scontent.fcgk19-1.fna.fbcdn.net/v/t39.30808-6/309928275_159922883346554_1498437531423887807_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=EnXpnetzPSMAX8fZrED&_nc_pt=1&_nc_ht=scontent.fcgk19-1.fna&oh=00_AfCEStzHdGCFYUw4G0bWZUPuOeBepmRnRYgsqQscIYwaEQ&oe=657F93CB"),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -44,12 +40,12 @@ class CardProduct extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    productName,
+                    product.productName,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Rp $productPrice',
+                    'Rp ${product.price}',
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 4),

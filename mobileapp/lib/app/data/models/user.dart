@@ -5,6 +5,7 @@ class User {
   final String email;
   String address;
   int balance;
+  String cartId;
 
   User({
     required this.id,
@@ -13,16 +14,18 @@ class User {
     required this.email,
     required this.address,
     required this.balance,
+    required this.cartId,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['sub'],
+      id: json['id'],
       name: json['name'],
-      username: json['userName'],
+      username: json['username'],
       email: json['email'],
       address: json['address'],
       balance: json['balance'],
+      cartId: json['cartId'],
     );
   }
 

@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:mobileapp/app/data/providers/api.dart';
 import 'package:mobileapp/core/utils/shared_pref.dart';
 
-// nama, id, username, email, password, address
 class UserService {
   Future<bool> updateProfile(String name, String address, String email,
       String username, String password) async {
@@ -27,12 +26,12 @@ class UserService {
     var url = Uri.parse('${Api.baseUrlUser}/user/update');
 
     var response =
-        await http.post(url, headers: headers, body: jsonEncode(body));
+        await http.put(url, headers: headers, body: jsonEncode(body));
 
     if (response.statusCode == 200) {
       user.name = name;
       user.address = address;
-      TbSharedPref.setUserLogin(user);
+      TbSharedPref.setUser(user);
       return true;
     } else {
       throw Exception(jsonDecode(response.body)['message']);
@@ -52,12 +51,12 @@ class UserService {
     var url =
         Uri.parse('${Api.baseUrlUser}/user/$idUser/top-up?amount=$amount');
 
-    var response = await http.post(url, headers: headers);
+    var response = await http.put(url, headers: headers);
 
     if (response.statusCode == 200) {
       var user = TbSharedPref.getUserLogin();
       user!.balance = user.balance + amount;
-      TbSharedPref.setUserLogin(user);
+      TbSharedPref.setUser(user);
       return true;
     } else {
       throw Exception(jsonDecode(response.body)['message']);
@@ -80,7 +79,7 @@ class UserService {
 
     if (response.statusCode == 200) {
       TbSharedPref.removeAccessToken();
-      TbSharedPref.setUserLogin(null);
+      TbSharedPref.setUserLogin(null, null);
       return true;
     } else {
       throw Exception(jsonDecode(response.body)['message']);

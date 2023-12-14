@@ -1,9 +1,11 @@
+import 'package:mobileapp/app/data/models/cart.dart';
 import 'package:mobileapp/app/data/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
 
 class TbSharedPref {
   static User? _userLogin;
+  static Cart? _cart;
   static bool? _guestLogin;
 
   static void setGuestLogin() {
@@ -14,12 +16,21 @@ class TbSharedPref {
     return _guestLogin;
   }
 
-  static void setUserLogin(User? user) {
+  static void setUserLogin(User? user, Cart? cartUser) {
+    _userLogin = user;
+    _cart = cartUser;
+  }
+
+  static void setUser(User? user) {
     _userLogin = user;
   }
 
   static User? getUserLogin() {
     return _userLogin;
+  }
+
+  static Cart? getCartUser() {
+    return _cart;
   }
 
   static Future<String> getAccessToken() async {

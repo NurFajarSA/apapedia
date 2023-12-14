@@ -7,13 +7,33 @@ import 'package:mobileapp/routes/routes.dart';
 
 class ProfileController extends GetxController {
   var isLogin = false.obs;
-  User? user = null;
+  User? user;
+  var username = 'Belum Login'.obs;
+  var name = 'Belum Login'.obs;
+  var email = 'Belum Login'.obs;
+  var address = 'Belum Login'.obs;
 
   @override
   void onInit() {
     super.onInit();
     isLogin.value = TbSharedPref.getUserLogin() != null;
     user = TbSharedPref.getUserLogin();
+    if (user != null) {
+      username.value = user!.username;
+      name.value = user!.name;
+      email.value = user!.email;
+      address.value = user!.address;
+    }
+  }
+
+  void refreshUser() {
+    user = TbSharedPref.getUserLogin();
+    if (user != null) {
+      username.value = user!.username;
+      name.value = user!.name;
+      email.value = user!.email;
+      address.value = user!.address;
+    }
   }
 
   void goToEditProfile() {

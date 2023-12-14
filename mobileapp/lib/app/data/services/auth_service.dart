@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobileapp/app/data/models/user.dart';
 import 'package:mobileapp/app/data/providers/api.dart';
+import 'package:mobileapp/app/data/services/order_service.dart';
 import 'package:mobileapp/core/utils/shared_pref.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -28,9 +29,16 @@ class AuthService extends GetxService {
       await TbSharedPref.setAccessToken(jwt);
 
       Map<String, dynamic> decodedToken = JwtDecoder.decode(jwt);
-
-      var user = User.fromJson(decodedToken);
-      TbSharedPref.setUserLogin(user);
+      var headers = <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $jwt'
+      };
+      var responseUser = await http.get(
+          Uri.parse('${Api.baseUrlUser}/user/${decodedToken['sub']}'),
+          headers: headers);
+      var user = User.fromJson(jsonDecode(responseUser.body));
+      // var cart = await Get.find<OrderService>().getCartByCustomerId(user.id);
+      TbSharedPref.setUserLogin(user, null);
       return true;
     } else {
       throw Exception(jsonDecode(response.body)['message']);
@@ -63,6 +71,6 @@ class AuthService extends GetxService {
 
   Future<void> logout() async {
     TbSharedPref.removeAccessToken();
-    TbSharedPref.setUserLogin(null);
+    TbSharedPref.setUserLogin(null, null);
   }
 }

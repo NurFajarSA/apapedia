@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mobileapp/app/data/services/user_service.dart';
+import 'package:mobileapp/app/modules/profile/profile_controller.dart';
 import 'package:mobileapp/core/utils/shared_pref.dart';
 
 class EditProfileController extends GetxController {
+  final profileController = Get.find<ProfileController>();
   @override
   void onInit() {
     super.onInit();
@@ -52,6 +54,9 @@ class EditProfileController extends GetxController {
         _usernameController.text,
         _passwordController.text,
       );
+      if (response) {
+        profileController.refreshUser();
+      }
       return response;
     }
   }

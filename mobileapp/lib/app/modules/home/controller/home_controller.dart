@@ -17,6 +17,13 @@ class HomeController extends GetxController {
     }
   }
 
+  void refreshBalance() {
+    var tempBalance = TbSharedPref.getUserLogin()?.balance;
+    if (tempBalance != null) {
+      balance.value = tempBalance;
+    }
+  }
+
   get currentIndex => _currentIndex;
   get cartIsEmpty => true;
   set currentIndex(value) => _currentIndex.value = value;
@@ -49,6 +56,9 @@ class HomeController extends GetxController {
       return false;
     }
     var response = await userService.topUpBalance(amount);
+    if (response) {
+      refreshBalance();
+    }
     return response;
   }
 

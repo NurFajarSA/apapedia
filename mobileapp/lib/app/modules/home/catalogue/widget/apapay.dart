@@ -37,8 +37,8 @@ class Apapay extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text('Apapay', style: TextThemeApapedia.labelMedium),
-                Text('Rp ${homeController.getBalance()}',
-                    style: TextThemeApapedia.headlineMedium),
+                Obx(() => Text('Rp ${homeController.getBalance()}',
+                    style: TextThemeApapedia.headlineMedium)),
               ],
             ),
             // top up button

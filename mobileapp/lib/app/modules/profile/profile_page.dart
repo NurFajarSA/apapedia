@@ -78,15 +78,15 @@ class ProfilePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            profileController.user?.name ?? 'Belum login',
-                            style: Theme.of(context).textTheme.headlineMedium,
-                            overflow: TextOverflow.fade,
-                          ),
+                          Obx(() => Text(
+                                profileController.name.value,
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                                overflow: TextOverflow.fade,
+                              )),
                           const SizedBox(height: 4),
-                          Text(
-                              "@${profileController.user?.username ?? 'Belum login'}",
-                              style: Theme.of(context).textTheme.bodyLarge),
+                          Obx(() => Text("@${profileController.username.value}",
+                              style: Theme.of(context).textTheme.bodyLarge)),
                         ],
                       ),
                     )
@@ -95,16 +95,16 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text('Email', style: Theme.of(context).textTheme.bodyLarge),
                 const SizedBox(height: 4),
-                Text(profileController.user?.email ?? 'Belum login',
-                    style: Theme.of(context).textTheme.headlineMedium),
+                Obx(() => Text(profileController.email.value,
+                    style: Theme.of(context).textTheme.headlineMedium)),
                 const SizedBox(height: 16),
                 Text(
                   'Alamat',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 4),
-                Text(profileController.user?.address ?? 'Belum login',
-                    style: Theme.of(context).textTheme.headlineMedium),
+                Obx(() => Text(profileController.address.value,
+                    style: Theme.of(context).textTheme.headlineMedium)),
                 const SizedBox(height: 16),
                 PrimaryButton(
                   width: double.infinity,
