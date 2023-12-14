@@ -1,3 +1,5 @@
 class Api {
-  static const String baseUrl = 'https://apap-102.cs.ui.ac.id/api';
+  static const String baseUrlUser = 'http://sonsulung.com:10102/api';
+  static const String baseUrlCatalogue = 'http://sonsulung.com:10103/api';
+  static const String baseUrlOrder = 'http://sonsulung.com:10104/api';
 }

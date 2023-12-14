@@ -11,7 +11,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 class AuthService extends GetxService {
   Future<bool> signIn(
       {required String usernameEmail, required String password}) async {
-    var url = Uri.parse('${Api.baseUrl}/auth/login');
+    var url = Uri.parse('${Api.baseUrlUser}/auth/login');
     var headers = <String, String>{
       'Content-Type': 'application/json',
     };
@@ -43,7 +43,7 @@ class AuthService extends GetxService {
       required username,
       required password,
       required address}) async {
-    var url = Uri.parse('${Api.baseUrl}/auth/signup/customer');
+    var url = Uri.parse('${Api.baseUrlUser}/auth/signup/customer');
     var headers = <String, String>{
       'Content-Type': 'application/json',
     };

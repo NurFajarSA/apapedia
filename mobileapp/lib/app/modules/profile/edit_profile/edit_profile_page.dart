@@ -110,6 +110,35 @@ class EditProfilePage extends StatelessWidget {
                     validator: (val) =>
                         editProfileController.isValidAddress(val),
                   ),
+                  const SizedBox(height: 20),
+                  CustomTextfield(
+                    label: "Email",
+                    hint: "john.doe@gmail.com",
+                    isMandatory: true,
+                    background: MyColors.background,
+                    controller: editProfileController.emailController,
+                    validator: (val) => editProfileController.isValidEmail(val),
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextfield(
+                    label: "Username",
+                    hint: "johndoe",
+                    isMandatory: true,
+                    background: MyColors.background,
+                    controller: editProfileController.usernameController,
+                    validator: (val) =>
+                        editProfileController.isValidUsername(val),
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextfield(
+                    label: "Password",
+                    hint: "********",
+                    isMandatory: true,
+                    background: MyColors.background,
+                    controller: editProfileController.passwordController,
+                    validator: (val) =>
+                        editProfileController.isValidPassword(val),
+                  ),
                 ],
               ),
             ),

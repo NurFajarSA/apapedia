@@ -4,8 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:mobileapp/app/data/providers/api.dart';
 import 'package:mobileapp/core/utils/shared_pref.dart';
 
+// nama, id, username, email, password, address
 class UserService {
-  Future<bool> updateProfile(String name, String address) async {
+  Future<bool> updateProfile(String name, String address, String email,
+      String username, String password) async {
     var token = await TbSharedPref.getAccessToken();
     var user = TbSharedPref.getUserLogin();
 
@@ -13,13 +15,16 @@ class UserService {
       'id': user!.id.toString(),
       'name': name,
       'address': address,
+      'email': email,
+      'username': username,
+      'password': password
     };
     var headers = <String, String>{
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token'
     };
 
-    var url = Uri.parse('${Api.baseUrl}/user/update');
+    var url = Uri.parse('${Api.baseUrlUser}/user/update');
 
     var response =
         await http.post(url, headers: headers, body: jsonEncode(body));
@@ -45,7 +50,7 @@ class UserService {
     };
 
     var url =
-        Uri.parse('${Api.baseUrl}/user/update-balance/$idUser?amount=$amount');
+        Uri.parse('${Api.baseUrlUser}/user/$idUser/top-up?amount=$amount');
 
     var response = await http.post(url, headers: headers);
 
@@ -69,7 +74,7 @@ class UserService {
       'Authorization': 'Bearer $token'
     };
 
-    var url = Uri.parse('${Api.baseUrl}/user/delete/$idUser');
+    var url = Uri.parse('${Api.baseUrlUser}/user/delete/$idUser');
 
     var response = await http.delete(url, headers: headers);
 

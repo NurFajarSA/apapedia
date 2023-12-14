@@ -11,15 +11,23 @@ class EditProfileController extends GetxController {
     if (user != null) {
       _nameController.text = user.name;
       _addressController.text = user.address;
+      _emailController.text = user.email;
+      _usernameController.text = user.username;
     }
   }
 
   get formKey => _formKey;
   get nameController => _nameController;
   get addressController => _addressController;
+  get emailController => _emailController;
+  get usernameController => _usernameController;
+  get passwordController => _passwordController;
 
   final _nameController = TextEditingController();
   final _addressController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final userService = Get.find<UserService>();
 
@@ -40,8 +48,38 @@ class EditProfileController extends GetxController {
       var response = await userService.updateProfile(
         _nameController.text,
         _addressController.text,
+        _emailController.text,
+        _usernameController.text,
+        _passwordController.text,
       );
       return response;
+    }
+  }
+
+  isValidEmail(String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Email cannot be empty';
+    }
+    if (!GetUtils.isEmail(val)) {
+      return 'Email is not valid';
+    }
+  }
+
+  isValidUsername(String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Username cannot be empty';
+    }
+    if (val.length < 6) {
+      return 'Username must be at least 6 characters';
+    }
+  }
+
+  isValidPassword(String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Password cannot be empty';
+    }
+    if (val.length < 8) {
+      return 'Password must be at least 8 characters';
     }
   }
 }
